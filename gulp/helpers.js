@@ -172,6 +172,7 @@ class Helpers {
         let manifest = require('../src/manifest.json')
         // The 16x16px icon is used for the context menu.
         // It is different from the logo.
+        manifest.author = this.settings.brands[brandName].author
         manifest.name = this.settings.brands[brandName].name
         // Distinguish between the test-version and production
         // by adding a `beta` postfix.
