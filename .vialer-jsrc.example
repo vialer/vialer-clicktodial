@@ -5,6 +5,7 @@
             "sip_endpoint": "websocket.voipgrid.nl",
             "homepage_url": "https://wiki.voipgrid.nl/index.php/Browser_Plugins",
             "name": "Vialer",
+            "author": "VoIPGRID",
             "analytics_id": {
                 "chrome": "",
                 "edge": "",
@@ -27,7 +28,8 @@
                     "gecko": {
                         "id": "",
                         "id_beta": "",
-                         "strict_min_version": "50.0"
+                        "strict_min_version": "50.0",
+                        "update_url": "https://plugins.vialer.io/firefox/updates.json"
                     },
                     "apiKey": "",
                     "apiSecret": ""
