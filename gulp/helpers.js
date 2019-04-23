@@ -256,7 +256,12 @@ class Helpers {
                 VERBOSE: this.settings.VERBOSE,
                 VERSION: this.settings.PACKAGE.version,
             }))
-            .pipe(ifElse(this.settings.PRODUCTION, () => minifier()))
+            .pipe(ifElse(this.settings.PRODUCTION, () => minifier({
+                mangle: true,
+                output: {
+                    beautify: true
+                }
+            })))
             .pipe(ifElse(!this.settings.PRODUCTION, () => sourcemaps.write('./')))
             .pipe(gulp.dest(path.join(this.settings.BUILD_DIR, brandName, buildType, 'js')))
             .pipe(size(_extend({title: `${bundleName}.js`}, this.settings.SIZE_OPTIONS)))
