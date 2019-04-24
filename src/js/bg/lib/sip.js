@@ -41,7 +41,7 @@ class Sip {
     connect() {
         // Emit to the frontend that the sip client is not yet
         // ready to start.
-        if (this.ua && this.ua.isConnected()) {
+        if (this.ua && this.ua.transport.isConnected()) {
             this.app.logger.warn(`${this}sip backend already starting or started`)
             return
         }
@@ -63,10 +63,12 @@ class Sip {
             traceSip: process.env.VERBOSE,
             uri: `sip:${user.email}`,
             userAgentString: process.env.PLUGIN_NAME,
-            wsServers: [`wss://${this.app.settings.realm}`],
+            transportOptions: {
+                wsServers: [`wss://${this.app.settings.realm}`],
+            }
         })
 
-        this.ua.on('connected', () => {
+        this.ua.transport.on('connected', () => {
             this.app.logger.info(`${this}SIP stack started`)
             // Reset the connection retry timer.
             this.app.emit('sip:started', {}, 'both')
@@ -74,7 +76,7 @@ class Sip {
         })
 
 
-        this.ua.on('disconnected', () => {
+        this.ua.transport.on('disconnected', () => {
             this.app.logger.info(`${this}SIP stack stopped`)
             this.app.emit('sip:stopped', {}, 'both')
 
@@ -101,7 +103,7 @@ class Sip {
                 this.unsubscribePresence(accountId)
             })
         }
-        if (this.ua && this.ua.isConnected()) {
+        if (this.ua && this.ua.transport.isConnected()) {
             this.ua.stop()
             this.app.logger.debug(`${this}disconnected`)
         } else {
@@ -193,7 +195,7 @@ class Sip {
     * @param {Number} accountId - The accountId to deregister.
     */
     unsubscribePresence(accountId) {
-        if (this.ua.isConnected()) {
+        if (this.ua.transport.isConnected()) {
             this.app.logger.debug(`${this}cannot unsubscribe presence ${accountId} without connection`)
             return
         }
@@ -217,7 +219,7 @@ class Sip {
     async updatePresence(refresh) {
         // The transport must be ready, in order to be able to update
         // presence information from the SIP server.
-        if (!this.ua.isConnected()) {
+        if (!this.ua.transport.isConnected()) {
             this.app.logger.warn(`${this}cannot update presence without websocket connection.`)
             return
         }
