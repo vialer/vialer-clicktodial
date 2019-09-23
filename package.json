@@ -1,88 +1,22 @@
 {
-  "name": "vialer-js",
-  "version": "2.2.6",
-  "description": "Click-to-Dial, status updates and queue monitoring for Firefox, Chrome & Electron.",
-  "engines": {
-    "node": ">=8.0.0"
+  "name": "vialer-clicktodial",
+  "version": "1.0.0",
+  "description": "This is the Vialer-js project. It includes build targets for Firefox and Chrome web extensions, web(requires CORS) and Electron desktop app. Please use the Firefox addon store or the Chrome store for regular browser plugin installation.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "serve src -l 8080"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/voipgrid/vialer-js.git"
+    "url": "git@gitlab.wearespindle.com:vialer/vialer-clicktodial.git"
   },
-  "keywords": [
-    "electron",
-    "sip",
-    "telephony",
-    "click-to-dial"
-  ],
-  "author": "Devhouse Spindle",
-  "contributors": [
-    {
-      "name": "CONTRIBUTORS",
-      "url": "https://github.com/voipgrid/vialer-js/graphs/contributors"
-    }
-  ],
-  "files": [
-    "LICENSE",
-    "build/electron/**"
-  ],
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/voipgrid/vialer-js/issues"
-  },
-  "homepage": "https://wiki.voipgrid.nl/index.php/Browser_Plugins",
-  "devDependencies": {
-    "browserify": "^14.1.0",
-    "chrome-webstore-upload": "^0.2.2",
-    "connect": "^3.6.0",
-    "connect-mount": "^1.0.0",
-    "del": "^2.2.2",
-    "eslint": "^4.0.0",
-    "eslint-plugin-sort-class-members": "^1.2.0",
-    "gulp": "^3.9.1",
-    "gulp-add-src": "^0.2.0",
-    "gulp-clean-css": "^3.0.4",
-    "gulp-concat": "^2.6.1",
-    "gulp-envify": "^1.0.0",
-    "gulp-flatten": "^0.3.1",
-    "gulp-gh-pages": "^0.5.4",
-    "gulp-help": "^1.6.1",
-    "gulp-if-else": "^1.0.3",
-    "gulp-imagemin": "^3.3.0",
-    "gulp-insert": "^0.5.0",
-    "gulp-livereload": "^3.8.1",
-    "gulp-notify": "^3.0.0",
-    "gulp-rename": "^1.2.2",
-    "gulp-replace": "^0.6.1",
-    "gulp-sass": "^3.1.0",
-    "gulp-size": "^2.1.0",
-    "gulp-sourcemaps": "^2.5.0",
-    "gulp-uglify": "^3.0.0",
-    "gulp-zip": "^4.0.0",
-    "jsdoc": "^3.5.4",
-    "jsdoc-rtd": "^1.0.15",
-    "mkdirp": "^0.5.1",
-    "rc": "^1.2.1",
-    "run-sequence": "^1.2.2",
-    "serve-index": "^1.9.0",
-    "serve-static": "^1.12.1",
-    "uglify-es": "^3.0.21",
-    "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0",
-    "watchify": "^3.9.0",
-    "web-ext": "^2.9.2",
-    "yargs": "^7.0.2"
-  },
+  "author": "",
+  "license": "ISC",
   "dependencies": {
-    "axios": "^0.16.2",
-    "css-element-queries": "^0.4.0",
-    "eventemitter3": "^2.0.3",
-    "jquery": "^3.2.1",
-    "roboto-fontface": "^0.8.0",
-    "sip.js": "^0.13.8",
-    "webextension-polyfill": "^0.2.1"
+    "serve": "^11.1.0"
   }
 }
