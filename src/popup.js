@@ -1,1 +1,1 @@
-import '/components/c-colleagues.mjs';
+import '/components/c-router.mjs';

@@ -1,5 +1,4 @@
 const BASE = "https://partner.voipgrid.nl/api/";
-const token = "Token dagmar.hoogendorp@vialerapp.com:bce23544508d9aba670650967141174c85299449";
 
 const CONFIGS = {
   contacts: {
@@ -11,6 +10,34 @@ const CONFIGS = {
     method: 'GET',
     useToken: true,
     path: 'plugin/user/'
+  },
+    autologin: {
+    method: 'GET',
+    useToken: true,
+    path: 'autologin/token/'
+  },
+  queues: {
+    method: 'GET',
+    useToken: true,
+    path: 'queuecallgroup/'
+  },
+  setDestination: {
+    method: 'PUT',
+    useToken: true,
+    path: 'selecteduserdestination/',
+    headers: {
+      'Content-type': 'application/json'
+    }
+  },
+  getDestination: {
+    method: 'GET',
+    useToken: true,
+    path: 'selecteduserdestination/'
+  },
+  destinations: {
+    method: 'GET',
+    useToken: true,
+    path: 'userdestination/'
   },
   login: {
     method: 'POST',
@@ -33,7 +60,7 @@ function makeRequestObject(name, options) {
   const requestOptions = Object.assign({ headers: {} }, config, options);
 
   if (requestOptions.useToken) {
-    // TODO: terugzetten const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token');
     if (!token) {
       throw new Error('unauthorised');
     }
