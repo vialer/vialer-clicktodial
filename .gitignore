@@ -10,4 +10,5 @@ src/brand.json
 .directory
 src/brand
 .vscode
+.env
 ~
