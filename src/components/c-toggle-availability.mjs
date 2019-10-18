@@ -47,10 +47,15 @@ window.customElements.define('c-toggle-availability',
         set isDisabled(isDisabled) {
             this._isDisabled = isDisabled;
             this.checkbox.checked = this._isDisabled;
+            this.storePreviousAvailability();
         }
 
         get isDisabled() {
             return this._isDisabled;
+        }
+
+        async storePreviousAvailability() {
+            await browser.storage.local.set({ 'previousAvailability': this._previousAvailability });
         }
     }
 );

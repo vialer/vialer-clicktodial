@@ -1,6 +1,8 @@
 import { logout } from '/lib/user.mjs';
 import { getUser } from '/lib/data.mjs';
 
+import '/components/c-shortcuts.mjs';
+
 const template = document.createElement('template');
 template.innerHTML = `
                 <span data-selector="user-name">     </span>
@@ -21,6 +23,8 @@ window.customElements.define('c-account-info',
             this.logout.addEventListener('click', this);
             this.userName = this.querySelector('[data-selector=user-name]');
             this.setUserInfo();
+            let shortcuts = document.createElement('c-shortcuts');
+            this.appendChild(shortcuts);
         }
 
         disconnectedCallback() {
@@ -44,4 +48,3 @@ window.customElements.define('c-account-info',
             });
         }
     });
-    

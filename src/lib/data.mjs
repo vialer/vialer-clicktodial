@@ -1,9 +1,6 @@
 import request from '/lib/request.mjs';
 
-// storage functionaliteit toevoegen
-
 async function getStorageData({ storageName, forceRefresh, apiDataMutateCallback, apiRequestOption = {} }) {
-  // polyfill hier gebruiken
   const storedData = await browser.storage.local.get(storageName);
 
   if (Object.keys(storedData).length === 0 || forceRefresh) {

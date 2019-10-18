@@ -49,21 +49,25 @@ window.customElements.define('c-availability',
 
             empty(this.destinationSelectNode);
 
-            this.destinations.forEach(destination => {
-                const option = document.createElement('option');
-                option.value = destination.id;
-                option.textContent = destination.description;
-
-                if (
-                    this.selectedDestination &&
-                    (this.selectedDestination.phoneaccount == destination.id ||
-                        this.selectedDestination.userdestination == destination.id)
-                ) {
-                    option.setAttribute('selected', '');
-                    this.checkBox.previousAvailability = option;
-                }
-                this.destinationSelectNode.appendChild(option);
-            });
+            this.getSavedDestination().then((prevDestination) => {
+                this.destinations.forEach(destination => {
+                    const option = document.createElement('option');
+                    option.value = destination.id;
+                    option.textContent = destination.description;
+                    if (
+                        this.selectedDestination &&
+                        (this.selectedDestination.phoneaccount == destination.id ||
+                            this.selectedDestination.userdestination == destination.id)
+                    ) {
+                        option.setAttribute('selected', '');
+                        this.checkBox.previousAvailability = destination;
+                    } else if (destination.id === prevDestination.id) {
+                        option.setAttribute('selected', '');
+                        this.checkBox.previousAvailability = destination;
+                    }
+                    this.destinationSelectNode.appendChild(option);
+                });
+            })
         }
 
         changeAvailability() {
@@ -74,16 +78,19 @@ window.customElements.define('c-availability',
             }
         }
 
-        setCheckbox() {
+        async setCheckbox(destination) {
             this.togglePlace = this.querySelector('[data-selector=place-toggle]');
             this.checkBox = document.createElement("c-toggle-availability");
             this.togglePlace.appendChild(this.checkBox);
             this.checkBox.isDisabled = this.isPhoneDisabled;
-            // for now get the first destination as a default;
-            this.checkBox.previousAvailability = this.destinations[0];
         }
 
-        async disconnectedCallback() {
+        async getSavedDestination() {
+            let previousDestination = await browser.storage.local.get('previousAvailability');
+            return previousDestination['previousAvailability'];
+        }
+
+        disconnectedCallback() {
             this.destinationSelectNode.removeEventListener('change', this);
             window.removeEventListener('availabilityChange');
         }
