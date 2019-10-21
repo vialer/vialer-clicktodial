@@ -1,4 +1,5 @@
 import * as user from '/lib/user.mjs';
+import { getFormValues } from '/lib/dom.mjs';
 
 const template = document.createElement('template');
 template.innerHTML = `
@@ -30,6 +31,11 @@ template.innerHTML = `
            required
           />
         </label>
+            <label hidden data-selector="two-factor-container">
+            <h5> Two factor bladiebla </h5>
+            <span data-translation-key="two-factor-token"></span>
+            <input type="text" name="token" data-selector="two-factor-input" />
+      </label>
         <button type="submit" data-translation-key="continue">✅</button>
       </form>
 `;
@@ -48,6 +54,11 @@ window.customElements.define('p-login',
             this.appendChild(template.content.cloneNode(true));
             this.formNode = this.querySelector('form');
             this.formNode.addEventListener('submit', this);
+
+            this.twoFactorAuthenticationInput = this.querySelector('[data-selector=two-factor-input]');
+            this.twoFactorAuthenticationContainerNode = this.querySelector(
+                '[data-selector=two-factor-container]'
+            );
             console.log("Component mounted");
             // this.changePasswordNode = this.querySelector('[data-selector=change-password]');    -> gebruiken voor later.
         }
@@ -63,8 +74,9 @@ window.customElements.define('p-login',
                     break;
                 case 'submit':
                     const { target } = e;
-                    const { email, password, token } = this.getFormValues(target);
+                    const { email, password, token } = getFormValues(target);
                     const payload = { email, password };
+                    this.twoFactorAuthenticationContainerNode.setAttribute('hidden', '');
 
                     if (token) {
                         payload.token = token;
@@ -74,22 +86,23 @@ window.customElements.define('p-login',
                         user.login(payload)
                             .then(async () => {
                                 window.dispatchEvent(new CustomEvent('updatePlugin'));
+                            }).catch(err => {
+                                const { status, body, message } = err;
+                                if (status === 400 && body && body.apitoken && body.apitoken.two_factor_token) {
+                                    this.showtwoFactorAuthenticationContainer();
+                                } else if (message === 'change_temp_password') {
+                                    // this.showChangePasswordMessage();
+                                } else {
+                                    // this.authenticationErrorNode.removeAttribute('hidden');
+                                }
                             });
                     }
             }
         }
 
-        // aparte dom.mjs maken?
-        getFormValues(form) {
-            return Array.from(form).reduce((prev, { name, value }) => {
-                if (name && value) {
-                    return Object.assign(prev, {
-                        [name]: value
-                    });
-                } else {
-                    return prev;
-                }
-            }, {});
+        showtwoFactorAuthenticationContainer() {
+            this.twoFactorAuthenticationContainerNode.removeAttribute('hidden');
+            this.twoFactorAuthenticationInput.setAttribute('required', '');
         }
     }
 );

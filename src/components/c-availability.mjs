@@ -61,7 +61,7 @@ window.customElements.define('c-availability',
                     ) {
                         option.setAttribute('selected', '');
                         this.checkBox.previousAvailability = destination;
-                    } else if (destination.id === prevDestination.id) {
+                    } else if (prevDestination !== undefined && destination.id === prevDestination.id) {
                         option.setAttribute('selected', '');
                         this.checkBox.previousAvailability = destination;
                     }
@@ -92,7 +92,6 @@ window.customElements.define('c-availability',
 
         disconnectedCallback() {
             this.destinationSelectNode.removeEventListener('change', this);
-            window.removeEventListener('availabilityChange');
         }
 
         async handleEvent({ type, currentTarget, target: { value } }) {
