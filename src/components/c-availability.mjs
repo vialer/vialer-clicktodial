@@ -27,8 +27,6 @@ window.customElements.define('c-availability',
             });
 
             // this.availability = this.querySelector('[data-selector=availability]');
-            //TODO als ophalen van API undefined is dan pas uit storage halen.
-
             this.destinations = [];
 
             const destinations = await getDestinations(true);
@@ -62,7 +60,8 @@ window.customElements.define('c-availability',
                     ) {
                         option.setAttribute('selected', '');
                         this.checkBox.previousAvailability = destination;
-                    } else if (prevDestination !== undefined && destination.id === prevDestination.id) {
+                        
+                    } else if (this.selectedDestination.phoneaccount === null && prevDestination !== undefined && destination.id === prevDestination.id) {
                         option.setAttribute('selected', '');
                         this.checkBox.previousAvailability = destination;
                     }
