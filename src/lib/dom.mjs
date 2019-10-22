@@ -25,3 +25,35 @@ export function getFormValues(form) {
         }
     }, {});
 }
+
+/**
+ * hides a DOM node.
+ * @param node - the node that needs to be hidden
+ */
+export function hide(n) {
+    n.setAttribute('hidden', '');
+  }
+  
+  /**
+   * shows a DOM node.
+   * @param node - the node that needs to be shown.
+   */
+  export function show(n) {
+    n.removeAttribute('hidden');
+  }
+
+  /**
+ * disables a DOM node.
+ * @param node - the node that needs to be disabled.
+ */
+export function disable(n) {
+    n.setAttribute('disabled', '');
+  }
+  
+  /**
+   * enable a DOM node.
+   * @param node - the node that needs to be enabled.
+   */
+  export function enable(n) {
+    n.removeAttribute('disabled');
+  }

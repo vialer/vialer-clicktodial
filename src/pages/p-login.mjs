@@ -1,5 +1,5 @@
 import * as user from '/lib/user.mjs';
-import { getFormValues } from '/lib/dom.mjs';
+import { getFormValues , show, hide} from '/lib/dom.mjs';
 
 const template = document.createElement('template');
 template.innerHTML = `
@@ -88,7 +88,7 @@ window.customElements.define('p-login',
                     const { target } = e;
                     const { email, password, token } = getFormValues(target);
                     const payload = { email, password };
-                    this.twoFactorAuthenticationContainerNode.setAttribute('hidden', '');
+                    hide(this.twoFactorAuthenticationContainerNode);
 
                     if (token) {
                         payload.token = token;
@@ -105,7 +105,7 @@ window.customElements.define('p-login',
                                 } else if (status ===403){//message === 'change_temp_password') {
                                     this.showChangePasswordMessage();
                                 } else {
-                                    this.authenticationErrorNode.removeAttribute('hidden');
+                                    show(this.authenticationErrorNode);
                                 }
                             });
                     }
@@ -113,7 +113,7 @@ window.customElements.define('p-login',
         }
 
         showtwoFactorAuthenticationContainer() {
-            this.twoFactorAuthenticationContainerNode.removeAttribute('hidden');
+            show(this.twoFactorAuthenticationContainerNode);
             this.twoFactorAuthenticationInput.setAttribute('required', '');
         }
 
@@ -121,7 +121,7 @@ window.customElements.define('p-login',
             // voor later
             // const path = await getPlatformUrl('user/personal_settings');
             this.changePasswordLink.setAttribute('href', "https://partner.voipgrid.nl/user/login");
-            this.changePasswordNode.removeAttribute('hidden');
+            show(this.changePasswordNode);
         } u
     }
 );

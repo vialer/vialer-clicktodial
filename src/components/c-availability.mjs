@@ -1,6 +1,6 @@
 import '/components/c-toggle-availability.mjs';
 
-import { empty } from '/lib/dom.mjs';
+import { empty, disable, enable } from '/lib/dom.mjs';
 import { getDestinations, getSelectedDestination, setDestination } from '/lib/data.mjs';
 
 const template = document.createElement('template');
@@ -60,8 +60,9 @@ window.customElements.define('c-availability',
                     ) {
                         option.setAttribute('selected', '');
                         this.checkBox.previousAvailability = destination;
-                        
-                    } else if (this.selectedDestination.phoneaccount === null && prevDestination !== undefined && destination.id === prevDestination.id) {
+
+                    } else if (this.selectedDestination.phoneaccount === null &&
+                        prevDestination !== undefined && destination.id === prevDestination.id) {
                         option.setAttribute('selected', '');
                         this.checkBox.previousAvailability = destination;
                     }
@@ -72,9 +73,9 @@ window.customElements.define('c-availability',
 
         changeAvailability() {
             if (this.checkBox.isDisabled) {
-                this.destinationSelectNode.setAttribute('disabled', '');
+                disable(this.destinationSelectNode);
             } else {
-                this.destinationSelectNode.removeAttribute('disabled');
+                enable(this.destinationSelectNode);
             }
         }
 

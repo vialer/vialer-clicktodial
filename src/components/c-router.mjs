@@ -16,7 +16,6 @@ window.customElements.define('c-router',
      
         async showView() {
             let isAuthenticated = await check();
-            console.log(isAuthenticated);
             if (isAuthenticated) {
                 if (this.login !== undefined) { this.login.remove() }
                 this.main = document.createElement('p-main');

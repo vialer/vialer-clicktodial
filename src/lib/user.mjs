@@ -30,6 +30,7 @@ export async function isAuthenticated() {
         if (err.message == 'You need to change your password in the portal') {
             throw new Error('change_temp_password');
         }
-        throw new Error('unauthorised');
+        return false;
+        // throw new Error('unauthorised');
     }
 }
