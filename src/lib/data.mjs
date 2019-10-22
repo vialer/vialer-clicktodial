@@ -37,20 +37,21 @@ export async function getContact(forceRefresh = false) {
   return colleagueList;
 }
 
-export async function getPreviousDestination(){
+export async function getPreviousDestination() {
   return await browser.storage.local.get('previousDestination');
 }
 
-export async function getUser() {
-  const { client_id, email, first_name, last_name, preposition, token } = await request('user');
-  return {
-    email,
-    token,
-    preposition,
-    clientId: client_id,
-    firstName: first_name,
-    lastName: last_name
-  };
+//TODO misschien twee functies??? maar mail niet meer de hele tijd ophalen via een api request?
+export async function getUser(forceRefresh = false) {
+  const user = getStorageData({storageName: 'user', forceRefresh});
+  // await request('user');
+  return user;
+}
+
+export async function clickToDial(bNumber) {
+  const body = { b_number: bNumber };
+  const { a_number, auto_answer, b_number, callid } = await request('clickToDial', { body });
+  return { a_number, auto_answer, b_number, callid };
 }
 
 export async function getQueues(forceRefresh = false) {
@@ -119,7 +120,7 @@ export async function getDestinations(forceRefresh = false) {
   return destinations;
 }
 
-export async function getSelectedDestination(){
+export async function getSelectedDestination() {
   const data = await request('getDestination');
   const { id, fixeddestination, phoneaccount } = data.objects[0];
   return {

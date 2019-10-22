@@ -26,7 +26,8 @@ window.customElements.define('c-availability',
                 this.changeAvailability();
             });
 
-            this.availability = this.querySelector('[data-selector=availability]');
+            // this.availability = this.querySelector('[data-selector=availability]');
+            //TODO als ophalen van API undefined is dan pas uit storage halen.
 
             this.destinations = [];
 
@@ -78,7 +79,7 @@ window.customElements.define('c-availability',
             }
         }
 
-        async setCheckbox(destination) {
+        async setCheckbox() {
             this.togglePlace = this.querySelector('[data-selector=place-toggle]');
             this.checkBox = document.createElement("c-toggle-availability");
             this.togglePlace.appendChild(this.checkBox);

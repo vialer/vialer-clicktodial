@@ -5,7 +5,7 @@ import { getQueues } from '/lib/data.mjs';
 
 const template = document.createElement('template');
 template.innerHTML = `
-<span id="open-groups"><h3>Call groups</h3></span>
+<span id="open-groups"><h3>Call groups</h3></span> <a title="See queues" id="push-to-webphone" target="_blank">open queues</a>     
 <div id="call-groups">
 </div>
 `;
@@ -26,6 +26,9 @@ window.customElements.define('c-call-groups',
 
             this.openList = this.querySelector('#open-groups');
             this.openList.addEventListener('click', this);
+
+            this.pushToWebphone = this.querySelector('#push-to-webphone');
+            this.pushToWebphone.setAttribute('href', "https://webphone.vialer.nl/queues");
 
             this.getContactData();
         }

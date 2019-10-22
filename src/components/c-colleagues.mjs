@@ -22,7 +22,7 @@ template.innerHTML = `
     padding: 0;
     }
 </style>
-<span id="open-colleagues"><h3>Colleagues</h3></span>
+<span id="open-colleagues"><h3>Colleagues</h3></span> <a title="See availability of colleagues" id="push-to-webphone" target="_blank">open collegaatjes</a>     
 <div id="colleagues">
 </div>
 `;
@@ -44,6 +44,9 @@ window.customElements.define('c-colleagues',
 
             this.openList = this.querySelector('#open-colleagues');
             this.openList.addEventListener('click', this);
+
+            this.pushToWebphone = this.querySelector('#push-to-webphone');
+            this.pushToWebphone.setAttribute('href', "https://webphone.vialer.nl/contacts");
 
             this.getContactData();
         }

@@ -21,6 +21,14 @@ const CONFIGS = {
     useToken: true,
     path: 'queuecallgroup/'
   },
+  clickToDial:{
+    method: 'POST',
+    useToken: true,
+    path: 'clicktodial/',
+    headers: {
+      'Content-type': 'application/json'
+    }
+  },
   setDestination: {
     method: 'PUT',
     useToken: true,

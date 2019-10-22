@@ -7,6 +7,7 @@ export function login({ email, password, token }) {
         body.two_factor_token = token;
     }
     return request('login', { body }).then(({ api_token }) => {
+        console.log(api_token);
         localStorage.setItem('token', `Token ${email}:${api_token}`);
     })
 }
@@ -14,20 +15,21 @@ export function login({ email, password, token }) {
 export async function logout() {
     localStorage.clear();
     browser.storage.local.clear();
-  }
+}
 
 export async function isAuthenticated() {
     try {
-        const user = await getUser();
-        if(user.token){
+        let user = await getUser();
+        if (user.token) {
             return true;
-        } else{
+        } else {
             return false;
         }
+
     } catch (err) {
-        // if (err.message == 'You need to change your password in the portal') {
-        //     throw new Error('change_temp_password');
-        // }
-        // throw new Error('unauthorised');
+        if (err.message == 'You need to change your password in the portal') {
+            throw new Error('change_temp_password');
+        }
+        throw new Error('unauthorised');
     }
 }

@@ -1,8 +1,10 @@
+import { clickToDial } from '/lib/data.mjs';
+
 const template = document.createElement('template');
 template.innerHTML = `
                     <a id="popout" target="_blank">meh</a>
                     <a id="help" target="_blank">mehhh</a>
-                    <a id="settings" target="_blank">mehh</a>          
+                    <a id="settings" target="_blank">mehh</a> 
 `;
 
 window.customElements.define('c-shortcuts',

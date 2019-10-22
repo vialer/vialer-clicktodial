@@ -9,6 +9,13 @@ template.innerHTML = `
           <c-icon icon="warning"></c-icon>
           <span data-translation-key="authentication_error"></span>
         </div>
+        <div class="login-change-password" data-selector="change-password" hidden>
+        <p><span class="login-change-password-title" data-translation-key="change_password_title"></span></p>
+        <p>
+          <span data-translation-key="change_password_body"></span>
+          <a data-selector="change-password-link" target="_blank">link</a>
+        </p>
+      </div>
         <label>
           <span data-translation-key="email_address"></span>
           <input
@@ -59,6 +66,11 @@ window.customElements.define('p-login',
             this.twoFactorAuthenticationContainerNode = this.querySelector(
                 '[data-selector=two-factor-container]'
             );
+
+
+            this.changePasswordNode = this.querySelector('[data-selector=change-password]');
+            this.changePasswordLink = this.querySelector('[data-selector=change-password-link');
+            this.authenticationErrorNode = this.querySelector('[data-selector=authentication-error]');
             console.log("Component mounted");
             // this.changePasswordNode = this.querySelector('[data-selector=change-password]');    -> gebruiken voor later.
         }
@@ -90,10 +102,10 @@ window.customElements.define('p-login',
                                 const { status, body, message } = err;
                                 if (status === 400 && body && body.apitoken && body.apitoken.two_factor_token) {
                                     this.showtwoFactorAuthenticationContainer();
-                                } else if (message === 'change_temp_password') {
-                                    // this.showChangePasswordMessage();
+                                } else if (status ===403){//message === 'change_temp_password') {
+                                    this.showChangePasswordMessage();
                                 } else {
-                                    // this.authenticationErrorNode.removeAttribute('hidden');
+                                    this.authenticationErrorNode.removeAttribute('hidden');
                                 }
                             });
                     }
@@ -104,5 +116,12 @@ window.customElements.define('p-login',
             this.twoFactorAuthenticationContainerNode.removeAttribute('hidden');
             this.twoFactorAuthenticationInput.setAttribute('required', '');
         }
+
+        showChangePasswordMessage() {
+            // voor later
+            // const path = await getPlatformUrl('user/personal_settings');
+            this.changePasswordLink.setAttribute('href', "https://partner.voipgrid.nl/user/login");
+            this.changePasswordNode.removeAttribute('hidden');
+        } u
     }
 );
