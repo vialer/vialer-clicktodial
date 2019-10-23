@@ -122,6 +122,6 @@ window.customElements.define('p-login',
             // const path = await getPlatformUrl('user/personal_settings');
             this.changePasswordLink.setAttribute('href', "https://partner.voipgrid.nl/user/login");
             show(this.changePasswordNode);
-        } u
+        }
     }
 );

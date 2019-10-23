@@ -1,4 +1,5 @@
 import { isAuthenticated as check } from '/lib/user.mjs';
+import { updateApiData } from '/utils/updateApiData.mjs';
 
 import '/pages/p-login.mjs';
 import '/pages/p-main.mjs';
@@ -13,7 +14,7 @@ window.customElements.define('c-router',
             this.main = undefined;
             this.login = undefined;
         }
-     
+
         async showView() {
             let isAuthenticated = await check();
             if (isAuthenticated) {
@@ -24,7 +25,7 @@ window.customElements.define('c-router',
                 if (this.main !== undefined) {
                     this.main.remove();
                 }
-                if(this.login === undefined){
+                if (this.login === undefined) {
                     this.login = document.createElement('p-login');
                     this.appendChild(this.login);
                 }
@@ -32,6 +33,7 @@ window.customElements.define('c-router',
         }
 
         connectedCallback() {
+            updateApiData();
             window.addEventListener('updatePlugin', () => {
                 this.showView();
             });
