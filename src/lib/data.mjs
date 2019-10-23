@@ -41,10 +41,8 @@ export async function getPreviousDestination() {
   return await browser.storage.local.get('previousDestination');
 }
 
-//TODO misschien twee functies??? maar mail niet meer de hele tijd ophalen via een api request?
 export async function getUser(forceRefresh = false) {
   const user = getStorageData({storageName: 'user', forceRefresh});
-  // await request('user');
   return user;
 }
 

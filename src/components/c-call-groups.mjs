@@ -28,6 +28,8 @@ window.customElements.define('c-call-groups',
             this.openList.addEventListener('click', this);
 
             this.pushToWebphone = this.querySelector('#push-to-webphone');
+            
+            //TODO url niet zo
             this.pushToWebphone.setAttribute('href', "https://webphone.vialer.nl/queues");
 
             this.getContactData();

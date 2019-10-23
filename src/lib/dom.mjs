@@ -57,3 +57,12 @@ export function disable(n) {
   export function enable(n) {
     n.removeAttribute('disabled');
   }
+
+   /**
+   * select a DOM node.
+   * @param node - the node that needs to be enabled.
+   */
+  export function select(n) {
+    n.setAttribute('selected', '');
+  }
+  
