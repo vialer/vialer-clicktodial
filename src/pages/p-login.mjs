@@ -1,5 +1,6 @@
 import * as user from '/lib/user.mjs';
-import { getFormValues , show, hide} from '/lib/dom.mjs';
+import { getFormValues, show, hide } from '/lib/dom.mjs';
+import { Logger } from '/lib/logging.mjs';
 
 const template = document.createElement('template');
 template.innerHTML = `
@@ -48,6 +49,7 @@ template.innerHTML = `
 `;
 
 
+const logger = new Logger('login');
 
 window.customElements.define('p-login',
 
@@ -97,14 +99,18 @@ window.customElements.define('p-login',
                     if (email && password) {
                         user.login(payload)
                             .then(async () => {
+                                logger.info('Succesfull login for: ' + email);
                                 window.dispatchEvent(new CustomEvent('updatePlugin'));
                             }).catch(err => {
                                 const { status, body, message } = err;
                                 if (status === 400 && body && body.apitoken && body.apitoken.two_factor_token) {
+                                    logger.warn('Two factor token needed');
                                     this.showtwoFactorAuthenticationContainer();
-                                } else if (status ===403){//message === 'change_temp_password') {
+                                } else if (status === 403) {//message === 'change_temp_password') {
+                                    logger.warn('Password change needed');
                                     this.showChangePasswordMessage();
                                 } else {
+                                    logger.error('Not sure what went wrong, error = ' + err);
                                     show(this.authenticationErrorNode);
                                 }
                             });

@@ -1,9 +1,14 @@
 import request from '/lib/request.mjs';
 
+import { Logger } from '/lib/logging.mjs';
+
+const logger = new Logger('data');
+
 async function getStorageData({ storageName, forceRefresh, apiDataMutateCallback, apiRequestOption = {} }) {
   const storedData = await browser.storage.local.get(storageName);
 
   if (Object.keys(storedData).length === 0 || forceRefresh) {
+    logger.info(`fetching ${storageName} from api`)
     return request(storageName, apiRequestOption)
       .then(async (data) => {
         if (apiDataMutateCallback) {
@@ -13,6 +18,7 @@ async function getStorageData({ storageName, forceRefresh, apiDataMutateCallback
         return data;
       })
   }
+  logger.info(`fetching ${storageName} from storage.local`)
   return storedData[storageName];
 }
 
@@ -48,7 +54,15 @@ export async function getUser(forceRefresh = false) {
 
 export async function clickToDial(bNumber) {
   const body = { b_number: bNumber };
-  const { a_number, auto_answer, b_number, callid } = await request('clickToDial', { body });
+  try{
+    // const { a_number, auto_answer, b_number, callid } = await request('clickToDial', { body });
+    const dingie = await request('clickToDial', { body });
+    console.log(dingie);
+    // logger.debug(dingie);
+
+  } catch(err){
+    logger.error('Call not succesfull', err);
+  }
   return { a_number, auto_answer, b_number, callid };
 }
 

@@ -1,5 +1,9 @@
 import request from '/lib/request.mjs';
 import { getUser } from './data.mjs';
+import { Logger } from '/lib/logging.mjs';
+
+const logger = new Logger('user');
+
 
 export function login({ email, password, token }) {
     const body = { email, password };
@@ -7,14 +11,15 @@ export function login({ email, password, token }) {
         body.two_factor_token = token;
     }
     return request('login', { body }).then(({ api_token }) => {
-        console.log(api_token);
         localStorage.setItem('token', `Token ${email}:${api_token}`);
+        logger.info(`Succesfull login with for: ${email}`);
     })
 }
 
 export async function logout() {
     localStorage.clear();
     browser.storage.local.clear();
+    logger.info('Storages cleared, logout succesfull'); 
 }
 
 export async function isAuthenticated() {

@@ -2,6 +2,9 @@ import '/components/c-toggle-availability.mjs';
 
 import { empty, disable, enable, select } from '/lib/dom.mjs';
 import { getDestinations, getSelectedDestination, setDestination } from '/lib/data.mjs';
+import { Logger } from '/lib/logging.mjs';
+
+const logger = new Logger('availability');
 
 const template = document.createElement('template');
 template.innerHTML = `
@@ -20,7 +23,7 @@ window.customElements.define('c-availability',
 
         async connectedCallback() {
             this.appendChild(template.content.cloneNode(true));
-            console.log("Component mounted");
+            logger.info("Component mounted");
 
             window.addEventListener('availabilityChange', () => {
                 this.changeAvailability();

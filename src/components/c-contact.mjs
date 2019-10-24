@@ -1,4 +1,6 @@
 import { clickToDial } from '/lib/data.mjs';
+import { show, hide } from '/lib/dom.mjs';
+
 import replaceSpecialCharacters from '/utils/replaceSpecialCharacters.mjs';
 
 const template = document.createElement('template');
@@ -32,16 +34,20 @@ customElements.define('c-contact',
             this.appendChild(template.content.cloneNode(true));
             this.callButton = this.querySelector("#call-me");
             this.callButton.addEventListener('click', this);
+            window.addEventListener('availabilityChange', () => {
+                
+            });
         }
 
         disconnectedCallback() {
-            this.callButton.removeEventListener();
+            this.callButton.removeEventListener('click', this);
         }
 
         async handleEvent(e) {
             if (this.phoneNumber) {
                 //TODO zie any do
                 let response = await clickToDial(this.phoneNumber);
+                // TODO betere errors niet dit loggen, belknop verwijderen als a_number undefined is.
                 console.log(response);
             }
         }
