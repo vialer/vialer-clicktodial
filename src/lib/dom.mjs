@@ -43,6 +43,14 @@ export function hide(n) {
   }
 
   /**
+ * returns true of the DOM node is hidden.
+ * @param node - the node that needs to be checked.
+ */
+export function isHidden(n) {
+    return n.hasAttribute('hidden');
+  }
+
+  /**
  * disables a DOM node.
  * @param node - the node that needs to be disabled.
  */

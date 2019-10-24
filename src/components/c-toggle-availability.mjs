@@ -30,12 +30,12 @@ window.customElements.define('c-toggle-availability',
             if (checked) {
                 setDestination(undefined).then(() => {
                     this.isDisabled = true;
-                    window.dispatchEvent(new CustomEvent('availabilityChange'));
+                    window.dispatchEvent(new CustomEvent('availabilityChange', { detail: { disabled: true } }));
                 });
             } else {
                 setDestination(this._previousAvailability).then(() => {
                     this.isDisabled = false;
-                    window.dispatchEvent(new CustomEvent('availabilityChange'));
+                    window.dispatchEvent(new CustomEvent('availabilityChange', { detail: { disabled: false } }));
                 });
             }
         }

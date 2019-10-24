@@ -1,5 +1,5 @@
 import { clickToDial } from '/lib/data.mjs';
-import { show, hide } from '/lib/dom.mjs';
+import { show, hide, isHidden } from '/lib/dom.mjs';
 
 import replaceSpecialCharacters from '/utils/replaceSpecialCharacters.mjs';
 
@@ -34,9 +34,18 @@ customElements.define('c-contact',
             this.appendChild(template.content.cloneNode(true));
             this.callButton = this.querySelector("#call-me");
             this.callButton.addEventListener('click', this);
-            window.addEventListener('availabilityChange', () => {
-                
+            window.addEventListener('availabilityChange', (e) => {
+                this.changeVisibilityCallButton(e.detail.disabled);
             });
+        }
+
+        changeVisibilityCallButton(isDisabled) {
+            console.log(isDisabled);
+            if (isDisabled) {
+                hide(this.callButton);
+            } else {
+                show(this.callButton);
+            }
         }
 
         disconnectedCallback() {
