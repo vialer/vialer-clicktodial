@@ -1,5 +1,3 @@
-import { isAuthenticated as check } from '/lib/user.mjs';
-
 import '/components/c-colleagues.mjs';
 import '/components/c-call-groups.mjs';
 import '/components/c-account-info.mjs';
@@ -14,9 +12,6 @@ window.customElements.define('p-main',
 
         constructor() {
             super();
-            this.accountInfo = undefined;
-            this.colleagues = undefined;
-            this.queues = undefined;
         }
 
         connectedCallback() {

@@ -5,7 +5,8 @@
   "permissions": [
     "activeTab",
     "https://partner.voipgrid.nl/api/*",
-    "storage"
+    "storage",
+    "notifications"
   ],
 
   "background": {

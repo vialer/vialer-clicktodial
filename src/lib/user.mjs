@@ -24,7 +24,7 @@ export async function logout() {
 
 export async function isAuthenticated() {
     try {
-        let user = await getUser();
+        let user = await getUser(true);
         if (user.token) {
             return true;
         } else {
@@ -33,6 +33,7 @@ export async function isAuthenticated() {
 
     } catch (err) {
         if (err.message == 'You need to change your password in the portal') {
+            localStorage.clear();
             throw new Error('change_temp_password');
         }
         return false;

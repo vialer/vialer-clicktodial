@@ -11,7 +11,7 @@ const CONFIGS = {
     useToken: true,
     path: 'plugin/user/'
   },
-    autologin: {
+  autologin: {
     method: 'GET',
     useToken: true,
     path: 'autologin/token/'
@@ -21,13 +21,19 @@ const CONFIGS = {
     useToken: true,
     path: 'queuecallgroup/'
   },
-  clickToDial:{
+  clickToDial: {
     method: 'POST',
     useToken: true,
     path: 'clicktodial/',
     headers: {
       'Content-type': 'application/json'
     }
+  },
+  callStatus: {
+    method: 'GET',
+    useToken: true,
+    path: '/clicktodial/',
+    id: true
   },
   setDestination: {
     method: 'PUT',
@@ -76,7 +82,8 @@ function makeRequestObject(name, options) {
   }
 
   if (requestOptions.id) {
-    requestOptions.path += `${requestOptions.id}/`;
+    // hier wordt niks mee gedaan in wephone? aangepast om c2dstatus op te kunnen halen.
+    requestOptions.path += localStorage.getItem('callid');   // `${requestOptions.id}/`;
   }
 
   if (requestOptions.params) {
@@ -129,6 +136,7 @@ async function responseHandler(response) {
   }
 
   if (status === 404) {
+    // not found
     return undefined;
   }
 

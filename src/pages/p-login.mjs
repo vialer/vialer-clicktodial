@@ -11,6 +11,7 @@ template.innerHTML = `
           <span data-translation-key="authentication_error"></span>
         </div>
         <div class="login-change-password" data-selector="change-password" hidden>
+        <h5>Verander je wachtwoord vriend</h5>
         <p><span class="login-change-password-title" data-translation-key="change_password_title"></span></p>
         <p>
           <span data-translation-key="change_password_body"></span>
@@ -69,12 +70,10 @@ window.customElements.define('p-login',
                 '[data-selector=two-factor-container]'
             );
 
-
             this.changePasswordNode = this.querySelector('[data-selector=change-password]');
             this.changePasswordLink = this.querySelector('[data-selector=change-password-link');
             this.authenticationErrorNode = this.querySelector('[data-selector=authentication-error]');
             console.log("Component mounted");
-            // this.changePasswordNode = this.querySelector('[data-selector=change-password]');    -> gebruiken voor later.
         }
 
         disconnectedCallback() {
@@ -99,14 +98,13 @@ window.customElements.define('p-login',
                     if (email && password) {
                         user.login(payload)
                             .then(async () => {
-                                logger.info('Succesfull login for: ' + email);
                                 window.dispatchEvent(new CustomEvent('updatePlugin'));
                             }).catch(err => {
                                 const { status, body, message } = err;
                                 if (status === 400 && body && body.apitoken && body.apitoken.two_factor_token) {
                                     logger.warn('Two factor token needed');
                                     this.showtwoFactorAuthenticationContainer();
-                                } else if (status === 403) {//message === 'change_temp_password') {
+                                } else if (message === 'change_temp_password' || status === 403) {
                                     logger.warn('Password change needed');
                                     this.showChangePasswordMessage();
                                 } else {
@@ -123,9 +121,8 @@ window.customElements.define('p-login',
             this.twoFactorAuthenticationInput.setAttribute('required', '');
         }
 
-        showChangePasswordMessage() {
-            // voor later
-            // const path = await getPlatformUrl('user/personal_settings');
+        get showChangePasswordMessage() {
+            //TODO const path = await getPlatformUrl('user/personal_settings');
             this.changePasswordLink.setAttribute('href', "https://partner.voipgrid.nl/user/login");
             show(this.changePasswordNode);
         }

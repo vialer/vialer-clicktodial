@@ -10,7 +10,6 @@ template.innerHTML = `
 </div>
 `;
 
-
 const searchTheseProperties = ['description', 'phoneNumber'];
 
 function processSearchProperties(data) {
@@ -40,7 +39,6 @@ customElements.define('c-contact',
         }
 
         changeVisibilityCallButton(isDisabled) {
-            console.log(isDisabled);
             if (isDisabled) {
                 hide(this.callButton);
             } else {
@@ -56,6 +54,7 @@ customElements.define('c-contact',
             if (this.phoneNumber) {
                 //TODO zie any do
                 let response = await clickToDial(this.phoneNumber);
+              
                 // TODO betere errors niet dit loggen, belknop verwijderen als a_number undefined is.
                 console.log(response);
             }

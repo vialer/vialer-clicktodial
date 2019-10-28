@@ -1,6 +1,7 @@
 import request from '/lib/request.mjs';
-
 import { Logger } from '/lib/logging.mjs';
+import {showNotification} from '/lib/notify.mjs';
+
 
 const logger = new Logger('data');
 
@@ -17,6 +18,13 @@ async function getStorageData({ storageName, forceRefresh, apiDataMutateCallback
         await browser.storage.local.set({ [storageName]: data });
         return data;
       })
+      .catch((err)=>{
+        if(err.message === 'unauthorised'){
+          logger.error('Made an unauthorized request, possible password change. Removing token, updating view');
+          localStorage.clear();
+          window.dispatchEvent(new CustomEvent('updatePlugin'));
+        }
+      });
   }
   logger.info(`fetching ${storageName} from storage.local`)
   return storedData[storageName];
@@ -48,22 +56,36 @@ export async function getPreviousDestination() {
 }
 
 export async function getUser(forceRefresh = false) {
-  const user = getStorageData({storageName: 'user', forceRefresh});
+  const user = getStorageData({ storageName: 'user', forceRefresh });
   return user;
 }
 
+let callStatusInterval;
+
 export async function clickToDial(bNumber) {
   const body = { b_number: bNumber };
-  try{
-    // const { a_number, auto_answer, b_number, callid } = await request('clickToDial', { body });
-    const dingie = await request('clickToDial', { body });
-    console.log(dingie);
-    // logger.debug(dingie);
-
-  } catch(err){
+  try {
+    const { a_number, auto_answer, b_number, callid } = await request('clickToDial', { body });
+    localStorage.setItem('callid', callid);
+    showNotification(`calling ${b_number}`);
+    callStatusInterval = setInterval(getCallStatus, 3000);
+    return { a_number, auto_answer, b_number, callid };
+  } catch (err) {
     logger.error('Call not succesfull', err);
   }
-  return { a_number, auto_answer, b_number, callid };
+}
+
+async function getCallStatus() {
+  const { a_number, auto_answer, b_number, callid, status } = await request('callStatus');
+  stopIntervalAtStatus(status);
+  // return { a_number, auto_answer, b_number, callid, status };
+}
+
+function stopIntervalAtStatus(status) {
+  if (status !== 'dialing_b') {
+    showNotification(status);
+    clearInterval(callStatusInterval);
+  }
 }
 
 export async function getQueues(forceRefresh = false) {
