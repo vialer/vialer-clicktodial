@@ -1,6 +1,6 @@
 import request from '/lib/request.mjs';
 import { Logger } from '/lib/logging.mjs';
-import {showNotification} from '/lib/notify.mjs';
+import { showNotification } from '/lib/notify.mjs';
 
 
 const logger = new Logger('data');
@@ -18,8 +18,8 @@ async function getStorageData({ storageName, forceRefresh, apiDataMutateCallback
         await browser.storage.local.set({ [storageName]: data });
         return data;
       })
-      .catch((err)=>{
-        if(err.message === 'unauthorised'){
+      .catch((err) => {
+        if (err.message === 'unauthorised') {
           logger.error('Made an unauthorized request, possible password change. Removing token, updating view');
           localStorage.clear();
           window.dispatchEvent(new CustomEvent('updatePlugin'));
@@ -67,7 +67,6 @@ export async function clickToDial(bNumber) {
   try {
     const { a_number, auto_answer, b_number, callid } = await request('clickToDial', { body });
     localStorage.setItem('callid', callid);
-    showNotification(`calling ${b_number}`);
     callStatusInterval = setInterval(getCallStatus, 3000);
     return { a_number, auto_answer, b_number, callid };
   } catch (err) {

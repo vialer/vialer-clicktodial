@@ -1,5 +1,7 @@
 import { clickToDial } from '/lib/data.mjs';
 import { show, hide, isHidden } from '/lib/dom.mjs';
+import { showNotification } from '/lib/notify.mjs';
+
 
 import replaceSpecialCharacters from '/utils/replaceSpecialCharacters.mjs';
 
@@ -52,11 +54,8 @@ customElements.define('c-contact',
 
         async handleEvent(e) {
             if (this.phoneNumber) {
-                //TODO zie any do
-                let response = await clickToDial(this.phoneNumber);
-              
-                // TODO betere errors niet dit loggen, belknop verwijderen als a_number undefined is.
-                console.log(response);
+                let { b_number } = await clickToDial(this.phoneNumber);
+                showNotification(`calling ${b_number}`);
             }
         }
 
