@@ -2,14 +2,13 @@ import request from '/lib/request.mjs';
 import { Logger } from '/lib/logging.mjs';
 import { showNotification } from '/lib/notify.mjs';
 
-
 const logger = new Logger('data');
 
 async function getStorageData({ storageName, forceRefresh, apiDataMutateCallback, apiRequestOption = {} }) {
   const storedData = await browser.storage.local.get(storageName);
 
   if (Object.keys(storedData).length === 0 || forceRefresh) {
-    logger.info(`fetching ${storageName} from api`)
+    logger.info(`fetching ${storageName} from api`);
     return request(storageName, apiRequestOption)
       .then(async (data) => {
         if (apiDataMutateCallback) {
@@ -26,7 +25,7 @@ async function getStorageData({ storageName, forceRefresh, apiDataMutateCallback
         }
       });
   }
-  logger.info(`fetching ${storageName} from storage.local`)
+  logger.info(`fetching ${storageName} from storage.local`);
   return storedData[storageName];
 }
 

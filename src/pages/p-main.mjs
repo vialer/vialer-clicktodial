@@ -3,31 +3,31 @@ import '/components/c-call-groups.mjs';
 import '/components/c-account-info.mjs';
 import '/components/c-availability.mjs';
 
-const template = document.createElement('template');
-template.innerHTML = ``;
+import { loadTemplate } from '/lib/dom.mjs';
 
-window.customElements.define('p-main',
+loadTemplate('p-main').then(({ content }) => {
+    window.customElements.define('p-main',
+        class extends HTMLElement {
 
-    class extends HTMLElement {
+            constructor() {
+                super();
+            }
 
-        constructor() {
-            super();
+            connectedCallback() {
+                this.appendChild(content.cloneNode(true));
+
+                this.accountInfo = document.createElement('c-account-info');
+                this.appendChild(this.accountInfo);
+
+                this.availability = document.createElement('c-availability');
+                this.appendChild(this.availability);
+
+                this.colleagues = document.createElement('c-colleagues');
+                this.appendChild(this.colleagues);
+
+                this.queues = document.createElement('c-call-groups');
+                this.appendChild(this.queues);
+            }
         }
-
-        connectedCallback() {
-            this.appendChild(template.content.cloneNode(true));
-
-            this.accountInfo = document.createElement('c-account-info');
-            this.appendChild(this.accountInfo);
-
-            this.availability = document.createElement('c-availability');
-            this.appendChild(this.availability);
-
-            this.colleagues = document.createElement('c-colleagues');
-            this.appendChild(this.colleagues);
-
-            this.queues = document.createElement('c-call-groups');
-            this.appendChild(this.queues);
-        }
-    }
-);
+    );
+})

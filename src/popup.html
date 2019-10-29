@@ -9,7 +9,115 @@
   <script type="application/javascript" src="/vendor/browser-polyfill.js"></script>
   <script type="module" src="popup.js"></script>
   <c-router></c-router>
-
 </body>
+
+<template data-component="c-account-info">
+  <section>
+    <span data-selector="user-name"> </span>
+    <button data-selector="log-out" type="submit"> Logout </button>
+  </section>
+</template>
+
+<template data-component="c-toggle-availability">
+    <section>
+      <label>
+        Do not disturb:
+        <input type="checkbox" data-selector="dnd-checkbox" />
+      </label>
+    </section>
+  </template>
+
+<template data-component="c-availability">
+  <section>
+    <span data-selector="place-toggle">
+      <h3>Availability</h3>
+    </span>
+    <div data-selector="availability">
+      <select data-selector="destination-select"></select>
+    </div>
+  </section>
+</template>
+
+<template data-component="c-call-groups">
+  <section>
+    <span data-selector="open-groups">
+      <h3>Call groups</h3>
+    </span> <a title="See queues" data-selector="push-to-webphone" target="_blank">open queues</a>
+    <div data-selector="call-groups">
+    </div>
+  </section>
+</template>
+
+<template data-component="c-colleagues">
+  <section>
+    <span data-selector="open-colleagues">
+      <h3>Colleagues</h3>
+    </span> <a title="See availability of colleagues" data-selector="push-to-webphone" target="_blank">open
+      collegaatjes</a>
+    <div>
+      <input type="search" class="search-input" data-selector="searchInput"
+        data-placeholder-translation-key="search_colleagues" />
+    </div>
+    <div data-selector="colleagues">
+    </div>
+  </section>
+</template>
+
+<template data-component="c-contact">
+  <section>
+    <div data-selector="contact">
+      <button data-selector="call-me">bel</button>
+    </div>
+  </section>
+</template>
+
+<template data-component="c-shortcuts">
+  <section>
+    <a data-selector="popout" target="_blank">meh</a>
+    <a data-selector="help" target="_blank">mehhh</a>
+    <a data-selector="settings" target="_blank">mehh</a>
+  </section>
+</template>
+
+<template data-component="p-login">
+  <section>
+    <h1>Login</h1>
+    <form class="login-form">
+      <div class="login-error" data-selector="authentication-error" hidden>
+        <c-icon icon="warning"></c-icon>
+        <span data-translation-key="authentication_error"></span>
+      </div>
+      <div class="login-change-password" data-selector="change-password" hidden>
+        <h5>Verander je wachtwoord vriend</h5>
+        <p><span class="login-change-password-title" data-translation-key="change_password_title"></span></p>
+        <p>
+          <span data-translation-key="change_password_body"></span>
+          <a data-selector="change-password-link" target="_blank">link</a>
+        </p>
+      </div>
+      <label>
+        <span data-translation-key="email_address"></span>
+        <input type="email" name="email" data-selector="email-input" data-placeholder-translation-key="enter_email"
+          autocomplete="username" required />
+      </label>
+      <label>
+        <span data-translation-key="password"></span>
+        <input type="password" name="password" data-selector="password-input"
+          data-placeholder-translation-key="enter_password" autocomplete="current-password" required />
+      </label>
+      <label hidden data-selector="two-factor-container">
+        <h5> Two factor bladiebla </h5>
+        <span data-translation-key="two-factor-token"></span>
+        <input type="text" name="token" data-selector="two-factor-input" />
+      </label>
+      <button type="submit" data-translation-key="continue">✅</button>
+    </form>
+  </section>
+</template>
+
+<template data-component="p-main">
+  <section>
+  </section>
+</template>
 
 </html>

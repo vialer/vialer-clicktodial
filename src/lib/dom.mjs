@@ -1,3 +1,29 @@
+/**
+ * takes a string as argument and returns a template with that string set as innerHTML.
+ * @param templateString - the content of the template to set.
+ * @returns {templateNode} - a template with the content set.
+ */
+export function createTemplate(templateString) {
+    const template = document.createElement('template');
+    template.innerHTML = templateString;
+    return template;
+  }
+  
+  const templateCache = new Map();
+  const templateTypeMapping = {
+    c: 'components',
+    p: 'pages'
+  };
+  export function loadTemplate(component) {
+    if (templateCache.has(component)) {
+      return Promise.resolve(templateCache.get(component));
+    }
+  }
+  
+  Array.from(document.querySelectorAll('template')).forEach(templateNode => {
+    const { component } = templateNode.dataset;
+    templateCache.set(component, templateNode);
+  });  
 
 export function toggleVisibility(node) {
     if (node.hasAttribute("hidden")) {
@@ -12,7 +38,6 @@ export function empty(node) {
         node.removeChild(node.firstChild);
     }
 }
-
 
 export function getFormValues(form) {
     return Array.from(form).reduce((prev, { name, value }) => {
