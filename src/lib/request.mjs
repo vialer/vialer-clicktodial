@@ -33,7 +33,7 @@ const CONFIGS = {
     method: 'GET',
     useToken: true,
     path: '/clicktodial/',
-    id: true
+    setCallId: true
   },
   setDestination: {
     method: 'PUT',
@@ -82,8 +82,12 @@ function makeRequestObject(name, options) {
   }
 
   if (requestOptions.id) {
-    // hier wordt niks mee gedaan in wephone? aangepast om c2dstatus op te kunnen halen.
-    requestOptions.path += localStorage.getItem('callid');   // `${requestOptions.id}/`;
+    requestOptions.path += `${requestOptions.id}/`;
+  }
+
+  // To be able to make a call.
+  if (requestOptions.setCallId) {
+    requestOptions.path += localStorage.getItem('callid');   
   }
 
   if (requestOptions.params) {
