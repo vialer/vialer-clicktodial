@@ -1,0 +1,16 @@
+
+
+c-icon {
+    display: inline-flex;
+    align-items: center;
+}
+
+c-icon svg {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+}
+
+.green:hover{
+    background:#00e673;
+}

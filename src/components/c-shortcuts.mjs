@@ -22,5 +22,10 @@ loadTemplate('c-shortcuts').then(({ content }) => {
                 this.help.setAttribute('href', "https://wiki.voipgrid.nl/index.php/Browser_Plugins");
                 this.settings.setAttribute('href', "https://webphone.vialer.nl/settings");
             }
+
+            openOrFocus(url){
+                window.open(url, )
+            }
+
         });
 })

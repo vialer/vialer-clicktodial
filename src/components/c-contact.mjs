@@ -33,7 +33,7 @@ loadTemplate('c-contact').then(({ content }) => {
                 this.callButton.removeEventListener('click', this);
             }
 
-            async handleEvent(e) {
+            async handleEvent({ type }) {
                 if (this.phoneNumber) {
                     let { b_number } = await clickToDial(this.phoneNumber);
                     showNotification(`calling ${b_number}`);

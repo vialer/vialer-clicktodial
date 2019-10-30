@@ -3,6 +3,7 @@
 
 <head>
   <title>Click-to-Dial</title>
+  <link rel="stylesheet" href="styles/_elements.css" />
 </head>
 
 <body>
@@ -13,19 +14,22 @@
 
 <template data-component="c-account-info">
   <section>
+    <c-icon icon="user"></c-icon>
     <span data-selector="user-name"> </span>
-    <button data-selector="log-out" type="submit"> Logout </button>
+    <button data-selector="log-out" type="submit">
+      <c-icon icon="logout"></c-icon>
+    </button>
   </section>
 </template>
 
 <template data-component="c-toggle-availability">
-    <section>
-      <label>
-        Do not disturb:
-        <input type="checkbox" data-selector="dnd-checkbox" />
-      </label>
-    </section>
-  </template>
+  <section>
+    <label>
+      Do not disturb:
+      <input type="checkbox" data-selector="dnd-checkbox" />
+    </label>
+  </section>
+</template>
 
 <template data-component="c-availability">
   <section>
@@ -41,6 +45,7 @@
 <template data-component="c-call-groups">
   <section>
     <span data-selector="open-groups">
+      <c-icon icon="queues"></c-icon>
       <h3>Call groups</h3>
     </span> <a title="See queues" data-selector="push-to-webphone" target="_blank">open queues</a>
     <div data-selector="call-groups">
@@ -51,6 +56,7 @@
 <template data-component="c-colleagues">
   <section>
     <span data-selector="open-colleagues">
+      <c-icon icon="contacts"></c-icon>
       <h3>Colleagues</h3>
     </span> <a title="See availability of colleagues" data-selector="push-to-webphone" target="_blank">open
       collegaatjes</a>
@@ -66,16 +72,22 @@
 <template data-component="c-contact">
   <section>
     <div data-selector="contact">
-      <button data-selector="call-me">bel</button>
+      <button class="green" data-selector="call-me"><c-icon icon="phone"></c-icon></button>
     </div>
   </section>
 </template>
 
 <template data-component="c-shortcuts">
   <section>
-    <a data-selector="popout" target="_blank">meh</a>
-    <a data-selector="help" target="_blank">mehhh</a>
-    <a data-selector="settings" target="_blank">mehh</a>
+    <a data-selector="popout" target="_blank">
+      <c-icon icon="website"> </c-icon>
+    </a>
+    <a data-selector="help" target="_blank">
+      <c-icon icon="info"></c-icon>
+    </a>
+    <a data-selector="settings" target="_blank">
+      <c-icon icon="settings"></c-icon>
+    </a>
   </section>
 </template>
 
