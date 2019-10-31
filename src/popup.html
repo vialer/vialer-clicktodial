@@ -24,17 +24,20 @@
 
 <template data-component="c-toggle-availability">
   <section>
-    <label>
-      Do not disturb:
-      <input type="checkbox" data-selector="dnd-checkbox" />
-    </label>
+    <h3>
+      <span data-translation-key="general"></span>
+    </h3>
+    <!-- TODO deze shit fixen, waarom werkt het nieettttt??? -->
+    <input type="checkbox" data-selector="dnd-checkbox" />
   </section>
 </template>
 
 <template data-component="c-availability">
   <section>
     <span data-selector="place-toggle">
-      <h3>Availability</h3>
+      <h3>
+        <span data-translation-key="availability"></span>
+      </h3>
     </span>
     <div data-selector="availability">
       <select data-selector="destination-select"></select>
@@ -45,20 +48,23 @@
 <template data-component="c-call-groups">
   <section>
     <span data-selector="open-groups">
-      <c-icon icon="queues"></c-icon>
-      <h3>Call groups</h3>
+      <h3>
+        <c-icon icon="queues"></c-icon>
+        <span data-translation-key="quick_links_call_groups"></span>
+      </h3>
     </span> <a title="See queues" data-selector="push-to-webphone" target="_blank">open queues</a>
+    <!-- TODO  ^^^^^^^^^ -->
     <div data-selector="call-groups">
     </div>
   </section>
 </template>
 
 <template data-component="c-colleagues">
-  <section> 
+  <section>
     <span data-selector="open-colleagues">
       <h3>
-        <span data-translation-key="contacts"></span>
         <c-icon icon="contacts"></c-icon>
+        <span data-translation-key="contacts"></span>
       </h3>
     </span> <a title="See availability of colleagues" data-selector="push-to-webphone" target="_blank">open
       collegaatjes</a>
@@ -97,14 +103,18 @@
 
 <template data-component="p-login">
   <section>
-    <h1>Login</h1>
+    <h1>
+      <span data-translation-key="log_in_action"></span>
+    </h1>
     <form class="login-form">
       <div class="login-error" data-selector="authentication-error" hidden>
         <c-icon icon="warning"></c-icon>
         <span data-translation-key="authentication_error"></span>
       </div>
       <div class="login-change-password" data-selector="change-password" hidden>
-        <h5>Verander je wachtwoord vriend</h5>
+        <h5>
+          <span data-translation-key="change_password_body"></span>
+        </h5>
         <p><span class="login-change-password-title" data-translation-key="change_password_title"></span></p>
         <p>
           <span data-translation-key="change_password_body"></span>
@@ -122,8 +132,9 @@
           data-placeholder-translation-key="enter_password" autocomplete="current-password" required />
       </label>
       <label hidden data-selector="two-factor-container">
-        <h5> Two factor bladiebla </h5>
-        <span data-translation-key="two-factor-token"></span>
+        <h5>
+          <span data-translation-key="two-factor-token"></span>
+        </h5>
         <input type="text" name="token" data-selector="two-factor-input" />
       </label>
       <button type="submit" data-translation-key="continue">✅</button>
