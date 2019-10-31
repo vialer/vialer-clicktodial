@@ -6,7 +6,8 @@
     "activeTab",
     "https://partner.voipgrid.nl/api/*",
     "storage",
-    "notifications"
+    "notifications",
+    "https://api.segment.io/*"
   ],
 
   "background": {

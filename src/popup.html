@@ -54,10 +54,12 @@
 </template>
 
 <template data-component="c-colleagues">
-  <section>
+  <section> 
     <span data-selector="open-colleagues">
-      <c-icon icon="contacts"></c-icon>
-      <h3>Colleagues</h3>
+      <h3>
+        <span data-translation-key="contacts"></span>
+        <c-icon icon="contacts"></c-icon>
+      </h3>
     </span> <a title="See availability of colleagues" data-selector="push-to-webphone" target="_blank">open
       collegaatjes</a>
     <div>
@@ -72,7 +74,9 @@
 <template data-component="c-contact">
   <section>
     <div data-selector="contact">
-      <button class="green" data-selector="call-me"><c-icon icon="phone"></c-icon></button>
+      <button class="green" data-selector="call-me">
+        <c-icon icon="phone"></c-icon>
+      </button>
     </div>
   </section>
 </template>

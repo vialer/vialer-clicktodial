@@ -3,6 +3,7 @@ import { show, hide, loadTemplate } from '/lib/dom.mjs';
 import { showNotification } from '/lib/notify.mjs';
 
 import { processSearchProperties } from '/utils/processSearchProperties.mjs';
+import * as segment from '/lib/segment.mjs';
 
 loadTemplate('c-contact').then(({ content }) => {
     customElements.define('c-contact',
@@ -37,14 +38,13 @@ loadTemplate('c-contact').then(({ content }) => {
                 if (this.phoneNumber) {
                     let { b_number } = await clickToDial(this.phoneNumber);
                     showNotification(`calling ${b_number}`);
+                    segment.track.callContact();
                 }
             }
 
             set contactDetails(cDetail) {
                 let detail = document.createElement('div');
                 this.phoneNumber = cDetail.phoneNumber;
-                // this.detail = this.querySelector("#contact");
-                //TODO dit veranderen -> niet appenden in de set functie, beter in connectedCallback
                 detail.innerHTML = cDetail.description + "\n" + cDetail.phoneNumber;
                 this.searchProperties = processSearchProperties(cDetail);
                 this.appendChild(detail);

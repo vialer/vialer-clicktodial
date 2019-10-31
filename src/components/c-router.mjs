@@ -1,6 +1,8 @@
 import { isAuthenticated as check } from '/lib/user.mjs';
 import { updateApiData } from '/utils/updateApiData.mjs';
 import { Logger } from '/lib/logging.mjs';
+import { startTrackingUser } from '/utils/startTrackingUser.mjs';
+// import { translateNodes } from '/lib/i18n.mjs';
 
 import '/pages/p-login.mjs';
 import '/pages/p-main.mjs';
@@ -45,6 +47,8 @@ window.customElements.define('c-router',
         }
 
         connectedCallback() {
+            // translateNodes();
+            startTrackingUser()
             window.addEventListener('updatePlugin', () => {
                 this.showView();
             });

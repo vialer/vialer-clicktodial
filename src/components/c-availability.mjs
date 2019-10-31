@@ -3,6 +3,8 @@ import '/components/c-toggle-availability.mjs';
 import { empty, disable, enable, select, loadTemplate } from '/lib/dom.mjs';
 import { getDestinations, getSelectedDestination, setDestination } from '/lib/data.mjs';
 import { Logger } from '/lib/logging.mjs';
+import * as segment from '/lib/segment.mjs';
+
 
 const logger = new Logger('availability');
 
@@ -93,6 +95,7 @@ loadTemplate('c-availability').then(({ content }) => {
 
             async handleEvent({ type, currentTarget, target: { value } }) {
                 if ('change' === type && currentTarget === this.destinationSelectNode) {
+                    segment.track.updateAvailability();
                     const destination = this.destinations.find(destination => destination.id == value);
                     this.checkBox.previousAvailability = destination;
                     await setDestination(destination);

@@ -1,9 +1,8 @@
 import { setDestination } from '/lib/data.mjs';
 import { loadTemplate } from '/lib/dom.mjs';
+import * as segment from '/lib/segment.mjs';
 
 loadTemplate('c-toggle-availability').then(({ content }) => {
-    //TODO dit fixen -> issue aanmaken?
-
     window.customElements.define('c-toggle-availability',
 
         class extends HTMLElement {
@@ -23,6 +22,7 @@ loadTemplate('c-toggle-availability').then(({ content }) => {
             }
 
             async handleEvent({ currentTarget: { checked } }) {
+                segment.track.toggleDnd();
                 if (checked) {
                     setDestination(undefined).then(() => {
                         this.isDisabled = true;
