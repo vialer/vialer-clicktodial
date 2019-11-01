@@ -1,5 +1,5 @@
 import * as user from '/lib/user.mjs';
-import { getFormValues, show, hide, loadTemplate } from '/lib/dom.mjs';
+import { getFormValues, show, hide, loadTemplate } from '/utils/dom.mjs';
 import { Logger } from '/lib/logging.mjs';
 
 const logger = new Logger('login');

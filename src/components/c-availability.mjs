@@ -1,6 +1,6 @@
 import '/components/c-toggle-availability.mjs';
 
-import { empty, disable, enable, select, loadTemplate } from '/lib/dom.mjs';
+import { empty, disable, enable, select, loadTemplate } from '/utils/dom.mjs';
 import { getDestinations, getSelectedDestination, setDestination } from '/lib/data.mjs';
 import { Logger } from '/lib/logging.mjs';
 import * as segment from '/lib/segment.mjs';

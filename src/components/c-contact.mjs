@@ -1,5 +1,5 @@
 import { clickToDial } from '/lib/data.mjs';
-import { show, hide, loadTemplate } from '/lib/dom.mjs';
+import { show, hide, loadTemplate } from '/utils/dom.mjs';
 import { showNotification } from '/lib/notify.mjs';
 
 import { processSearchProperties } from '/utils/processSearchProperties.mjs';

@@ -1,4 +1,6 @@
 {
+  "authentication_error": "The email address or password you entered is invalid. Please check and try again.",
+  "app_language": "Language",
   "availability": "Availability",
   "call_failed": "Cannot establish call",
   "call_failed_busy": "Other person is busy, cannot establish call.",
@@ -7,6 +9,7 @@
   "change_password_body": "Your current password is temporary and needs to be changed for security reasons. Please click on the following link to go to the portal: ",
   "change_password_title": "Change temporary password",
   "click_to_dial": "Click to Dial",
+  "continue": "Continue",
   "contacts": "Colleagues",
   "email_address": "Email address",
   "email": "E-mail",

@@ -1,6 +1,6 @@
 import { logout } from '/lib/user.mjs';
 import { getUser } from '/lib/data.mjs';
-import { loadTemplate } from '/lib/dom.mjs';
+import { loadTemplate } from '/utils/dom.mjs';
 
 import '/components/c-shortcuts.mjs';
 

@@ -3,7 +3,12 @@ import { Logger } from '/lib/logging.mjs';
 const logger = new Logger('i18n');
 
 export const availableLanguages = ['nl-NL', 'en-US']; // ['en-US', 'nl-NL' ];
-export let [chosenLanguage] = availableLanguages; // first as default
+export let chosenLanguage = null;
+
+export async function setChosenLanguage() {
+    let chosen = await browser.storage.local.get('chosenLanguage');
+    chosenLanguage = Object.keys(chosen).length !== 0 ? chosen.chosenLanguage : availableLanguages[0]; // first as default
+}
 
 export function setTranslatedTextContent(node, key = node.dataset.translationKey) {
     return translate(key).then(text => {
@@ -18,6 +23,7 @@ export function setTranslatedPlaceholder(node, key = node.dataset.placeholderTra
 }
 
 export function translateNodes(node = document.body) {
+    console.log(chosenLanguage)
     const collection = [];
     for (const n of node.querySelectorAll('[data-translation-key]')) {
         const { translationKey } = n.dataset;
@@ -46,6 +52,7 @@ export function setLanguage(lng) {
     return new Promise(resolve => {
         document.documentElement.setAttribute('lang', lng);
         chosenLanguage = lng;
+        browser.storage.local.set({ 'chosenLanguage': lng });
         Array.from(document.getElementsByTagName('c-translate')).forEach(t => {
             t.update();
         });

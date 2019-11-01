@@ -106,6 +106,7 @@
     <h1>
       <span data-translation-key="log_in_action"></span>
     </h1>
+    <c-language-switcher></c-language-switcher>
     <form class="login-form">
       <div class="login-error" data-selector="authentication-error" hidden>
         <c-icon icon="warning"></c-icon>
@@ -141,6 +142,14 @@
     </form>
   </section>
 </template>
+
+<template data-component="c-language-switcher">
+    <label class="with-help-text">
+      <span data-translation-key="app_language"></span>
+      <select data-selector="language-select"></select>
+    </label>
+    <!-- <p class="help-text" data-translation-key="app_language_help_text"></p> -->
+  </template>
 
 <template data-component="p-main">
   <section>

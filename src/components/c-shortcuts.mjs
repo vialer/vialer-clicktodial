@@ -1,4 +1,4 @@
-import { loadTemplate } from '/lib/dom.mjs';
+import { loadTemplate } from '/utils/dom.mjs';
 
 loadTemplate('c-shortcuts').then(({ content }) => {
     window.customElements.define('c-shortcuts',

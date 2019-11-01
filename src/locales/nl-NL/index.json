@@ -1,4 +1,6 @@
 {
+  "app_language": "Taal",
+  "authentication_error": "Het gebruikte e-mailadres of wachtwoord is onjuist. Controleer op eventuele fouten en probeer het nog een keer.",
   "availability": "Beschikbaarheid",
   "call_failed": "Kan geen gesprek starten",
   "call_failed_busy": "Andere persoon is in gesprek, kan geen gesprek starten.",
@@ -8,6 +10,7 @@
   "change_password_title": "Wijzig tijdelijk wachtwoord",
   "click_to_dial": "Klik en Bel",
   "contacts": "Collega's",
+  "continue": "Doorgaan",
   "email_address": "E-mailadres",
   "email": "E-mail",
   "en-US": "English",

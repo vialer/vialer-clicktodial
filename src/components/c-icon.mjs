@@ -1,4 +1,4 @@
-import { empty, loadIcon } from '/lib/dom.mjs';
+import { empty, loadIcon } from '/utils/dom.mjs';
 
 window.customElements.define(
   'c-icon',

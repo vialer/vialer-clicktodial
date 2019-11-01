@@ -1,6 +1,6 @@
 import '/components/c-contact.mjs';
 
-import { toggleVisibility, show, hide, loadTemplate } from '/lib/dom.mjs';
+import { toggleVisibility, show, hide, loadTemplate } from '/utils/dom.mjs';
 import { getContact } from '/lib/data.mjs';
 
 loadTemplate('c-colleagues').then(({ content }) => {

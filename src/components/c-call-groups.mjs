@@ -1,6 +1,6 @@
 import '/components/c-contact.mjs';
 
-import { toggleVisibility, loadTemplate } from '/lib/dom.mjs';
+import { toggleVisibility, loadTemplate } from '/utils/dom.mjs';
 import { getQueues } from '/lib/data.mjs';
 
 loadTemplate('c-call-groups').then(({ content }) => {

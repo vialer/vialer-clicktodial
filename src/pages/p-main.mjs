@@ -3,7 +3,7 @@ import '/components/c-call-groups.mjs';
 import '/components/c-account-info.mjs';
 import '/components/c-availability.mjs';
 
-import { loadTemplate } from '/lib/dom.mjs';
+import { loadTemplate } from '/utils/dom.mjs';
 
 loadTemplate('p-main').then(({ content }) => {
     window.customElements.define('p-main',
