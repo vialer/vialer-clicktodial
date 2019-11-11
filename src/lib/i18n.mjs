@@ -8,6 +8,7 @@ export let chosenLanguage = null;
 export async function setChosenLanguage() {
     let chosen = await browser.storage.local.get('chosenLanguage');
     chosenLanguage = Object.keys(chosen).length !== 0 ? chosen.chosenLanguage : availableLanguages[0]; // first as default
+    logger.info(`Chosen language is set on: ${chosenLanguage}`);
 }
 
 export function setTranslatedTextContent(node, key = node.dataset.translationKey) {
@@ -23,7 +24,6 @@ export function setTranslatedPlaceholder(node, key = node.dataset.placeholderTra
 }
 
 export function translateNodes(node = document.body) {
-    console.log(chosenLanguage)
     const collection = [];
     for (const n of node.querySelectorAll('[data-translation-key]')) {
         const { translationKey } = n.dataset;

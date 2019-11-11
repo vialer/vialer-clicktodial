@@ -1,6 +1,6 @@
 // import * as RemoteLogging from '/lib/remote-logging.mjs';
 
-import { logToConsole } from '/lib/console.mjs';
+import { logToConsole } from './console.mjs';
 
 const LEVELS = {
   error: 4,

@@ -87,7 +87,7 @@ function makeRequestObject(name, options) {
 
   // To be able to make a call.
   if (requestOptions.setCallId) {
-    requestOptions.path += localStorage.getItem('callid');   
+    requestOptions.path += localStorage.getItem('callid');
   }
 
   if (requestOptions.params) {

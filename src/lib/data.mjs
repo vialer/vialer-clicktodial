@@ -1,6 +1,6 @@
-import request from '/lib/request.mjs';
-import { Logger } from '/lib/logging.mjs';
-import { showNotification } from '/lib/notify.mjs';
+import request from './request.mjs';
+import { Logger } from './logging.mjs';
+import { showNotification } from './notify.mjs';
 
 const logger = new Logger('data');
 

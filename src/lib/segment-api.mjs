@@ -1,7 +1,7 @@
 // Based on: https://github.com/segmentio/analytics-node
 // Translated nodejs to a minimal browser implementation.
 
-import { uuidv4 } from '/utils/crypto.mjs';
+import { uuidv4 } from '../utils/crypto.mjs';
 // import pRetry from 'p-retry';
 
 export class Analytics {

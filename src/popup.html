@@ -3,6 +3,7 @@
 
 <head>
   <title>Click-to-Dial</title>
+  <meta charset="utf-8" />
   <link rel="stylesheet" href="styles/_elements.css" />
 </head>
 
@@ -24,11 +25,11 @@
 
 <template data-component="c-toggle-availability">
   <section>
+    <input type="checkbox" data-selector="dnd-checkbox" />
     <h3>
+      <!-- TODO deze shit fixen, waarom werkt het nieettttt??? -->
       <span data-translation-key="general"></span>
     </h3>
-    <!-- TODO deze shit fixen, waarom werkt het nieettttt??? -->
-    <input type="checkbox" data-selector="dnd-checkbox" />
   </section>
 </template>
 
@@ -144,15 +145,29 @@
 </template>
 
 <template data-component="c-language-switcher">
-    <label class="with-help-text">
-      <span data-translation-key="app_language"></span>
-      <select data-selector="language-select"></select>
-    </label>
-    <!-- <p class="help-text" data-translation-key="app_language_help_text"></p> -->
-  </template>
+  <label class="with-help-text">
+    <span data-translation-key="app_language"></span>
+    <select data-selector="language-select"></select>
+  </label>
+  <!-- <p class="help-text" data-translation-key="app_language_help_text"></p> -->
+</template>
 
 <template data-component="p-main">
   <section>
+  </section>
+</template>
+
+<template data-component="c-click-to-dial-wrapper">
+  <section>
+
+  </section>
+</template>
+
+<template data-component="c-click-to-dial-button">
+  <section>
+    <button data-selector="click-to-dial-button">
+      <c-icon icon="phone"></c-icon>
+    </button>
   </section>
 </template>
 
