@@ -1,8 +1,4 @@
-import { disable, enable, loadTemplate } from '../utils/dom.mjs';
-import { clickToDial } from '../lib/data.mjs';
 import { Logger } from '../lib/logging.mjs';
-import { showNotification } from '../lib/notify.mjs';
-import * as segment from '../lib/segment.mjs';
 
 const logger = new Logger('click-to-dial-button');
 const phoneIconClassName = 'vialer-icon'
@@ -39,10 +35,9 @@ window.customElements.define('c-click-to-dial-button',
             e.stopImmediatePropagation()
 
             if (this.phoneNumber) {
-                let { b_number } = await clickToDial(this.phoneNumber);
-                showNotification(`calling ${b_number}`);
-                // TODO track clicktodial ding
-                // segment.track.callContact();
+                chrome.runtime.sendMessage({ b_number: this.phoneNumber }, function (response) {
+                    logger.info(response.update);
+                })
             }
         }
 

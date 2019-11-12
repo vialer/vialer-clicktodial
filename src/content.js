@@ -10628,184 +10628,6 @@
 	return jQuery;
 	} );
 
-	/**
-	 * takes a string as argument and returns a template with that string set as innerHTML.
-	 * @param templateString - the content of the template to set.
-	 * @returns {templateNode} - a template with the content set.
-	 */
-
-	const templateCache = new Map();
-
-	Array.from(document.querySelectorAll('template')).forEach(templateNode => {
-	    const { component } = templateNode.dataset;
-	    templateCache.set(component, templateNode);
-	});
-
-	const BASE = "https://partner.voipgrid.nl/api/";
-
-	const CONFIGS = {
-	  contacts: {
-	    method: 'GET',
-	    useToken: true,
-	    path: 'phoneaccount/basic/phoneaccount/?active=true&order_by=description'
-	  },
-	  user: {
-	    method: 'GET',
-	    useToken: true,
-	    path: 'plugin/user/'
-	  },
-	  autologin: {
-	    method: 'GET',
-	    useToken: true,
-	    path: 'autologin/token/'
-	  },
-	  queues: {
-	    method: 'GET',
-	    useToken: true,
-	    path: 'queuecallgroup/'
-	  },
-	  clickToDial: {
-	    method: 'POST',
-	    useToken: true,
-	    path: 'clicktodial/',
-	    headers: {
-	      'Content-type': 'application/json'
-	    }
-	  },
-	  callStatus: {
-	    method: 'GET',
-	    useToken: true,
-	    path: '/clicktodial/',
-	    setCallId: true
-	  },
-	  setDestination: {
-	    method: 'PUT',
-	    useToken: true,
-	    path: 'selecteduserdestination/',
-	    headers: {
-	      'Content-type': 'application/json'
-	    }
-	  },
-	  getDestination: {
-	    method: 'GET',
-	    useToken: true,
-	    path: 'selecteduserdestination/'
-	  },
-	  destinations: {
-	    method: 'GET',
-	    useToken: true,
-	    path: 'userdestination/'
-	  },
-	  login: {
-	    method: 'POST',
-	    path: 'permission/apitoken/',
-	    headers: {
-	      'Content-type': 'application/json'
-	    }
-	  }
-	};
-
-	function makeRequestObject(name, options) {
-	  let config;
-
-	  if (name in CONFIGS) {
-	    config = Object.assign({}, CONFIGS[name]);
-	  } else {
-	    throw new Error(`api config '${name}' not found`);
-	  }
-
-	  const requestOptions = Object.assign({ headers: {} }, config, options);
-
-	  if (requestOptions.useToken) {
-	    const token = localStorage.getItem('token');
-	    if (!token) {
-	      throw new Error('unauthorised');
-	    }
-	    requestOptions.headers['authorization'] = token;
-	  }
-
-	  if (requestOptions.id) {
-	    requestOptions.path += `${requestOptions.id}/`;
-	  }
-
-	  // To be able to make a call.
-	  if (requestOptions.setCallId) {
-	    requestOptions.path += localStorage.getItem('callid');
-	  }
-
-	  if (requestOptions.params) {
-	    const queryString = Object.keys(requestOptions.params)
-	      .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(requestOptions.params[k]))
-	      .join('&');
-
-	    requestOptions.path += `?${queryString}`;
-	  }
-
-	  if (requestOptions.body && typeof requestOptions.body === 'object') {
-	    requestOptions.body = JSON.stringify(requestOptions.body);
-	  }
-
-	  const url = `${BASE}${requestOptions.path}`;
-
-	  delete requestOptions.path;
-	  delete requestOptions.useToken;
-	  delete requestOptions.params;
-	  delete requestOptions.id;
-
-	  return { url, requestOptions };
-	}
-
-	async function responseHandler(response) {
-	  const { status } = response;
-	  let json;
-
-	  if (status === 400) {
-	    try {
-	      json = await response.json();
-	      return Promise.reject({
-	        status,
-	        url: response.url,
-	        statusText: response.statusText,
-	        body: json
-	      });
-	    } catch (err) {
-	      throw new Error('bad request');
-	    }
-	  }
-
-	  if (status === 401) {
-	    throw new Error('unauthorised');
-	  }
-
-	  if (status === 403) {
-	    const message = await response.text();
-	    throw new Error(message);
-	  }
-
-	  if (status === 404) {
-	    // not found
-	    return undefined;
-	  }
-
-	  if (status === 429) {
-	    throw new Error('too_many_requests');
-	  }
-
-	  if (status === 200 || status === 201) {
-	    try {
-	      json = await response.json();
-	      return json;
-	    } catch (err) {
-	      return {};
-	    }
-	  }
-	}
-
-	function request(name, options) {
-	  const { url, requestOptions } = makeRequestObject(name, options);
-	  return fetch(url, requestOptions).then(responseHandler);
-	}
-
 	function logToConsole(level, module, message, ...args) {
 	    const fn =
 	      {
@@ -10868,197 +10690,7 @@
 	  }
 	}
 
-	function showNotification(title, options) {
-	    let notification = new Notification(title, options);
-	}
-
-	const logger = new Logger('data');
-
-	let callStatusInterval;
-
-	async function clickToDial(bNumber) {
-	  const body = { b_number: bNumber };
-	  try {
-	    const { a_number, auto_answer, b_number, callid } = await request('clickToDial', { body });
-	    localStorage.setItem('callid', callid);
-	    callStatusInterval = setInterval(getCallStatus, 3000);
-	    return { a_number, auto_answer, b_number, callid };
-	  } catch (err) {
-	    logger.error('Call not succesfull', err);
-	  }
-	}
-
-	async function getCallStatus() {
-	  const { a_number, auto_answer, b_number, callid, status } = await request('callStatus');
-	  stopIntervalAtStatus(status);
-	  // return { a_number, auto_answer, b_number, callid, status };
-	}
-
-	function stopIntervalAtStatus(status) {
-	  if (status !== 'dialing_b') {
-	    showNotification(status);
-	    clearInterval(callStatusInterval);
-	  }
-	}
-
-	// Code from https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest
-
-	// https://stackoverflow.com/a/2117523
-	function uuidv4() {
-	  return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
-	    (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16)
-	  );
-	}
-
-	// Based on: https://github.com/segmentio/analytics-node
-	// import pRetry from 'p-retry';
-
-	class Analytics {
-	  /**
-	   * Initialize a new `Analytics` with your Segment project's `writeKey` and an
-	   * optional dictionary of `options`.
-	   *
-	   * @param {String} writeKey
-	   * @param {Object} [options] (optional)
-	   *   @property {Number} flushAt (default: 20)
-	   *   @property {Number} flushInterval (default: 10000)
-	   *   @property {String} host (default: 'https://api.segment.io')
-	   *   @property {Boolean} enable (default: true)
-	   */
-	  constructor(writeKey, options = {}) {
-	    if (!writeKey) {
-	      throw new Error("You must pass your Segment project's write key.");
-	    }
-
-	    this.queue = [];
-	    this.writeKey = writeKey;
-	    this.host = options.host || 'https://api.segment.io';
-	    this.timeout = options.timeout || false;
-	    this.flushAt = Math.max(options.flushAt, 1) || 20;
-	    this.flushInterval = options.flushInterval || 10000;
-	    this.flushed = false;
-	    this.retryCount = options.retryCount || 3;
-	  }
-
-	  identify(message) {
-	    this.enqueue('identify', message);
-	  }
-
-	  track(message) {
-	    this.enqueue('track', message);
-	  }
-
-	  /**
-	   * Add a `message` of type `type` to the queue and
-	   * check whether it should be flushed.
-	   *
-	   * @param {String} type
-	   * @param {Object} message
-	   */
-	  enqueue(type, message) {
-	    message = Object.assign({}, message);
-	    message.type = type;
-
-	    if (!message.timestamp) {
-	      message.timestamp = new Date();
-	    }
-
-	    if (!message.messageId) {
-	      // TODO: node implementation added md5 of message here..
-	      message.messageId = uuidv4();
-	    }
-
-	    this.queue.push(message);
-
-	    if (!this.flushed) {
-	      this.flushed = true;
-	      this.flush();
-	      return;
-	    }
-
-	    if (this.queue.length >= this.flushAt) {
-	      this.flush();
-	    }
-
-	    if (this.flushInterval && !this.timer) {
-	      this.timer = setTimeout(() => this.flush(), this.flushInterval);
-	    }
-	  }
-
-	  async _sendRequest(data) {
-	    const response = await fetch(`${this.host}/v1/batch`, {
-	      method: 'POST',
-	      headers: {
-	        'Content-Type': 'application/json',
-	        'Authorization': 'Basic ' + btoa(this.writeKey + ":")
-	      },
-	      body: JSON.stringify(data)
-	    });
-
-	    if (response.ok) {
-	      return response;
-	    }
-
-	    if (response.status === 429 ||
-	        (response.status >= 500 && response.status < 600)) {
-	      // Error is retryable
-	      throw new Error(response.statusText);
-	    }
-
-	    // Abort retries.
-	    // throw new pRetry.AbortError(response.statusText);
-	  }
-
-	  async sendRequest(data) {
-	    this._sendRequest(data);
-	    // await pRetry(() => this._sendRequest(data), {
-	    //   retries: this.retryCount
-	    // });
-	  }
-
-	  async flush() {
-	    if (this.timer) {
-	      clearTimeout(this.timer);
-	      this.timer = null;
-	    }
-
-	    if (!this.queue.length) {
-	      return;
-	    }
-
-	    const messages = this.queue.splice(0, this.flushAt);
-
-	    const data = {
-	      batch: messages,
-	      timestamp: new Date(),
-	      sentAt: new Date()
-	    };
-
-	    await this.sendRequest(data);
-	  }
-	}
-
-	// import { BRAND, VERSION } from '/lib/constants.mjs';
-
-	const SEGMENT_API_URL = 'https://api.segment.io';
-	const SEGMENT_WRITE_KEY = 'SSnR5qQW22VHmx0vtnyas25wY8JmAgPo';
-
-	const logger$1 = new Logger('segment');
-
-	let segmentApi;
-
-	function init() {
-
-	  try {
-	    segmentApi = new Analytics(SEGMENT_WRITE_KEY, { host: SEGMENT_API_URL });
-	  } catch (e) {
-	    logger$1.error('init failed', e);
-	  }
-	}
-
-	init();
-
-	const logger$2 = new Logger('click-to-dial-button');
+	const logger = new Logger('click-to-dial-button');
 	const phoneIconClassName = 'vialer-icon';
 
 	const template = document.createElement('template');
@@ -11091,13 +10723,11 @@ knop
 	            e.preventDefault();
 	            e.stopPropagation();
 	            e.stopImmediatePropagation();
-	            console.log(this.phoneNumber); //TODO ==== undefined
 
 	            if (this.phoneNumber) {
-	                let { b_number } = await clickToDial(this.phoneNumber);
-	                showNotification(`calling ${b_number}`);
-	                // TODO track clicktodial ding
-	                // segment.track.callContact();
+	                chrome.runtime.sendMessage({ b_number: this.phoneNumber }, function (response) {
+	                    logger.info(response.update);
+	                });
 	            }
 	        }
 
@@ -11138,7 +10768,7 @@ knop
 	);
 	// })
 
-	const logger$3 = new Logger('walker');
+	const logger$1 = new Logger('walker');
 
 	// Identify our elements with these class names.
 	const phoneElementClassName$1 = 'vialer-phone-number';
@@ -11937,7 +11567,7 @@ knop
 	    }
 	}
 
-	const logger$4 = new Logger('observer');
+	const logger$2 = new Logger('observer');
 
 	/**
 	 * The Observer module. Injected in all tabs and all its frames.
@@ -12011,7 +11641,7 @@ knop
 	        // sized pages to prevent locking the page.
 	        let childrenLength = $(root).find('*').length; // no lookup costs
 	        if (childrenLength < 2001) {
-	            logger$4.debug(`${this}scanning ${childrenLength} elements`);
+	            logger$2.debug(`${this}scanning ${childrenLength} elements`);
 	            this.walker.walkTheDOM(root, (currentNode) => {
 	                // Scan using every available parser.
 	                this.parsers.forEach((localeParser) => {
@@ -12024,8 +11654,6 @@ knop
 	                    // (doesn't work with a text node)
 	                    let replacementNode = document.createElement('c-click-to-dial-wrapper');
 	                    let originalHTML = this.escapeHTML(currentNode.data);
-	                    // replacementNode.textContent = currentNode.data
-	                    // replacementNode.innerHTML = this.escapeHTML(currentNode.data)
 
 	                    let matches = parser().parse(originalHTML);
 	                    if (matches.length) {
@@ -12034,10 +11662,6 @@ knop
 
 	                            matches.reverse().forEach((match) => {
 	                                let numberIconElement = document.createElement('c-click-to-dial-button'); //this.createNumberIconElement(match.number)
-	                                
-
-	                                // prefix icon with match (==number)
-	                                // let originalText = originalHTML.slice(match.start, match.end) //TODO checken of dit nog nodig zijn
 
 	                                let before = document.createElement('span');
 	                                before.textContent = originalHTML.slice(0, match.start);
@@ -12045,16 +11669,12 @@ knop
 	                                after.textContent = originalHTML.slice(match.end);
 	                                let originalNumber = document.createElement('span');
 	                                originalNumber.textContent = originalHTML.slice(match.start, match.end);
-
 	                                
 	                                numberIconElement.contactDetails = match.number;
 	                                replacementNode.appendChild(before);
 	                                replacementNode.appendChild(originalNumber);
 	                                replacementNode.appendChild(numberIconElement);
 	                                replacementNode.appendChild(after);
-	                              
-	                                // TODO dit vervangen 
-	                                // replacementNode.innerHTML = before + originalText + numberIconElement.innerHTML + after //replacementNode.innerHTML = before + numberIconElement.innerHTML + after
 	                            });
 
 	                            currentNode.parentNode.insertBefore(replacementNode, currentNode);
@@ -12064,7 +11684,7 @@ knop
 	                }); 
 	            });
 	        } else {
-	           logger$4.debug(`${this}not scanning ${childrenLength} elements`);
+	           logger$2.debug(`${this}not scanning ${childrenLength} elements`);
 	        }
 
 	        if (pause) {
@@ -12077,13 +11697,13 @@ knop
 	    * Injects icons in the page and start observing the page for changes.
 	    */
 	    processPage() {
-	        logger$4.debug(`${this}start observing`);
+	        logger$2.debug(`${this}start observing`);
 	        // Inject our print stylesheet.
 	        // $('head').append(this.printStyle)
 	        // Insert icons.
 	        const before = new Date().getTime();
 	        this.doInsert();
-	        logger$4.debug(`${this}doInsert (processPage) took`, new Date().getTime() - before);
+	        logger$2.debug(`${this}doInsert (processPage) took`, new Date().getTime() - before);
 	        // Start listening to DOM mutations.
 	        this.observePage();
 	    }
@@ -12116,7 +11736,7 @@ knop
 	        // Handle mutations if it probably isn't too much to handle
 	        // (current limit is totally random).
 	        if (_parkedNodes.length < 151) {
-	            logger$4.debug(`${this}processing ${_parkedNodes.length} parked nodes.`);
+	            logger$2.debug(`${this}processing ${_parkedNodes.length} parked nodes.`);
 	            let batchSize = 40; // random size
 	            for (let i = 0; i < Math.ceil(_parkedNodes.length / batchSize); i++) {
 	                ((index) => {
@@ -12127,10 +11747,10 @@ knop
 	                            if (stillInDocument) {
 	                                let before = new Date().getTime();
 	                                this.doInsert(node);
-	                                logger$4.debug(
+	                                logger$2.debug(
 	                                    `${this}doInsert (handleMutations) took`, new Date().getTime() - before);
 	                            } else {
-	                                logger$4.debug(`${this}doInsert (handleMutations) took 0 - removed node`);
+	                                logger$2.debug(`${this}doInsert (handleMutations) took 0 - removed node`);
 	                            }
 	                        }
 	                    }, 0); // Push back execution to the end on the current event stack.

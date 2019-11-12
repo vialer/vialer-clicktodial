@@ -92,7 +92,6 @@ export class ObserverModule {
                     // (doesn't work with a text node)
                     let replacementNode = document.createElement('c-click-to-dial-wrapper');
                     let originalHTML = this.escapeHTML(currentNode.data);
-                    // replacementNode.textContent = currentNode.data // TODO is dit nog wel of niet nodig?
 
                     let matches = parser().parse(originalHTML);
                     if (matches.length) {
