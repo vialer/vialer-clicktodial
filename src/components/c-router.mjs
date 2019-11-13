@@ -50,6 +50,7 @@ window.customElements.define('c-router',
         }
 
         connectedCallback() {
+            // TODO dit verwijderen als het succesvol is.
             startTrackingUser();
             window.addEventListener('updatePlugin', () => {
                 this.showView();

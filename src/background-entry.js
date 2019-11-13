@@ -1,14 +1,23 @@
 import { clickToDial } from './lib/data.mjs';
 import { showNotification } from './lib/notify.mjs';
-import * as segment from './lib/segment.mjs';
+import { Logger } from './lib/logging.mjs';
+
+// import 'webextension-polyfill';
+// import * as segment from './lib/segment.mjs';
+// import { startTrackingUser } from './utils/startTrackingUser.mjs';
+
+// startTrackingUser();
+const logger = new Logger('background');
+
 
 chrome.runtime.onMessage.addListener(async function (request, sender, sendResponse) {
     if (request.b_number) {
-        let { b_number } = await clickToDial(request.b_number);
-        if (b_number) {
-            segment.track.clickedToDial();
+        clickToDial(request.b_number).then(({ b_number }) => {
             showNotification(`calling ${b_number}`);
             sendResponse({ update: 'Trying to make the call' });
-        }
+        }).catch((e)=>{
+            logger.error(e);
+        })
+        //TODO notificatie als er error status code terugkomt
     }
 });

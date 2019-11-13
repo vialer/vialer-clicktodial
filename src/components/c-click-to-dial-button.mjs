@@ -1,4 +1,5 @@
 import { Logger } from '../lib/logging.mjs';
+import * as segment from '../lib/segment.mjs';
 
 const logger = new Logger('click-to-dial-button');
 const phoneIconClassName = 'vialer-icon'
@@ -37,6 +38,8 @@ window.customElements.define('c-click-to-dial-button',
             if (this.phoneNumber) {
                 chrome.runtime.sendMessage({ b_number: this.phoneNumber }, function (response) {
                     logger.info(response.update);
+                    // TODO track clicktodial ding
+                    segment.track.callContact();
                 })
             }
         }

@@ -10690,7 +10690,199 @@
 	  }
 	}
 
-	const logger = new Logger('click-to-dial-button');
+	// Code from https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest
+
+	// https://stackoverflow.com/a/2117523
+	function uuidv4() {
+	  return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+	    (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16)
+	  );
+	}
+
+	// Based on: https://github.com/segmentio/analytics-node
+	// import pRetry from 'p-retry';
+
+	class Analytics {
+	  /**
+	   * Initialize a new `Analytics` with your Segment project's `writeKey` and an
+	   * optional dictionary of `options`.
+	   *
+	   * @param {String} writeKey
+	   * @param {Object} [options] (optional)
+	   *   @property {Number} flushAt (default: 20)
+	   *   @property {Number} flushInterval (default: 10000)
+	   *   @property {String} host (default: 'https://api.segment.io')
+	   *   @property {Boolean} enable (default: true)
+	   */
+	  constructor(writeKey, options = {}) {
+	    if (!writeKey) {
+	      throw new Error("You must pass your Segment project's write key.");
+	    }
+
+	    this.queue = [];
+	    this.writeKey = writeKey;
+	    this.host = options.host || 'https://api.segment.io';
+	    this.timeout = options.timeout || false;
+	    this.flushAt = Math.max(options.flushAt, 1) || 20;
+	    this.flushInterval = options.flushInterval || 10000;
+	    this.flushed = false;
+	    this.retryCount = options.retryCount || 3;
+	  }
+
+	  identify(message) {
+	    this.enqueue('identify', message);
+	  }
+
+	  track(message) {
+	    this.enqueue('track', message);
+	  }
+
+	  /**
+	   * Add a `message` of type `type` to the queue and
+	   * check whether it should be flushed.
+	   *
+	   * @param {String} type
+	   * @param {Object} message
+	   */
+	  enqueue(type, message) {
+	    message = Object.assign({}, message);
+	    message.type = type;
+
+	    if (!message.timestamp) {
+	      message.timestamp = new Date();
+	    }
+
+	    if (!message.messageId) {
+	      // TODO: node implementation added md5 of message here..
+	      message.messageId = uuidv4();
+	    }
+
+	    this.queue.push(message);
+
+	    if (!this.flushed) {
+	      this.flushed = true;
+	      this.flush();
+	      return;
+	    }
+
+	    if (this.queue.length >= this.flushAt) {
+	      this.flush();
+	    }
+
+	    if (this.flushInterval && !this.timer) {
+	      this.timer = setTimeout(() => this.flush(), this.flushInterval);
+	    }
+	  }
+
+	  async _sendRequest(data) {
+	    const response = await fetch(`${this.host}/v1/batch`, {
+	      method: 'POST',
+	      headers: {
+	        'Content-Type': 'application/json',
+	        'Authorization': 'Basic ' + btoa(this.writeKey + ":")
+	      },
+	      body: JSON.stringify(data)
+	    });
+
+	    if (response.ok) {
+	      return response;
+	    }
+
+	    if (response.status === 429 ||
+	        (response.status >= 500 && response.status < 600)) {
+	      // Error is retryable
+	      throw new Error(response.statusText);
+	    }
+
+	    // Abort retries.
+	    // throw new pRetry.AbortError(response.statusText);
+	  }
+
+	  async sendRequest(data) {
+	    this._sendRequest(data);
+	    // await pRetry(() => this._sendRequest(data), {
+	    //   retries: this.retryCount
+	    // });
+	  }
+
+	  async flush() {
+	    if (this.timer) {
+	      clearTimeout(this.timer);
+	      this.timer = null;
+	    }
+
+	    if (!this.queue.length) {
+	      return;
+	    }
+
+	    const messages = this.queue.splice(0, this.flushAt);
+
+	    const data = {
+	      batch: messages,
+	      timestamp: new Date(),
+	      sentAt: new Date()
+	    };
+
+	    await this.sendRequest(data);
+	  }
+	}
+
+	// import { BRAND, VERSION } from '/lib/constants.mjs';
+
+	const SEGMENT_API_URL = 'https://api.segment.io';
+	const SEGMENT_WRITE_KEY = 'SSnR5qQW22VHmx0vtnyas25wY8JmAgPo';
+
+	const logger = new Logger('segment');
+
+	let segmentApi;
+	let segmentUserId;
+
+	function init() {
+
+	  try {
+	    segmentApi = new Analytics(SEGMENT_WRITE_KEY, { host: SEGMENT_API_URL });
+	  } catch (e) {
+	    logger.error('init failed', e);
+	  }
+	}
+
+	async function trackEvent(event, properties) {
+	  try {
+	    if (!segmentUserId) {
+	      logger.debug('trying to track event without user!');
+	      return;
+	    }
+
+	    logger.debug(`tracking event ${event} with properties: ${JSON.stringify(properties)}`);
+	    if (segmentApi) {
+	      segmentApi.track({
+	        userId: segmentUserId,
+	        event,
+	        properties
+	      });
+	    }
+	  } catch (e) {
+	    logger.error(e);
+	  }
+	}
+
+	function tr(event, properties) {
+	  return () => trackEvent(event, properties);
+	}
+
+	const track = {
+	  login: tr('login'),
+	  callContact: tr('call_contact'),
+	  logout: tr('logout'),
+	  toggleDnd: tr('dnd_toggle'),
+	  updateAvailability: tr('availability_update'),
+	  clickedToDial: (tr('click_to_dial')) //TODO als parser geintegreerd is.
+
+	};
+
+	init();
+
+	const logger$1 = new Logger('click-to-dial-button');
 	const phoneIconClassName = 'vialer-icon';
 
 	const template = document.createElement('template');
@@ -10726,7 +10918,9 @@ knop
 
 	            if (this.phoneNumber) {
 	                chrome.runtime.sendMessage({ b_number: this.phoneNumber }, function (response) {
-	                    logger.info(response.update);
+	                    logger$1.info(response.update);
+	                    // TODO track clicktodial ding
+	                    track.callContact();
 	                });
 	            }
 	        }
@@ -10768,7 +10962,7 @@ knop
 	);
 	// })
 
-	const logger$1 = new Logger('walker');
+	const logger$2 = new Logger('walker');
 
 	// Identify our elements with these class names.
 	const phoneElementClassName$1 = 'vialer-phone-number';
@@ -11567,7 +11761,7 @@ knop
 	    }
 	}
 
-	const logger$2 = new Logger('observer');
+	const logger$3 = new Logger('observer');
 
 	/**
 	 * The Observer module. Injected in all tabs and all its frames.
@@ -11641,7 +11835,7 @@ knop
 	        // sized pages to prevent locking the page.
 	        let childrenLength = $(root).find('*').length; // no lookup costs
 	        if (childrenLength < 2001) {
-	            logger$2.debug(`${this}scanning ${childrenLength} elements`);
+	            logger$3.debug(`${this}scanning ${childrenLength} elements`);
 	            this.walker.walkTheDOM(root, (currentNode) => {
 	                // Scan using every available parser.
 	                this.parsers.forEach((localeParser) => {
@@ -11684,7 +11878,7 @@ knop
 	                }); 
 	            });
 	        } else {
-	           logger$2.debug(`${this}not scanning ${childrenLength} elements`);
+	           logger$3.debug(`${this}not scanning ${childrenLength} elements`);
 	        }
 
 	        if (pause) {
@@ -11697,13 +11891,13 @@ knop
 	    * Injects icons in the page and start observing the page for changes.
 	    */
 	    processPage() {
-	        logger$2.debug(`${this}start observing`);
+	        logger$3.debug(`${this}start observing`);
 	        // Inject our print stylesheet.
 	        // $('head').append(this.printStyle)
 	        // Insert icons.
 	        const before = new Date().getTime();
 	        this.doInsert();
-	        logger$2.debug(`${this}doInsert (processPage) took`, new Date().getTime() - before);
+	        logger$3.debug(`${this}doInsert (processPage) took`, new Date().getTime() - before);
 	        // Start listening to DOM mutations.
 	        this.observePage();
 	    }
@@ -11736,7 +11930,7 @@ knop
 	        // Handle mutations if it probably isn't too much to handle
 	        // (current limit is totally random).
 	        if (_parkedNodes.length < 151) {
-	            logger$2.debug(`${this}processing ${_parkedNodes.length} parked nodes.`);
+	            logger$3.debug(`${this}processing ${_parkedNodes.length} parked nodes.`);
 	            let batchSize = 40; // random size
 	            for (let i = 0; i < Math.ceil(_parkedNodes.length / batchSize); i++) {
 	                ((index) => {
@@ -11747,10 +11941,10 @@ knop
 	                            if (stillInDocument) {
 	                                let before = new Date().getTime();
 	                                this.doInsert(node);
-	                                logger$2.debug(
+	                                logger$3.debug(
 	                                    `${this}doInsert (handleMutations) took`, new Date().getTime() - before);
 	                            } else {
-	                                logger$2.debug(`${this}doInsert (handleMutations) took 0 - removed node`);
+	                                logger$3.debug(`${this}doInsert (handleMutations) took 0 - removed node`);
 	                            }
 	                        }
 	                    }, 0); // Push back execution to the end on the current event stack.
