@@ -8,7 +8,6 @@ src/brand.json
 ./*.zip
 .vialer-jsrc
 .directory
-src/brand
 .vscode
 .env
 ~
