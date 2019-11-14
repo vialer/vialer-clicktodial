@@ -1,3 +1,4 @@
+import browser from '/vendor/browser-polyfill.js';
 import { setDestination } from '/lib/data.mjs';
 import { loadTemplate } from '/utils/dom.mjs';
 import * as segment from '/lib/segment.mjs';

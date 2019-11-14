@@ -1,4 +1,6 @@
 import { Logger } from '/lib/logging.mjs';
+import browser from '/vendor/browser-polyfill.js';
+
 
 const logger = new Logger('i18n');
 

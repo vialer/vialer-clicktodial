@@ -1,5 +1,6 @@
 
 import { getUser, getQueues, getContact } from '/lib/data.mjs';
+import browser from '/vendor/browser-polyfill.js';
 
 const userTimeout = 2 * 60 * 1000; // = 2 minutes
 const queuesTimeout = 2 * 60 * 1000;

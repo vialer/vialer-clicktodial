@@ -5,7 +5,6 @@ import makeDirectory from './helpers/makeDirectory.mjs';
 import processFile from './helpers/processFile.mjs';
 import copyRelevantBrandFiles from './helpers/copyRelevantBrandFiles.mjs';
 import spawnProcess from './helpers/spawnProcess.mjs';
-import injectPreCacheManifest from './helpers/injectPreCacheManifest.mjs';
 import {
   SOURCE_DIR,
   DESTINATION_DIR,
@@ -49,7 +48,6 @@ export default async function build({first}) {
     console.log();
     o.succeed('Finished Rollup build');
 
-    await injectPreCacheManifest();
   } catch (e) {
     console.error(e);
   }

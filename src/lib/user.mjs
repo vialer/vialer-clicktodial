@@ -2,6 +2,8 @@ import request from '/lib/request.mjs';
 import { getUser } from './data.mjs';
 import { Logger } from '/lib/logging.mjs';
 import * as segment from '/lib/segment.mjs';
+import browser from '/vendor/browser-polyfill.js';
+
 
 const logger = new Logger('user');
 

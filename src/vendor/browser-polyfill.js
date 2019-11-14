@@ -1,16 +1,4 @@
-(function (global, factory) {
-  if (typeof define === "function" && define.amd) {
-    define("webextension-polyfill", ["module"], factory);
-  } else if (typeof exports !== "undefined") {
-    factory(module);
-  } else {
-    var mod = {
-      exports: {}
-    };
-    factory(mod);
-    global.browser = mod.exports;
-  }
-})(this, function (module) {
+const r = (function (module) {
   /* webextension-polyfill - v0.5.0 - Thu Sep 26 2019 22:22:26 */
   /* -*- Mode: indent-tabs-mode: nil; js-indent-level: 2 -*- */
   /* vim: set sts=2 sw=2 et tw=80: */
@@ -1179,9 +1167,10 @@
 
     // The build process adds a UMD wrapper around this file, which makes the
     // `module` variable available.
-    module.exports = wrapAPIs(chrome);
+    return wrapAPIs(chrome);
   } else {
-    module.exports = browser;
+    return browser;
   }
-});
-//# sourceMappingURL=browser-polyfill.js.map
+})();
+
+export default r;

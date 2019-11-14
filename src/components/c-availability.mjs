@@ -1,3 +1,4 @@
+import browser from '/vendor/browser-polyfill.js';
 import '/components/c-toggle-availability.mjs';
 
 import { empty, disable, enable, select, loadTemplate } from '/utils/dom.mjs';

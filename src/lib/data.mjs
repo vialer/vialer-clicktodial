@@ -1,6 +1,7 @@
 import request from './request.mjs';
 import { Logger } from './logging.mjs';
 import { showNotification } from './notify.mjs';
+import browser from '/vendor/browser-polyfill.js';
 
 const logger = new Logger('data');
 
