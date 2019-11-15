@@ -27,4 +27,3 @@ loadTemplate("p-main").then(({ content }) => {
     }
   );
 });
-\;
