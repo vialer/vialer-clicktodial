@@ -58,28 +58,29 @@ export class Walker {
     * @param {Node} element - The DOM element to check.
     * @returns {Boolean} - Whether the element is blocked or not.
     */
-   isBlockedElement(element) {
-    if (element.tagName in this.blockedTagNames) {
-        return true
-    }
-
-    // Check for attributes on *element*.
-    if ($(element).is('[contenteditable="true"]') ||
-            $(element).is('[aria-labelledby]') ||
-            ($(element).is('[role]') && $(element).attr('role').toLowerCase() in this.blockedRoles)) {
-        return true
-    } else {
-        // check for attributes on *parents*
-        let closest_role_element = $(element).closest('[role]')
-        if (!!$(element).closest('[contenteditable="true"]').length ||
-                !!$(element).closest('[aria-labelledby]').length ||
-                (!!closest_role_element.length &&
-                 $(closest_role_element[0]).attr('role').toLowerCase() in this.blockedRoles)) {
+    isBlockedElement(element) {
+        if (element.tagName in this.blockedTagNames) {
             return true
         }
+
+        // Check for attributes on *element*.
+        if (element.isContentEditable ||
+            element.hasAttribute('aria-labelledby') ||
+            element.hasAttribute('role') && element.getAttribute('role').toLowerCase() in this.blockedRoles) {
+            return true
+        } else {
+            //TODO dit terugzetten
+            // check for attributes on *parents*
+            // let closest_role_element = $(element).closest('[role]')
+            // if (!!$(element).closest('[contenteditable="true"]').length ||
+            //     !!$(element).closest('[aria-labelledby]').length ||
+            //     (!!closest_role_element.length &&
+            //         $(closest_role_element[0]).attr('role').toLowerCase() in this.blockedRoles)) {
+            //     return true
+            // }
+        }
+        return false
     }
-    return false
-}
 
 
     /**
@@ -111,7 +112,7 @@ export class Walker {
             }
 
             // Skip existing numbers with an icon.
-            if ($(parentElement).hasClass(phoneElementClassName)) {
+            if (parentElement.classList.contains(phoneElementClassName)) {
                 return true
             }
 
@@ -144,7 +145,6 @@ export class Walker {
             },
         }
 
-        //TODO filter terugzetten
         let nodeIterator = document.createNodeIterator(root, whatToShow, filter)
 
         let curNode

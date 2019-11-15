@@ -23,10 +23,5 @@ loadTemplate('c-shortcuts').then(({ content }) => {
                 this.settings.setAttribute('href', "https://webphone.vialer.nl/settings");
             }
 
-            //TODO nadenken over hoe er gedetecteerd kan worden of de webphone al open staat, en dan een focus + redirect doen
-            openOrFocus(url){
-                window.open(url, )
-            }
-
         });
 })

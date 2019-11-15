@@ -45,9 +45,6 @@ function getConfig(input, file) {
   return {
     input,
     output: {
-      globals: {
-        jquery: '$'
-      },
       file,
       format: 'esm',
       sourcemap: true,

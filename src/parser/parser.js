@@ -587,7 +587,9 @@ export default function() {
         }
 
         // sanity check: are there any unwanted characters we kept because of skipping ?
-        let just_text = $('<span>').html(result_raw).text()
+        // let just_text = $('<span>').html(result_raw).text()
+        let just_text = document.createElement('option').innerText = result_raw;
+
 
         // Find first digit
         let pos_digit = just_text.search(/\d/g)

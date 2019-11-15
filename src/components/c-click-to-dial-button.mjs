@@ -37,9 +37,8 @@ window.customElements.define('c-click-to-dial-button',
             e.stopImmediatePropagation()
 
             if (this.phoneNumber) {
-                browser.runtime.sendMessage({ b_number: this.phoneNumber }, function (response) {
-                    logger.info(response.update);
-                    // TODO track clicktodial ding
+                browser.runtime.sendMessage(null, { b_number: this.phoneNumber }).then(() => {
+                    logger.info(`Trying to call ${this.phoneNumber}`);
                     segment.track.callContact();
                 })
             }

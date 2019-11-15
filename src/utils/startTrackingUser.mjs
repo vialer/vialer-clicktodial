@@ -1,12 +1,13 @@
 import { Logger } from '../lib/logging.mjs';
 import * as segment from '../lib/segment.mjs';
 import browser from '/vendor/browser-polyfill.js';
+// Error: Unexpected token (Note that you need plugins to import files that are not JavaScript)  ^^^^^^^^^^^^^
 
 
 const logger = new Logger('startTrackingUser');
 
 export async function startTrackingUser() {
-    // if (!segmentUserIdSet()) {
+    if (!segmentUserIdSet()) {
         browser.storage.local.get("user").then(async (user) => {
             if (Object.keys(user).length !== 0) {
                 let email = user.user.email;
@@ -15,9 +16,9 @@ export async function startTrackingUser() {
                 logger.warn('User not yet logged in, tracking not possible');
             }
         });
-    // } else{
-        // logger.info('UserId already set for this user');
-    // }
+    } else {
+        logger.info('UserId already set for this user');
+    }
 }
 
 async function segmentUserIdSet() {

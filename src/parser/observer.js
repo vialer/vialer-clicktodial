@@ -77,7 +77,7 @@ export class ObserverModule {
 
         // Walk the DOM looking for elements to parse, but block reasonably
         // sized pages to prevent locking the page.
-        let childrenLength = $(root).find('*').length // no lookup costs
+        let childrenLength = root.querySelectorAll('*').length // no lookup costs
         if (childrenLength < 2001) {
             logger.debug(`${this}scanning ${childrenLength} elements`)
             this.walker.walkTheDOM(root, (currentNode) => {
@@ -213,7 +213,7 @@ export class ObserverModule {
                 mutations.forEach((mutation) => {
                     // Filter mutations to park.
                     if (mutation.addedNodes.length) {
-                        $.each(mutation.addedNodes, (index, addedNode) => {
+                        Array.from(mutation.addedNodes).forEach((index, addedNode) => {
                             if (!this.walker.skipNode(addedNode)) {
                                 this.parkedNodes.push(addedNode)
                             }
