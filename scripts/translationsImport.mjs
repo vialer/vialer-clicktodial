@@ -1,8 +1,12 @@
-import { join } from 'path';
-import writeFile from './helpers/writeFile.mjs';
-import importFromFile from './translation/importFromFile.mjs';
-import getLocales from './translation/getLocales.mjs';
-import { LOCATION, TRANSLATION_FILE_TYPE, ROOT_DIR } from './translation/constants.mjs';
+import { join } from "path";
+import writeFile from "./helpers/writeFile.mjs";
+import importFromFile from "./translation/importFromFile.mjs";
+import getLocales from "./translation/getLocales.mjs";
+import {
+  LOCATION,
+  TRANSLATION_FILE_TYPE,
+  ROOT_DIR
+} from "./translation/constants.mjs";
 
 (async () => {
   try {
@@ -31,16 +35,21 @@ import { LOCATION, TRANSLATION_FILE_TYPE, ROOT_DIR } from './translation/constan
 
         return Promise.all(
           files.map(file => {
-            const fileName = join(LOCATION, lang, `${file}.${TRANSLATION_FILE_TYPE}`);
-            return writeFile(fileName, `${JSON.stringify(data[lang][file], null, '  ')}\n`).then(() =>
-              fileName.replace(ROOT_DIR, '')
+            const fileName = join(
+              LOCATION,
+              lang,
+              `${file}.${TRANSLATION_FILE_TYPE}`
             );
+            return writeFile(
+              fileName,
+              `${JSON.stringify(data[lang][file], null, "  ")}\n`
+            ).then(() => fileName.replace(ROOT_DIR, ""));
           })
         );
       })
-    )
+    );
 
-    console.log('language files imported and written to:');
+    console.log("language files imported and written to:");
     filesWritten.forEach(file => {
       console.log(`-  ${file}`);
     });

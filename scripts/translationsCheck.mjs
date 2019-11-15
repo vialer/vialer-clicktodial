@@ -1,21 +1,26 @@
-import { join } from 'path';
-import writeFile from './helpers/writeFile.mjs';
-import { LOCATION, ROOT_DIR } from './translation/constants.mjs';
-import getStats from './translation/getStats.mjs';
-import getProblems from './translation/getProblems.mjs';
+import { join } from "path";
+import writeFile from "./helpers/writeFile.mjs";
+import { LOCATION, ROOT_DIR } from "./translation/constants.mjs";
+import getStats from "./translation/getStats.mjs";
+import getProblems from "./translation/getProblems.mjs";
 
 (async () => {
-  const statsPath = join(LOCATION, 'stats.json');
+  const statsPath = join(LOCATION, "stats.json");
   const stats = await getStats();
-  writeFile(statsPath, JSON.stringify(stats, null, '  '));
-  console.log(`Language stats written to ${statsPath.replace(ROOT_DIR,'')}`);
+  writeFile(statsPath, JSON.stringify(stats, null, "  "));
+  console.log(`Language stats written to ${statsPath.replace(ROOT_DIR, "")}`);
 
-  const { missingKeys, missingFiles, missingTranslations, unusedTranslations } = await getProblems();
+  const {
+    missingKeys,
+    missingFiles,
+    missingTranslations,
+    unusedTranslations
+  } = await getProblems();
 
-  missingFiles.forEach(({property, where}) => {
+  missingFiles.forEach(({ property, where }) => {
     console.log(`Missing file ${property} in locale ${where}`);
   });
-  missingKeys.forEach(({property, where}) => {
+  missingKeys.forEach(({ property, where }) => {
     console.log(`Missing key ${property} in file ${where}`);
   });
   missingTranslations.forEach(missingTranslation => {
@@ -25,5 +30,5 @@ import getProblems from './translation/getProblems.mjs';
     console.log(`Unused translation key ${unusedTranslation}`);
   });
 
-  console.log('Checks done.');
+  console.log("Checks done.");
 })();

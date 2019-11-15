@@ -2,62 +2,62 @@ const BASE = "https://partner.voipgrid.nl/api/";
 
 const CONFIGS = {
   contacts: {
-    method: 'GET',
+    method: "GET",
     useToken: true,
-    path: 'phoneaccount/basic/phoneaccount/?active=true&order_by=description'
+    path: "phoneaccount/basic/phoneaccount/?active=true&order_by=description"
   },
   user: {
-    method: 'GET',
+    method: "GET",
     useToken: true,
-    path: 'plugin/user/'
+    path: "plugin/user/"
   },
   autologin: {
-    method: 'GET',
+    method: "GET",
     useToken: true,
-    path: 'autologin/token/'
+    path: "autologin/token/"
   },
   queues: {
-    method: 'GET',
+    method: "GET",
     useToken: true,
-    path: 'queuecallgroup/'
+    path: "queuecallgroup/"
   },
   clickToDial: {
-    method: 'POST',
+    method: "POST",
     useToken: true,
-    path: 'clicktodial/',
+    path: "clicktodial/",
     headers: {
-      'Content-type': 'application/json'
+      "Content-type": "application/json"
     }
   },
   callStatus: {
-    method: 'GET',
+    method: "GET",
     useToken: true,
-    path: '/clicktodial/',
+    path: "/clicktodial/",
     setCallId: true
   },
   setDestination: {
-    method: 'PUT',
+    method: "PUT",
     useToken: true,
-    path: 'selecteduserdestination/',
+    path: "selecteduserdestination/",
     headers: {
-      'Content-type': 'application/json'
+      "Content-type": "application/json"
     }
   },
   getDestination: {
-    method: 'GET',
+    method: "GET",
     useToken: true,
-    path: 'selecteduserdestination/'
+    path: "selecteduserdestination/"
   },
   destinations: {
-    method: 'GET',
+    method: "GET",
     useToken: true,
-    path: 'userdestination/'
+    path: "userdestination/"
   },
   login: {
-    method: 'POST',
-    path: 'permission/apitoken/',
+    method: "POST",
+    path: "permission/apitoken/",
     headers: {
-      'Content-type': 'application/json'
+      "Content-type": "application/json"
     }
   }
 };
@@ -74,11 +74,11 @@ function makeRequestObject(name, options) {
   const requestOptions = Object.assign({ headers: {} }, config, options);
 
   if (requestOptions.useToken) {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (!token) {
-      throw new Error('unauthorised');
+      throw new Error("unauthorised");
     }
-    requestOptions.headers['authorization'] = token;
+    requestOptions.headers["authorization"] = token;
   }
 
   if (requestOptions.id) {
@@ -87,18 +87,23 @@ function makeRequestObject(name, options) {
 
   // To be able to make a call.
   if (requestOptions.setCallId) {
-    requestOptions.path += localStorage.getItem('callid');
+    requestOptions.path += localStorage.getItem("callid");
   }
 
   if (requestOptions.params) {
     const queryString = Object.keys(requestOptions.params)
-      .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(requestOptions.params[k]))
-      .join('&');
+      .map(
+        k =>
+          encodeURIComponent(k) +
+          "=" +
+          encodeURIComponent(requestOptions.params[k])
+      )
+      .join("&");
 
     requestOptions.path += `?${queryString}`;
   }
 
-  if (requestOptions.body && typeof requestOptions.body === 'object') {
+  if (requestOptions.body && typeof requestOptions.body === "object") {
     requestOptions.body = JSON.stringify(requestOptions.body);
   }
 
@@ -126,12 +131,12 @@ async function responseHandler(response) {
         body: json
       });
     } catch (err) {
-      throw new Error('bad request');
+      throw new Error("bad request");
     }
   }
 
   if (status === 401) {
-    throw new Error('unauthorised');
+    throw new Error("unauthorised");
   }
 
   if (status === 403) {
@@ -145,7 +150,7 @@ async function responseHandler(response) {
   }
 
   if (status === 429) {
-    throw new Error('too_many_requests');
+    throw new Error("too_many_requests");
   }
 
   if (status === 200 || status === 201) {

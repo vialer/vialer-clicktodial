@@ -1,17 +1,17 @@
-import { empty, loadIcon } from '/utils/dom.mjs';
+import { empty, loadIcon } from "/utils/dom.mjs";
 
 window.customElements.define(
-  'c-icon',
+  "c-icon",
   class extends HTMLElement {
     static get observedAttributes() {
-      return ['icon'];
+      return ["icon"];
     }
 
     connectedCallback() {}
 
     attributeChangedCallback(name, oldValue, newValue) {
       if (this.isConnected) {
-        const folder = this.getAttribute('folder') || '/icons/';
+        const folder = this.getAttribute("folder") || "/icons/";
         loadIcon(`${folder}${newValue}`)
           .then(({ content }) => {
             empty(this);

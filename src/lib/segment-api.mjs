@@ -1,7 +1,7 @@
 // Based on: https://github.com/segmentio/analytics-node
 // Translated nodejs to a minimal browser implementation.
 
-import { uuidv4 } from '../utils/crypto.mjs';
+import { uuidv4 } from "../utils/crypto.mjs";
 // import pRetry from 'p-retry';
 
 export class Analytics {
@@ -23,7 +23,7 @@ export class Analytics {
 
     this.queue = [];
     this.writeKey = writeKey;
-    this.host = options.host || 'https://api.segment.io';
+    this.host = options.host || "https://api.segment.io";
     this.timeout = options.timeout || false;
     this.flushAt = Math.max(options.flushAt, 1) || 20;
     this.flushInterval = options.flushInterval || 10000;
@@ -32,11 +32,11 @@ export class Analytics {
   }
 
   identify(message) {
-    this.enqueue('identify', message);
+    this.enqueue("identify", message);
   }
 
   track(message) {
-    this.enqueue('track', message);
+    this.enqueue("track", message);
   }
 
   /**
@@ -78,10 +78,10 @@ export class Analytics {
 
   async _sendRequest(data) {
     const response = await fetch(`${this.host}/v1/batch`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Basic ' + btoa(this.writeKey + ":")
+        "Content-Type": "application/json",
+        Authorization: "Basic " + btoa(this.writeKey + ":")
       },
       body: JSON.stringify(data)
     });
@@ -90,8 +90,10 @@ export class Analytics {
       return response;
     }
 
-    if (response.status === 429 ||
-        (response.status >= 500 && response.status < 600)) {
+    if (
+      response.status === 429 ||
+      (response.status >= 500 && response.status < 600)
+    ) {
       // Error is retryable
       throw new Error(response.statusText);
     }
@@ -128,4 +130,3 @@ export class Analytics {
     await this.sendRequest(data);
   }
 }
-

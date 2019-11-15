@@ -1,4 +1,4 @@
-import exportToFile from './translation/exportToFile.mjs';
+import exportToFile from "./translation/exportToFile.mjs";
 
 (async () => {
   const exportedFile = await exportToFile();

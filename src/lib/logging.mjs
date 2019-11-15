@@ -1,6 +1,6 @@
 // import * as RemoteLogging from '/lib/remote-logging.mjs';
 
-import { logToConsole } from './console.mjs';
+import { logToConsole } from "./console.mjs";
 
 const LEVELS = {
   error: 4,
@@ -10,7 +10,7 @@ const LEVELS = {
   debug: 0
 };
 
-export let verbosity = 'info';
+export let verbosity = "info";
 
 export class Logger {
   constructor(module) {
@@ -19,9 +19,9 @@ export class Logger {
     // Define aliases for each log level on Logger.
     // eg. `Logger.info(...) = Logger.log('info', ...)`
     Object.keys(LEVELS).forEach(level => {
-      this[level] = (function() {
+      this[level] = function() {
         this.log.call(this, level, ...arguments);
-      }).bind(this);
+      }.bind(this);
     });
   }
 
@@ -29,10 +29,9 @@ export class Logger {
     const verbosityIdx = LEVELS[verbosity] || 0;
     const levelIdx = LEVELS[level] || 0;
     // if (levelIdx >= verbosityIdx) {
-      logToConsole(level, this.module, message, ...args);
+    logToConsole(level, this.module, message, ...args);
     // }
     // TODO later remote logging toevoegen
     // RemoteLogging.enqueueMessage(level, this.module, message, ...args);
   }
 }
-
