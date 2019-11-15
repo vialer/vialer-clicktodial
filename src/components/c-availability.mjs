@@ -14,10 +14,6 @@ loadTemplate('c-availability').then(({ content }) => {
     window.customElements.define('c-availability',
 
         class extends HTMLElement {
-            constructor() {
-                super();
-            }
-
             async connectedCallback() {
                 this.appendChild(content.cloneNode(true));
                 logger.info("Component mounted");

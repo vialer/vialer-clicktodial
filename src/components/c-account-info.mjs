@@ -8,10 +8,6 @@ loadTemplate('c-account-info').then(({ content }) => {
     window.customElements.define('c-account-info',
 
         class extends HTMLElement {
-            constructor() {
-                super();
-            }
-
             connectedCallback() {
                 this.appendChild(content.cloneNode(true));
                 console.log("Component mounted");

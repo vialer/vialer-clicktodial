@@ -4,10 +4,6 @@ loadTemplate('c-shortcuts').then(({ content }) => {
     window.customElements.define('c-shortcuts',
 
         class extends HTMLElement {
-            constructor() {
-                super();
-            }
-
             connectedCallback() {
                 this.appendChild(content.cloneNode(true));
                 console.log("Component mounted");

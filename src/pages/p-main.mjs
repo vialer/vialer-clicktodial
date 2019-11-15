@@ -8,11 +8,6 @@ import { loadTemplate } from '/utils/dom.mjs';
 loadTemplate('p-main').then(({ content }) => {
     window.customElements.define('p-main',
         class extends HTMLElement {
-
-            constructor() {
-                super();
-            }
-
             connectedCallback() {
                 this.appendChild(content.cloneNode(true));
 

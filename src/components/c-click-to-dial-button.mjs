@@ -16,10 +16,6 @@ knop
 window.customElements.define('c-click-to-dial-button',
 
     class extends HTMLElement {
-        constructor() {
-            super();
-        }
-
         connectedCallback() {
             this.appendChild(template.content.cloneNode(true));
             this.callButton = this.querySelector('[data-selector=click-to-dial-button]');

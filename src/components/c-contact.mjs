@@ -9,10 +9,6 @@ loadTemplate('c-contact').then(({ content }) => {
     customElements.define('c-contact',
 
         class Contact extends HTMLElement {
-            constructor() {
-                super();
-            }
-
             connectedCallback() {
                 this.appendChild(content.cloneNode(true));
                 this.callButton = this.querySelector('[data-selector=call-me]');

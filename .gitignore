@@ -2,7 +2,7 @@ node_modules
 build
 dist
 docs/build
-src/brand.json
+src/brand
 .tags
 .publish
 ./*.zip
@@ -10,3 +10,4 @@ src/brand.json
 .directory
 .vscode
 .env
+~

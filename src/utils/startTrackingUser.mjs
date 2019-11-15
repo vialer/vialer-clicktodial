@@ -1,8 +1,6 @@
 import { Logger } from '../lib/logging.mjs';
 import * as segment from '../lib/segment.mjs';
 import browser from '/vendor/browser-polyfill.js';
-// Error: Unexpected token (Note that you need plugins to import files that are not JavaScript)  ^^^^^^^^^^^^^
-
 
 const logger = new Logger('startTrackingUser');
 

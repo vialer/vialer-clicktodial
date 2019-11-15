@@ -12,10 +12,6 @@ template.innerHTML = `
 window.customElements.define('c-click-to-dial-wrapper',
 
     class extends HTMLElement {
-        constructor() {
-            super();
-        }
-
         connectedCallback() {
             // this.appendChild(content.cloneNode(true));
             this.appendChild(template.content.cloneNode(true));

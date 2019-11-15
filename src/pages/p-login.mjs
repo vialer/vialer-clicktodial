@@ -8,10 +8,6 @@ loadTemplate('p-login').then(({ content }) => {
     window.customElements.define('p-login',
 
         class extends HTMLElement {
-            constructor() {
-                super();
-            }
-
             connectedCallback() {
                 this.appendChild(content.cloneNode(true));
                 this.formNode = this.querySelector('form');

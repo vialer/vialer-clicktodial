@@ -7,10 +7,6 @@ loadTemplate('c-toggle-availability').then(({ content }) => {
     window.customElements.define('c-toggle-availability',
 
         class extends HTMLElement {
-            constructor() {
-                super();
-            }
-
             connectedCallback() {
                 this.appendChild(content.cloneNode(true));
                 this.checkbox = this.querySelector('[data-selector=dnd-checkbox]');
