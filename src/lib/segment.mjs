@@ -93,7 +93,7 @@ export const track = {
   logout: tr("logout"),
   toggleDnd: tr("dnd_toggle"),
   updateAvailability: tr("availability_update"),
-  clickedToDial: tr("click_to_dial") //TODO als parser geintegreerd is.
+  clickedToDial: tr("click_to_dial")
 };
 
 init();

@@ -75,8 +75,6 @@ loadTemplate("c-colleagues").then(({ content }) => {
           }
           node.doesMatchSearchString(value) ? show(node) : hide(node);
         }
-        // TODO besluiten dit wel of niet
-        // this.sortAlphabeticCharacterVisibility();
       }
     }
   );
