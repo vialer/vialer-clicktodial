@@ -13,46 +13,18 @@ const logger = new Logger("observer");
 export class ObserverModule {
   constructor() {
     this.hasUI = false;
-    this.parsers = [parsers]; // require('./parsers')
+    this.parsers = [parsers];
     this.walker = new Walker();
     // Search and insert icons after mutations.
     this.observer = null;
     this.handleMutationsTimeout = null;
     this.parkedNodes = [];
 
-    // this.printStyle = $(
-    //     `<link rel="stylesheet" href="../styles/webext_print.css" media="print">`)
-
-    /**
-     * Signal the background that the observer has been loaded and is
-     * ready to look for phone numbers if the background demands it.
-     */
-    //TODO change --->???????
-    // this.app.emit('dialer:observer.ready', {
-    //     callback: (data) => {
-    //         // Don't start observing, unless the observe property is true.
-    //         if (!data.observe) return
-
-    //         if (window !== window.top && !(document.body.offsetWidth > 0 || document.body.offsetHeight > 0)) {
-    //             // Wait for this hidden iframe to become visible, before
-    //             // starting the observer.
-    //             //TODO jquery eruit slopen
-    //             $(window).on('resize', () => {
-    //                 this.processPage()
-    //                 // No reason to wait for more resize events.
-    //                 $(window).off('resize')
-    //             })
-    //         } else {
-    //             this.processPage()
-    //         }
-    //     },
-    // })
-
     /**
      * Handle the event when a link is clicked that contains
      * <a href="tel:"></a>.
      */
-    //TODO jquery eruit slopen en dit nog fixen
+    //TODO think if this should be possible
     // $('body').on('click', '[href^="tel:"]', (e) => {
     //     $(e.currentTarget).blur()
     //     // Don't do anything with this click in the actual page.
@@ -105,7 +77,7 @@ export class ObserverModule {
               matches.reverse().forEach(match => {
                 let numberIconElement = document.createElement(
                   "c-click-to-dial-button"
-                ); //this.createNumberIconElement(match.number)
+                );
 
                 let before = document.createElement("span");
                 before.textContent = originalHTML.slice(0, match.start);
@@ -144,8 +116,6 @@ export class ObserverModule {
    */
   processPage() {
     logger.debug(`${this}start observing`);
-    // Inject our print stylesheet.
-    // $('head').append(this.printStyle)
     // Insert icons.
     const before = new Date().getTime();
     this.doInsert();
@@ -262,10 +232,6 @@ export class ObserverModule {
     if (this.observer) {
       this.observer.disconnect();
     }
-  }
-
-  toString() {
-    // return `${this.app}[observer] `
   }
 
   /**
