@@ -89,11 +89,6 @@ loadTemplate("p-login").then(({ content }) => {
       }
 
       get showChangePasswordMessage() {
-        //TODO url veranderen const path = await getPlatformUrl('user/personal_settings'); ???
-        this.changePasswordLink.setAttribute(
-          "href",
-          "https://partner.voipgrid.nl/user/login"
-        );
         show(this.changePasswordNode);
       }
     }

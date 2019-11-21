@@ -1,0 +1,46 @@
+p-login {
+  header {
+    display: flex;
+    padding: 1rem 1rem 0;
+  }
+
+  h1 {
+    flex: 1;
+  }
+
+  form {
+    width: 100%;
+    padding: 1rem;
+
+    > label,
+    > div {
+      margin-bottom: 1rem;
+    }
+
+    > label {
+      display: block;
+
+      > span {
+        display: block;
+        margin-bottom: .25rem;
+      }
+    }
+    *:last-child {
+      margin-bottom: 0;
+    }
+
+    input, button {
+      display: block;
+      width: 100%;
+      border: 1px solid var(--border-color);
+      border-radius: .25rem;
+      padding: .5rem;
+    }
+    input {
+      background-color: var(--light-grey);
+    }
+    button {
+      taxt-align: center;
+    }
+  }
+}

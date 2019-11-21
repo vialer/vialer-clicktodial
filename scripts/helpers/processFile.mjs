@@ -76,8 +76,8 @@ export default function processFile(source, sto) {
       return makeDirectory(destinationDir)
         .then(() => readFile(source))
         .then(replaceEnvVariables)
-        .then(content => writeFile(destination, content))
-        // .then(content => writeFile(destination, minifier.minify(content, htmlMinifyOptions)))
+        // .then(content => writeFile(destination, content))
+        .then(content => writeFile(destination, minifier.minify(content, htmlMinifyOptions)))
         .then(() => {
           sto && sto.succeed(`Copyied and minified ${source} to ${destination}`);
         })

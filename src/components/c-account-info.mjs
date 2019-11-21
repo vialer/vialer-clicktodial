@@ -2,8 +2,6 @@ import { logout } from "/lib/user.mjs";
 import { getUser } from "/lib/data.mjs";
 import { loadTemplate } from "/utils/dom.mjs";
 
-import "/components/c-shortcuts.mjs";
-
 loadTemplate("c-account-info").then(({ content }) => {
   window.customElements.define(
     "c-account-info",

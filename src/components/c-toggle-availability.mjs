@@ -1,5 +1,6 @@
 import browser from "/vendor/browser-polyfill.js";
 import { setDestination } from "/lib/data.mjs";
+import { translateNodes } from '/lib/i18n.mjs';
 import { loadTemplate } from "/utils/dom.mjs";
 import * as segment from "/lib/segment.mjs";
 
@@ -10,9 +11,11 @@ loadTemplate("c-toggle-availability").then(({ content }) => {
     class extends HTMLElement {
       connectedCallback() {
         this.appendChild(content.cloneNode(true));
-        this.checkbox = this.querySelector("[data-selector=dnd-checkbox]");
+        this.checkbox = this.querySelector("[data-selector=toggle-dnd]");
         this.checkbox.addEventListener("change", this);
         this.isDisabled = false;
+
+        translateNodes(this);
       }
 
       async disconnectedCallback() {

@@ -13,36 +13,30 @@
 </body>
 
 <template data-component="c-account-info">
-  <section>
-    <c-icon icon="user"></c-icon>
-    <span data-selector="user-name"> </span>
-    <button data-selector="log-out" type="submit">
-      <c-icon icon="logout"></c-icon>
-    </button>
-  </section>
+  <span data-selector="user-name"></span>
+  <button data-selector="log-out" type="submit">
+    <c-icon icon="logout"></c-icon>
+  </button>
+  <a href="%%WEBPHONE_URL%%" target="_blank"><c-icon icon="website"> </c-icon></a>
+  <a href="%%HELP_URL%%" target="_blank"><c-icon icon="info"></c-icon></a>
+  <a href="%%SETTINGS_URL%%"" target="_blank"><c-icon icon="settings"></c-icon></a>
 </template>
 
 <template data-component="c-toggle-availability">
-  <section>
-    <input type="checkbox" data-selector="dnd-checkbox" />
-    <h3>
-      <!-- TODO deze shit fixen -->
-      <span data-translation-key="general"></span>
-    </h3>
-  </section>
+
 </template>
 
 <template data-component="c-availability">
-  <section>
-    <span data-selector="place-toggle">
-      <h3>
-        <span data-translation-key="availability"></span>
-      </h3>
-    </span>
+    <div>
+      <h3 data-translation-key="availability"></h3>
+      <label>
+        <span data-translation-key="general"></span>
+        <input type="checkbox" data-selector="toggle-dnd" />
+      </label>
+    </div>
     <div data-selector="availability">
       <select data-selector="destination-select"></select>
     </div>
-  </section>
 </template>
 
 <template data-component="c-call-groups">
@@ -88,39 +82,23 @@
   </section>
 </template>
 
-<template data-component="c-shortcuts">
-  <section>
-    <a data-selector="popout" target="_blank">
-      <c-icon icon="website"> </c-icon>
-    </a>
-    <a data-selector="help" target="_blank">
-      <c-icon icon="info"></c-icon>
-    </a>
-    <a data-selector="settings" target="_blank">
-      <c-icon icon="settings"></c-icon>
-    </a>
-  </section>
-</template>
-
 <template data-component="p-login">
   <section>
-    <h1>
-      <span data-translation-key="log_in_action"></span>
-    </h1>
-    <c-language-switcher></c-language-switcher>
+    <header>
+      <h1 data-translation-key="log_in_action"></h1>
+      <c-language-switcher></c-language-switcher>
+    </header>
     <form class="login-form">
       <div class="login-error" data-selector="authentication-error" hidden>
         <c-icon icon="warning"></c-icon>
         <span data-translation-key="authentication_error"></span>
       </div>
       <div class="login-change-password" data-selector="change-password" hidden>
-        <h5>
-          <span data-translation-key="change_password_body"></span>
-        </h5>
+        <h5 data-translation-key="change_password_body"></h5>
         <p><span class="login-change-password-title" data-translation-key="change_password_title"></span></p>
         <p>
           <span data-translation-key="change_password_body"></span>
-          <a data-selector="change-password-link" target="_blank">link</a>
+          <a data-selector="change-password-link" target="_blank" href="%%CHANGE_PASSWORD_URL%%">link</a>
         </p>
       </div>
       <label>
@@ -134,12 +112,12 @@
           data-placeholder-translation-key="enter_password" autocomplete="current-password" required />
       </label>
       <label hidden data-selector="two-factor-container">
-        <h5>
-          <span data-translation-key="two-factor-token"></span>
-        </h5>
+        <h5 data-translation-key="two-factor-token"></h5>
         <input type="text" name="token" data-selector="two-factor-input" />
       </label>
-      <button type="submit" data-translation-key="continue">✅</button>
+      <div>
+        <button type="submit" data-translation-key="continue">✅</button>
+      </div>
     </form>
   </section>
 </template>
@@ -152,15 +130,8 @@
   <!-- <p class="help-text" data-translation-key="app_language_help_text"></p> -->
 </template>
 
-<template data-component="p-main">
-  <section>
-  </section>
-</template>
-
 <template data-component="c-click-to-dial-wrapper">
-  <section>
-
-  </section>
+  <section></section>
 </template>
 
 <template data-component="c-click-to-dial-button">
@@ -171,4 +142,14 @@
   </section>
 </template>
 
+<template data-component="p-main">
+  <header>
+    <c-account-info></c-account-info>
+  </header>
+  <section>
+    <c-availability></c-availability>
+    <c-colleagues></c-colleagues>
+    <c-call-groups></c-call-groups>
+  </section>
+</template>
 </html>
