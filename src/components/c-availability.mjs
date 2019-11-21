@@ -19,7 +19,8 @@ loadTemplate("c-availability").then(({ content }) => {
     class extends HTMLElement {
       async connectedCallback() {
         this.appendChild(content.cloneNode(true));
-        logger.info("Component mounted");
+
+        this.checkBox = this.querySelector('c-toggle-availability');
 
         window.addEventListener("availabilityChange", () => {
           this.changeAvailability();
@@ -82,9 +83,6 @@ loadTemplate("c-availability").then(({ content }) => {
       }
 
       async setCheckbox() {
-        this.togglePlace = this.querySelector("[data-selector=place-toggle]");
-        this.checkBox = document.createElement("c-toggle-availability");
-        this.togglePlace.appendChild(this.checkBox);
         this.checkBox.isDisabled = this.isPhoneDisabled;
       }
 

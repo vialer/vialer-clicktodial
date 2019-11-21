@@ -23,20 +23,20 @@
 </template>
 
 <template data-component="c-toggle-availability">
-
+  <label>
+    <span data-translation-key="general"></span>
+    <input type="checkbox" data-selector="toggle-dnd" />
+  </label>
 </template>
 
 <template data-component="c-availability">
-    <div>
-      <h3 data-translation-key="availability"></h3>
-      <label>
-        <span data-translation-key="general"></span>
-        <input type="checkbox" data-selector="toggle-dnd" />
-      </label>
-    </div>
-    <div data-selector="availability">
-      <select data-selector="destination-select"></select>
-    </div>
+  <div>
+    <h3 data-translation-key="availability"></h3>
+    <c-toggle-availability></c-toggle-availability>
+  </div>
+  <div data-selector="availability">
+    <select data-selector="destination-select"></select>
+  </div>
 </template>
 
 <template data-component="c-call-groups">
