@@ -2,6 +2,8 @@ import { Analytics } from "/lib/segment-api.mjs";
 // import { isReplaced } from '/utils/env.mjs';
 import { hexString, digestMessage } from "/utils/crypto.mjs";
 import { Logger } from "/lib/logging.mjs";
+import browser from "/vendor/browser-polyfill.js";
+
 // import { BRAND, VERSION } from '/lib/constants.mjs';
 
 const SEGMENT_API_URL = "https://api.segment.io";
@@ -45,6 +47,7 @@ async function _setUserId(email) {
 
   logger.verbose(`setting user to ${userHash}`);
   segmentUserId = userHash;
+  await browser.storage.local.set({ 'segmentUser': segmentUserId });
 
   if (segmentApi) {
     segmentApi.identify({
@@ -61,26 +64,42 @@ export function setUserId(email) {
   _setUserId(email).catch(logger.error);
 }
 
-async function trackEvent(event, properties) {
-  try {
-    if (!segmentUserId) {
-      logger.debug("trying to track event without user!");
-      return;
+async function checkUserIdFromStorage() {
+  browser.storage.local.get("segmentUser").then((storageUserId) => {
+    if (Object.keys(storageUserId).length !== 0) {
+      console.log(storageUserId);
+      return storageUserId;
+    } else {
+      return undefined;
     }
+  });
+}
 
-    logger.debug(
-      `tracking event ${event} with properties: ${JSON.stringify(properties)}`
-    );
-    if (segmentApi) {
-      segmentApi.track({
-        userId: segmentUserId,
-        event,
-        properties
-      });
+async function trackEvent(event, properties) {
+  browser.storage.local.get("segmentUser").then((storageUserId) => {
+    if (Object.keys(storageUserId).length !== 0) {
+      segmentUserId = storageUserId.segmentUser;
     }
-  } catch (e) {
-    logger.error(e);
-  }
+    try {
+      if (!segmentUserId) {
+        logger.debug("trying to track event without user!");
+        return;
+      }
+
+      logger.debug(
+        `tracking event ${event} with properties: ${JSON.stringify(properties)}`
+      );
+      if (segmentApi) {
+        segmentApi.track({
+          userId: segmentUserId,
+          event,
+          properties
+        });
+      }
+    } catch (e) {
+      logger.error(e);
+    }
+  });
 }
 
 function tr(event, properties) {

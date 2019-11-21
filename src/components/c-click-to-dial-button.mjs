@@ -1,5 +1,4 @@
 import { Logger } from "../lib/logging.mjs";
-import * as segment from "../lib/segment.mjs";
 import browser from "/vendor/browser-polyfill.js";
 
 const logger = new Logger("click-to-dial-button");
@@ -40,13 +39,13 @@ window.customElements.define(
           .sendMessage(null, { b_number: this.phoneNumber })
           .then(() => {
             logger.info(`Trying to call ${this.phoneNumber}`);
-            segment.track.callContact();
           });
       }
     }
 
     set contactDetails(number) {
       this.phoneNumber = number;
+
     }
 
     get contactDetails() {

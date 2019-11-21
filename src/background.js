@@ -2,9 +2,8 @@ import { clickToDial } from "./lib/data.mjs";
 import { showNotification } from "./lib/notify.mjs";
 import { Logger } from "./lib/logging.mjs";
 import browser from "/vendor/browser-polyfill.js";
+import * as segment from "./lib/segment.mjs";
 
-// import 'webextension-polyfill';
-// import * as segment from './lib/segment.mjs';
 // import { startTrackingUser } from './utils/startTrackingUser.mjs';
 
 // startTrackingUser();
@@ -19,6 +18,7 @@ browser.runtime.onMessage.addListener(async function(
     clickToDial(request.b_number)
       .then(({ b_number }) => {
         showNotification(`calling ${b_number}`);
+        segment.track.clickedToDial();
       })
       .catch(e => {
         logger.error(e);
