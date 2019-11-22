@@ -21,7 +21,7 @@ export async function startTrackingUser() {
 
 async function segmentUserIdSet() {
   let sUserId = await browser.storage.local.get("segmentUser");
-  if (sUserId) {
+  if (Object.keys(sUserId).length !== 0) {
     return true;
   }
   return false;

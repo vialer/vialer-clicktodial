@@ -1,13 +1,15 @@
-import { Analytics } from "/lib/segment-api.mjs";
+import { Analytics } from '/lib/segment-api.mjs';
 // import { isReplaced } from '/utils/env.mjs';
-import { hexString, digestMessage } from "/utils/crypto.mjs";
-import { Logger } from "/lib/logging.mjs";
+import { hexString, digestMessage } from '/utils/crypto.mjs';
+import { Logger } from '/lib/logging.mjs';
+import browser from '/vendor/browser-polyfill.js';
+
 // import { BRAND, VERSION } from '/lib/constants.mjs';
 
-const SEGMENT_API_URL = "https://api.segment.io";
-const SEGMENT_WRITE_KEY = "";
+const SEGMENT_API_URL = 'https://api.segment.io';
+const SEGMENT_WRITE_KEY = '';
 
-const logger = new Logger("segment");
+const logger = new Logger('segment');
 
 let segmentApi;
 let segmentUserId;
@@ -18,14 +20,14 @@ export function isEnabled() {
 
 function init() {
   if (!isEnabled()) {
-    logger.warn("Telemetry disabled, API key missing");
+    logger.warn('Telemetry disabled, API key missing');
     return;
   }
 
   try {
     segmentApi = new Analytics(SEGMENT_WRITE_KEY, { host: SEGMENT_API_URL });
   } catch (e) {
-    logger.error("init failed", e);
+    logger.error('init failed', e);
   }
 }
 
@@ -45,6 +47,7 @@ async function _setUserId(email) {
 
   logger.verbose(`setting user to ${userHash}`);
   segmentUserId = userHash;
+  await browser.storage.local.set({ segmentUser: segmentUserId });
 
   if (segmentApi) {
     segmentApi.identify({
@@ -62,25 +65,28 @@ export function setUserId(email) {
 }
 
 async function trackEvent(event, properties) {
-  try {
-    if (!segmentUserId) {
-      logger.debug("trying to track event without user!");
-      return;
+  browser.storage.local.get('segmentUser').then(storageUserId => {
+    if (Object.keys(storageUserId).length !== 0) {
+      segmentUserId = storageUserId.segmentUser;
     }
+    try {
+      if (!segmentUserId) {
+        logger.debug('trying to track event without user!');
+        return;
+      }
 
-    logger.debug(
-      `tracking event ${event} with properties: ${JSON.stringify(properties)}`
-    );
-    if (segmentApi) {
-      segmentApi.track({
-        userId: segmentUserId,
-        event,
-        properties
-      });
+      logger.debug(`tracking event ${event} with properties: ${JSON.stringify(properties)}`);
+      if (segmentApi) {
+        segmentApi.track({
+          userId: segmentUserId,
+          event,
+          properties
+        });
+      }
+    } catch (e) {
+      logger.error(e);
     }
-  } catch (e) {
-    logger.error(e);
-  }
+  });
 }
 
 function tr(event, properties) {
@@ -88,12 +94,12 @@ function tr(event, properties) {
 }
 
 export const track = {
-  login: tr("login"),
-  callContact: tr("call_contact"),
-  logout: tr("logout"),
-  toggleDnd: tr("dnd_toggle"),
-  updateAvailability: tr("availability_update"),
-  clickedToDial: tr("click_to_dial")
+  login: tr('login'),
+  callContact: tr('call_contact'),
+  logout: tr('logout'),
+  toggleDnd: tr('dnd_toggle'),
+  updateAvailability: tr('availability_update'),
+  clickedToDial: tr('click_to_dial')
 };
 
 init();
