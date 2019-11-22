@@ -1,0 +1,16 @@
+c-icon {
+  display: inline-flex;
+  align-items: center;
+
+  > svg {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+
+    fill: var(--text-dark);
+  }
+
+  &.flip > svg {
+    transform: rotate(180deg);
+  }
+}

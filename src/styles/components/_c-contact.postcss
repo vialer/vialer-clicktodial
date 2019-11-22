@@ -1,0 +1,52 @@
+c-contact {
+  display: flex;
+  align-items: center;
+
+  border-radius: 0.25rem;
+  padding: .75rem 0.5rem;
+
+  background: var(--background-light);
+
+  &:nth-child(even) {
+    background-color: var(--background-dark);
+  }
+
+  > div {
+    flex: 1;
+    color: var(--text-light);
+  }
+
+  > button {
+    width: 1.6rem;
+    height: 1.6rem;
+    border: 2px solid var(--text-light);
+    border-radius: 0.25rem;
+    background: transparent;
+    padding: 0.2rem;
+
+    cursor: pointer;
+
+    * {
+      pointer-event: none;
+    }
+
+    > c-icon svg {
+      fill: var(--text-light);
+    }
+
+    &:hover {
+      border-color: #00e673;
+
+      > c-icon svg {
+        fill: #00e673;
+      }
+    }
+  }
+
+  .contact-name {
+    font-size: var(--text-l);
+  }
+  .contact-phone-number {
+    font-size: var(--text-s);
+  }
+}

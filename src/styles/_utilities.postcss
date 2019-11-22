@@ -1,0 +1,47 @@
+.component-header{
+  display: flex;
+  align-items: center;
+  padding-bottom: 1rem;
+
+  > c-icon,
+  > a {
+    margin-right: .75rem;
+    width: var(--text-l);
+    height: var(--text-l);
+
+    svg {
+      fill: var(--text-light);
+    }
+  }
+
+  > h3 {
+    width: 6rem;
+    margin-right: .75rem;
+  }
+
+  > input {
+    flex: 1;
+    display: block;
+    min-width: 0;
+    border: none;
+    background: white;
+    border-radius: .25rem;
+    padding: .25rem;
+    font-size: var(--text-l);
+    margin-right: .75rem;
+  }
+
+  > c-toggle {
+    margin-left: auto;
+  }
+}
+
+.list-container {
+  border-top: 1px solid var(--border-color);
+  padding: .5rem;
+  margin-left: -1rem;
+  margin-right: -1rem;
+  background-color: var(--background-light);
+  height: 15rem;
+  overflow: auto;
+}

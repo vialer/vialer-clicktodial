@@ -1,4 +1,18 @@
 p-main {
+  display: block;
+  height: 100%;
+
   > section {
+    background-color: var(--background-dark);
+
+    > * {
+      display: block;
+      padding: 1rem 1rem 0;
+      border-bottom: 1px solid var(--border-color);
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
   }
 }

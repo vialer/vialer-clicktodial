@@ -1,11 +1,11 @@
-import "/components/c-contact.mjs";
+import '/components/c-contact.mjs';
 
-import { toggleVisibility, show, hide, loadTemplate } from "/utils/dom.mjs";
-import { getContact } from "/lib/data.mjs";
+import { show, hide, loadTemplate } from '/utils/dom.mjs';
+import { getContact } from '/lib/data.mjs';
 
-loadTemplate("c-colleagues").then(({ content }) => {
+loadTemplate('c-colleagues').then(({ content }) => {
   window.customElements.define(
-    "c-colleagues",
+    'c-colleagues',
 
     class Colleagues extends HTMLElement {
       constructor() {
@@ -15,39 +15,35 @@ loadTemplate("c-colleagues").then(({ content }) => {
 
       connectedCallback() {
         this.appendChild(content.cloneNode(true));
-        console.log("Component mounted");
 
-        this.list = this.querySelector("[data-selector=colleagues]");
-        this.list.setAttribute("hidden", "");
+        this.list = this.querySelector('[data-selector=colleagues]');
 
-        this.openList = this.querySelector("[data-selector=open-colleagues]");
-        this.openList.addEventListener("click", this);
+        this.toggleNode = this.querySelector('c-toggle');
+        this.toggleNode.addEventListener('toggle-open', this);
+        this.toggleNode.addEventListener('toggle-close', this);
 
-        this.pushToWebphone = this.querySelector(
-          "[data-selector=push-to-webphone]"
-        );
-        // TODO url niet zo zetten
-        this.pushToWebphone.setAttribute(
-          "href",
-          "https://webphone.vialer.nl/contacts"
-        );
-
-        this.searchInput = this.querySelector("[data-selector=searchInput]");
-        this.searchInput.addEventListener("input", this);
+        this.searchInput = this.querySelector('[data-selector=searchInput]');
+        this.searchInput.addEventListener('input', this);
 
         this.getContactData();
       }
 
       disconnectedCallback() {
-        this.openList.removeEventListener("click", this);
+        this.toggleNode.removeEventListener('toggle-open', this);
+        this.toggleNode.removeEventListener('toggle-close', this);
       }
 
       handleEvent({ type }) {
         switch (type) {
-          case "click":
-            toggleVisibility(this.list);
+          case 'toggle-open':
+            show(this.list);
             break;
-          case "input":
+
+          case 'toggle-close':
+            hide(this.list);
+            break;
+
+          case 'input':
             show(this.list);
             this.applyContactsFilters();
             break;
@@ -58,9 +54,9 @@ loadTemplate("c-colleagues").then(({ content }) => {
         getContact().then(contacts => {
           this.dataRetrieved = true;
           contacts.forEach(contact => {
-            let colleague = document.createElement("c-contact");
-            colleague.contactDetails = contact;
+            let colleague = document.createElement('c-contact');
             this.list.appendChild(colleague);
+            colleague.contactDetails = contact;
           });
         });
       }
@@ -70,7 +66,7 @@ loadTemplate("c-colleagues").then(({ content }) => {
         const { value } = this.searchInput;
 
         for (const node of children) {
-          if (node.nodeName !== "C-CONTACT") {
+          if (node.nodeName !== 'C-CONTACT') {
             continue;
           }
           node.doesMatchSearchString(value) ? show(node) : hide(node);

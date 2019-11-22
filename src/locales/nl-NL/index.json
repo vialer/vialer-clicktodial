@@ -2,9 +2,9 @@
   "app_language": "Taal",
   "authentication_error": "Het gebruikte e-mailadres of wachtwoord is onjuist. Controleer op eventuele fouten en probeer het nog een keer.",
   "availability": "Beschikbaarheid",
-  "call_failed": "Kan geen gesprek starten",
   "call_failed_busy": "Andere persoon is in gesprek, kan geen gesprek starten.",
   "call_failed_unavailable": "Andere persoon is niet beschikbaar, kan geen gesprek starten.",
+  "call_failed": "Kan geen gesprek starten",
   "calling": "Bellen",
   "change_password_body": "Het wachtwoord is tijdelijk bruikbaar en moet om veiligheidsredenen worden gewijzigd. Klik op de volgende link om naar de portal te gaan en om een nieuw wachtwoord aan te maken: ",
   "change_password_title": "Wijzig tijdelijk wachtwoord",
@@ -14,8 +14,8 @@
   "email_address": "E-mailadres",
   "email": "E-mail",
   "en-US": "English",
-  "enabled": "ingeschakeld",
   "enable_dnd": "Do not disturb",
+  "enabled": "ingeschakeld",
   "enter_email": "Vul hier je e-mailadres in",
   "enter_number_or_name": "Typ een nummer of naam",
   "enter_password": "Vul hier je wachtwoord in",
@@ -29,6 +29,8 @@
   "logged_out_title": "Je bent uitgelogd",
   "nav_settings": "Instellingen",
   "nl-NL": "Nederlands",
+  "open_call_groups": "open belgroepen",
+  "open_colleagues": "open collega's",
   "password": "Wachtwoord",
   "quick_links_call_groups": "Belgroepen",
   "quick_links_dial_plans": "Belplannen",
@@ -42,6 +44,6 @@
   "status_offline": "offline",
   "two-factor-token": "Token",
   "unknown": "Onbekend",
-  "user_destination": "Eindbestemming van gebruiker",
-  "user_destination_help_text": "Kies het VoIP-account waarop je oproepen wilt ontvangen wanneer iemand je belt."
+  "user_destination_help_text": "Kies het VoIP-account waarop je oproepen wilt ontvangen wanneer iemand je belt.",
+  "user_destination": "Eindbestemming van gebruiker"
 }

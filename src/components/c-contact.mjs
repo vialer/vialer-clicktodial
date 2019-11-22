@@ -1,20 +1,33 @@
-import { clickToDial } from "/lib/data.mjs";
-import { show, hide, loadTemplate } from "/utils/dom.mjs";
-import { showNotification } from "/lib/notify.mjs";
+import { clickToDial } from '/lib/data.mjs';
+import { show, hide, loadTemplate } from '/utils/dom.mjs';
+import { showNotification } from '/lib/notify.mjs';
 
-import { processSearchProperties } from "/utils/processSearchProperties.mjs";
-import * as segment from "/lib/segment.mjs";
+import { processSearchProperties } from '/utils/processSearchProperties.mjs';
+import * as segment from '/lib/segment.mjs';
 
-loadTemplate("c-contact").then(({ content }) => {
+loadTemplate('c-contact').then(({ content }) => {
   customElements.define(
-    "c-contact",
+    'c-contact',
 
     class Contact extends HTMLElement {
+      set contactDetails(data) {
+        this.phoneNumber = data.phoneNumber;
+
+        this.phoneNumberNode.innerText = data.phoneNumber;
+        this.nameNode.innerText = data.description;
+
+        this.searchProperties = processSearchProperties(data);
+      }
+
       connectedCallback() {
         this.appendChild(content.cloneNode(true));
-        this.callButton = this.querySelector("[data-selector=call-me]");
-        this.callButton.addEventListener("click", this);
-        window.addEventListener("availabilityChange", e => {
+
+        this.nameNode = this.querySelector('[data-selector=name]');
+        this.phoneNumberNode = this.querySelector('[data-selector=phoneNumber]');
+        this.callButton = this.querySelector('[data-selector=call-me]');
+        this.callButton.addEventListener('click', this);
+
+        window.addEventListener('availabilityChange', e => {
           this.changeVisibilityCallButton(e.detail.disabled);
         });
       }
@@ -28,7 +41,7 @@ loadTemplate("c-contact").then(({ content }) => {
       }
 
       disconnectedCallback() {
-        this.callButton.removeEventListener("click", this);
+        this.callButton.removeEventListener('click', this);
       }
 
       async handleEvent({ type }) {
@@ -39,15 +52,7 @@ loadTemplate("c-contact").then(({ content }) => {
         }
       }
 
-      set contactDetails(cDetail) {
-        let detail = document.createElement("div");
-        this.phoneNumber = cDetail.phoneNumber;
-        detail.innerHTML = cDetail.description + "\n" + cDetail.phoneNumber;
-        this.searchProperties = processSearchProperties(cDetail);
-        this.appendChild(detail);
-      }
-
-      doesMatchSearchString(_str = "") {
+      doesMatchSearchString(_str = '') {
         if (0 === _str.length) {
           return true;
         }

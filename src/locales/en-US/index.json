@@ -1,16 +1,16 @@
 {
-  "authentication_error": "The email address or password you entered is invalid. Please check and try again.",
   "app_language": "Language",
+  "authentication_error": "The email address or password you entered is invalid. Please check and try again.",
   "availability": "Availability",
-  "call_failed": "Cannot establish call",
   "call_failed_busy": "Other person is busy, cannot establish call.",
   "call_failed_unavailable": "Other person is unavailable, cannot establish call.",
+  "call_failed": "Cannot establish call",
   "calling": "Calling",
   "change_password_body": "Your current password is temporary and needs to be changed for security reasons. Please click on the following link to go to the portal: ",
   "change_password_title": "Change temporary password",
   "click_to_dial": "Click to Dial",
-  "continue": "Continue",
   "contacts": "Colleagues",
+  "continue": "Continue",
   "email_address": "Email address",
   "email": "E-mail",
   "en-US": "English",
@@ -29,6 +29,8 @@
   "logged_out_title": "You're logged out",
   "nav_settings": "Settings",
   "nl-NL": "Nederlands",
+  "open_call_groups": "open call groups",
+  "open_colleagues": "open colleagues",
   "password": "Password",
   "quick_links_call_groups": "Call groups",
   "quick_links_queues": "Queues",
@@ -42,6 +44,6 @@
   "status_offline": "offline",
   "two-factor-token": "Token",
   "unknown": "Unknown",
-  "user_destination": "User destination",
-  "user_destination_help_text": "Choose the VoIP account you want to receive the call on when someone calls you."
+  "user_destination_help_text": "Choose the VoIP account you want to receive the call on when someone calls you.",
+  "user_destination": "User destination"
 }

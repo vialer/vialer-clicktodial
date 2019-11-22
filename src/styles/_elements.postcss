@@ -5,7 +5,8 @@
 html {
   padding: 0;
   font-family: sans-serif;
-  background: var(--light-grey);
+  font-size: var(--text-m);
+  background: var(--background-light);
 }
 body {
   margin: 0;
@@ -13,30 +14,33 @@ body {
   min-height: 10rem;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3{
   margin: 0;
+  color: var(--text-light);
+}
+h1 {
+  font-size: var(--text-xl);
+}
+h2 {
+  font-size: var(--text-l);
+}
+h3 {
+  font-size: var(--text-m);
+  font-weight: normal;
 }
 
-c-icon {
-    display: inline-flex;
-    align-items: center;
-}
-
-c-icon svg {
-    display: inline-block;
-    width: 1rem;
-    height: 1rem;
-}
-
-.green:hover{
-    background:#00e673;
+span {
+  color: inherit;
+  font-size: inherit;
 }
 
 *[hidden] {
   display: none;
 }
 
-
 select {
   width: 100%;
+  font-size: var(--text-l);
+}
+option {
 }

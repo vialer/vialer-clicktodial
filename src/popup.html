@@ -40,46 +40,36 @@
 </template>
 
 <template data-component="c-call-groups">
-  <section>
-    <span data-selector="open-groups">
-      <h3>
-        <c-icon icon="queues"></c-icon>
-        <span data-translation-key="quick_links_call_groups"></span>
-      </h3>
-    </span> <a title="See queues" data-selector="push-to-webphone" target="_blank">open queues</a>
-    <!-- TODO  ^^^^^^^^^ -->
-    <div data-selector="call-groups">
-    </div>
-  </section>
+  <div class="component-header">
+    <c-icon icon="queues"></c-icon>
+    <h3 data-translation-key="quick_links_call_groups"></h3>
+    <a title="open_call_groups" href="%%QUEUES_URL%%" target="_blank"><c-icon icon="external"></c-icon></a>
+    <c-toggle></c-toggle>
+  </div>
+  <div data-selector="call-groups" class="list-container" hidden></div>
 </template>
 
 <template data-component="c-colleagues">
-  <section>
-    <span data-selector="open-colleagues">
-      <h3>
-        <c-icon icon="contacts"></c-icon>
-        <span data-translation-key="contacts"></span>
-      </h3>
-    </span> <a title="See availability of colleagues" data-selector="push-to-webphone" target="_blank">open
-      collega</a>
-    <!-- TODO  ^^^^^^^^^ message hiervoor maken in locales -->
-    <div>
-      <input type="search" class="search-input" data-selector="searchInput"
-        data-placeholder-translation-key="search_colleagues" />
-    </div>
-    <div data-selector="colleagues">
-    </div>
-  </section>
+  <div class="component-header">
+    <c-icon icon="contacts"></c-icon>
+    <h3 data-translation-key="contacts"></h3>
+    <a title="open_colleagues" href="%%COLLEAGUES_URL%%" target="_blank"><c-icon icon="external"></c-icon></a>
+    <input type="search" class="search-input" data-selector="searchInput" data-placeholder-translation-key="search_colleagues" />
+    <c-toggle></c-toggle>
+  </div>
+  <div data-selector="colleagues" class="list-container" hidden></div>
+</template>
+
+<template data-component="c-toggle">
+  <button><c-icon icon="caret-down"></c-icon></button>
 </template>
 
 <template data-component="c-contact">
-  <section>
-    <div data-selector="contact">
-      <button class="green" data-selector="call-me">
-        <c-icon icon="phone"></c-icon>
-      </button>
-    </div>
-  </section>
+  <div>
+    <div data-selector="name" class="contact-name"></div>
+    <div data-selector="phoneNumber" class="contact-phone-number"></div>
+  </div>
+  <button data-selector="call-me"><c-icon icon="phone"></c-icon></button>
 </template>
 
 <template data-component="p-login">

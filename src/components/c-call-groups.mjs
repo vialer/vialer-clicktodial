@@ -1,6 +1,6 @@
 import "/components/c-contact.mjs";
 
-import { toggleVisibility, loadTemplate } from "/utils/dom.mjs";
+import { hide, show, loadTemplate } from "/utils/dom.mjs";
 import { getQueues } from "/lib/data.mjs";
 
 loadTemplate("c-call-groups").then(({ content }) => {
@@ -15,32 +15,31 @@ loadTemplate("c-call-groups").then(({ content }) => {
 
       connectedCallback() {
         this.appendChild(content.cloneNode(true));
-        console.log("Component mounted");
+
         this.list = this.querySelector("[data-selector=call-groups]");
-        this.list.setAttribute("hidden", "");
 
-        this.openList = this.querySelector("[data-selector=open-groups]");
-        this.openList.addEventListener("click", this);
-
-        this.pushToWebphone = this.querySelector(
-          "[data-selector=push-to-webphone]"
-        );
-
-        //TODO url niet zo
-        this.pushToWebphone.setAttribute(
-          "href",
-          "https://webphone.vialer.nl/queues"
-        );
+        this.toggleNode = this.querySelector('c-toggle');
+        this.toggleNode.addEventListener('toggle-open', this);
+        this.toggleNode.addEventListener('toggle-close', this);
 
         this.getContactData();
       }
 
       disconnectedCallback() {
-        this.openList.removeEventListener("click", this);
+        this.toggleNode.removeEventListener('toggle-open', this);
+        this.toggleNode.removeEventListener('toggle-close', this);
       }
 
-      handleEvent(e) {
-        toggleVisibility(this.list);
+      handleEvent({ type }) {
+        switch (type) {
+          case 'toggle-open':
+            show(this.list);
+            break;
+
+          case 'toggle-close':
+            hide(this.list);
+            break;
+        }
       }
 
       getContactData() {
@@ -48,8 +47,9 @@ loadTemplate("c-call-groups").then(({ content }) => {
           this.dataRetrieved = true;
           queues.forEach(queue => {
             let contact = document.createElement("c-contact");
-            contact.contactDetails = queue;
             this.list.appendChild(contact);
+
+            contact.contactDetails = queue;
           });
         });
       }
