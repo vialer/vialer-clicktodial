@@ -24,17 +24,18 @@
 
 <template data-component="c-toggle-availability">
   <label>
-    <span data-translation-key="general"></span>
+    <span data-translation-key="enable_dnd"></span>
     <input type="checkbox" data-selector="toggle-dnd" />
   </label>
 </template>
 
 <template data-component="c-availability">
-  <div>
+  <div class="component-header">
+    <c-icon icon="phone"></c-icon>
     <h3 data-translation-key="availability"></h3>
     <c-toggle-availability></c-toggle-availability>
   </div>
-  <div data-selector="availability">
+  <div>
     <select data-selector="destination-select"></select>
   </div>
 </template>

@@ -1,2 +1,35 @@
 c-availability {
+  .component-header {
+    padding-bottom: .5rem;
+
+    > c-icon:first-child {
+      border-radius: .25rem;
+      padding: .1rem;
+      background-color: var(--text-light);
+
+      > svg {
+        fill: white;
+      }
+    }
+  }
+
+  c-toggle-availability {
+    margin-left: auto;
+  }
+
+  > div:last-child{
+    padding-bottom: 1rem;
+  }
+
+  select {
+    border: none;
+    appearance: none;
+    background: var(--background-light) url('icons/caret-down.svg') right 0.5rem center no-repeat;
+    background-size: 15px 9px;
+    padding: .5rem;
+
+    > option {
+
+    }
+  }
 }
