@@ -11,6 +11,7 @@ const envVariableNames = [
   'COLLEAGUES_URL',
   'HELP_URL',
   'LOGENTRIES_API_KEY',
+  'SEGMENT_WRITE_KEY',
   'PRIMARY_COLOR',
   'QUEUES_URL',
   'SENTRY_D',

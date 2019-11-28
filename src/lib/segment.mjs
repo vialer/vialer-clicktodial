@@ -7,7 +7,7 @@ import browser from '/vendor/browser-polyfill.js';
 // import { BRAND, VERSION } from '/lib/constants.mjs';
 
 const SEGMENT_API_URL = 'https://api.segment.io';
-const SEGMENT_WRITE_KEY = '';
+const SEGMENT_WRITE_KEY = '%%SEGMENT_WRITE_KEY%%';
 
 const logger = new Logger('segment');
 
