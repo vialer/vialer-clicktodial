@@ -44,7 +44,9 @@ loadTemplate('c-colleagues').then(({ content }) => {
             break;
 
           case 'input':
-            show(this.list);
+            if (!this.toggleNode.hasAttributes('open')) {
+              this.toggleNode.setAttribute('open', '');
+            }
             this.applyContactsFilters();
             break;
         }
