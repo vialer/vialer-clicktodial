@@ -15,7 +15,7 @@ loadTemplate('c-availability').then(({ content }) => {
       constructor(args) {
         super(args);
 
-        this.isAvalable = undefined;
+        this.isAvailable = undefined;
         this.selectedDestination = undefined;
       }
 
@@ -70,11 +70,11 @@ loadTemplate('c-availability').then(({ content }) => {
       updateAvailabilityInterface() {
         getSelectedDestination().then(selected => {
           this.selectedDestination = selected;
-          this.isAvalable = this.selectedDestination.phoneaccount === null ? false : true;
+          this.isAvailable = this.selectedDestination.phoneaccount === null ? false : true;
 
           this.updateSelectedDestination();
           enable(this.toggleDnDNode);
-          if (this.isAvalable) {
+          if (this.isAvailable) {
             enable(this.destinationSelectNode);
           } else {
             this.toggleDnDNode.checked = true;
@@ -94,7 +94,7 @@ loadTemplate('c-availability').then(({ content }) => {
       async handleEvent({ type, currentTarget, currentTarget: { checked }, target: { value } }) {
         switch (currentTarget) {
           case this.toggleDnDNode:
-            if (checked !== this.isAvalable) {
+            if (checked !== this.isAvailable) {
               return;
             }
             await setUnavailable(checked);
