@@ -1,23 +1,26 @@
 c-availability {
   .component-header {
-    padding-bottom: .5rem;
+    padding-bottom: 0.5rem;
 
     > c-icon:first-child {
-      border-radius: .25rem;
-      padding: .1rem;
+      border-radius: 0.25rem;
+      padding: 0.1rem;
       background-color: var(--text-light);
 
       > svg {
         fill: white;
       }
     }
+
+    label {
+      margin-left: auto;
+    }
+    span {
+      color: var(--text-light);
+    }
   }
 
-  c-toggle-availability {
-    margin-left: auto;
-  }
-
-  > div:last-child{
+  > div:last-child {
     padding-bottom: 1rem;
   }
 
@@ -26,10 +29,9 @@ c-availability {
     appearance: none;
     background: var(--background-light) url('icons/caret-down.svg') right 0.5rem center no-repeat;
     background-size: 15px 9px;
-    padding: .5rem;
+    padding: 0.5rem;
 
     > option {
-
     }
   }
 }
