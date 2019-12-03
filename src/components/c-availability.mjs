@@ -1,29 +1,31 @@
-import browser from "/vendor/browser-polyfill.js";
-import "/components/c-toggle-availability.mjs";
+import browser from '/vendor/browser-polyfill.js';
 
-import { empty, disable, enable, select, loadTemplate } from "/utils/dom.mjs";
-import {
-  getDestinations,
-  getSelectedDestination,
-  setDestination
-} from "/lib/data.mjs";
-import { Logger } from "/lib/logging.mjs";
-import * as segment from "/lib/segment.mjs";
+import { empty, disable, enable, select, loadTemplate } from '/utils/dom.mjs';
+import { getDestinations, getSelectedDestination, setDestination, setUnavailable } from '/lib/data.mjs';
+import { Logger } from '/lib/logging.mjs';
+import * as segment from '/lib/segment.mjs';
 
-const logger = new Logger("availability");
+const logger = new Logger('availability');
 
-loadTemplate("c-availability").then(({ content }) => {
+loadTemplate('c-availability').then(({ content }) => {
   window.customElements.define(
-    "c-availability",
+    'c-availability',
 
     class extends HTMLElement {
+      constructor(args) {
+        super(args);
+
+        this.isAvailable = undefined;
+        this.selectedDestination = undefined;
+      }
+
       async connectedCallback() {
         this.appendChild(content.cloneNode(true));
 
-        this.checkBox = this.querySelector('c-toggle-availability');
-
-        window.addEventListener("availabilityChange", () => {
-          this.changeAvailability();
+        this.toggleDnDNode = this.querySelector('[data-selector=toggle-dnd]');
+        this.toggleDnDNode.addEventListener('change', this);
+        window.addEventListener('availabilityChange', () => {
+          this.updateAvailabilityInterface();
         });
 
         this.destinations = [];
@@ -31,80 +33,85 @@ loadTemplate("c-availability").then(({ content }) => {
         const destinations = await getDestinations(true);
         this.destinations.push(...destinations);
 
-        this.destinationSelectNode = this.querySelector(
-          "[data-selector=destination-select]"
-        );
-        this.destinationSelectNode.addEventListener("change", this);
+        this.destinationSelectNode = this.querySelector('[data-selector=destination-select]');
+        this.destinationSelectNode.addEventListener('change', this);
 
-        getSelectedDestination().then(selected => {
-          this.selectedDestination = selected;
-          this.isPhoneDisabled =
-            this.selectedDestination.phoneaccount === null ? true : false;
-          this.setCheckbox();
-          this.updateSelectedDestination();
-          this.changeAvailability();
-        });
+        this.updateAvailabilityInterface();
       }
 
       async updateSelectedDestination() {
         empty(this.destinationSelectNode);
 
-        this.getSavedDestination().then(prevDestination => {
-          this.destinations.forEach(destination => {
-            const option = document.createElement("option");
-            option.value = destination.id;
-            option.textContent = destination.description;
-            if (
-              this.selectedDestination &&
-              (this.selectedDestination.phoneaccount == destination.id ||
-                this.selectedDestination.userdestination == destination.id)
-            ) {
-              select(option);
-              this.checkBox.previousAvailability = destination;
-            } else if (
-              this.selectedDestination.phoneaccount === null &&
-              prevDestination !== undefined &&
-              destination.id === prevDestination.id
-            ) {
-              select(option);
-              this.checkBox.previousAvailability = destination;
-            }
-            this.destinationSelectNode.appendChild(option);
-          });
+        const { previousDestination } = await browser.storage.local.get('previousDestination');
+
+        this.destinations.forEach(destination => {
+          const option = document.createElement('option');
+          option.value = destination.id;
+          option.textContent = destination.description;
+          if (
+            this.selectedDestination &&
+            (this.selectedDestination.phoneaccount == destination.id ||
+              this.selectedDestination.userdestination == destination.id)
+          ) {
+            select(option);
+            this.selectedDestination = destination;
+          } else if (
+            this.selectedDestination.phoneaccount === null &&
+            previousDestination !== undefined &&
+            destination.id === previousDestination.id
+          ) {
+            select(option);
+            this.selectedDestination = destination;
+          }
+          this.destinationSelectNode.appendChild(option);
         });
       }
 
-      changeAvailability() {
-        if (this.checkBox.isDisabled) {
-          disable(this.destinationSelectNode);
-        } else {
-          enable(this.destinationSelectNode);
-        }
-      }
+      updateAvailabilityInterface() {
+        getSelectedDestination().then(selected => {
+          this.selectedDestination = selected;
+          this.isAvailable = this.selectedDestination.phoneaccount === null ? false : true;
 
-      async setCheckbox() {
-        this.checkBox.isDisabled = this.isPhoneDisabled;
+          this.updateSelectedDestination();
+          enable(this.toggleDnDNode);
+          if (this.isAvailable) {
+            enable(this.destinationSelectNode);
+          } else {
+            this.toggleDnDNode.checked = true;
+          }
+        });
       }
 
       async getSavedDestination() {
-        let previousDestination = await browser.storage.local.get(
-          "previousAvailability"
-        );
-        return previousDestination["previousAvailability"];
+        let previousDestination = await browser.storage.local.get('previousAvailability');
+        return previousDestination['previousAvailability'];
       }
 
       disconnectedCallback() {
-        this.destinationSelectNode.removeEventListener("change", this);
+        this.destinationSelectNode.removeEventListener('change', this);
       }
 
-      async handleEvent({ type, currentTarget, target: { value } }) {
-        if ("change" === type && currentTarget === this.destinationSelectNode) {
-          segment.track.updateAvailability();
-          const destination = this.destinations.find(
-            destination => destination.id == value
-          );
-          this.checkBox.previousAvailability = destination;
-          await setDestination(destination);
+      async handleEvent({ type, currentTarget, currentTarget: { checked }, target: { value } }) {
+        switch (currentTarget) {
+          case this.toggleDnDNode:
+            if (checked !== this.isAvailable) {
+              return;
+            }
+            await setUnavailable(checked);
+            if (checked) {
+              disable(this.destinationSelectNode);
+            } else {
+              enable(this.destinationSelectNode);
+            }
+            break;
+
+          case this.destinationSelectNode:
+            if ('change' === type) {
+              segment.track.updateAvailability();
+              const destination = this.destinations.find(destination => destination.id == value);
+              await setDestination(destination);
+            }
+            break;
         }
       }
     }
