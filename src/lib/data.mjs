@@ -24,12 +24,19 @@ async function getStorageData({
         return data;
       })
       .catch(err => {
-        if (err.message === "unauthorised") {
-          logger.error(
-            "Made an unauthorized request, possible password change. Removing token, updating view"
-          );
-          localStorage.clear();
-          window.dispatchEvent(new CustomEvent("updatePlugin"));
+        switch (err.message) {
+          case 'You need to change your password in the portal':
+            localStorage.clear();
+            throw new Error('change_temp_password');
+            break;
+
+          case 'unauthorised':
+            logger.error(
+              "Made an unauthorized request, possible password change. Removing token, updating view"
+            );
+            localStorage.clear();
+            window.dispatchEvent(new CustomEvent("updatePlugin"));
+            break;
         }
       });
   }

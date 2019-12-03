@@ -48,6 +48,8 @@ loadTemplate("p-login").then(({ content }) => {
             const payload = { email, password };
             hide(this.twoFactorAuthenticationContainerNode);
 
+            this.email = email;
+
             if (token) {
               payload.token = token;
             }
@@ -88,7 +90,15 @@ loadTemplate("p-login").then(({ content }) => {
         this.twoFactorAuthenticationInput.setAttribute("required", "");
       }
 
-      get showChangePasswordMessage() {
+      showChangePasswordMessage() {
+        const token = localStorage.getItem('token');
+        if (!token || !this.email) {
+          this.changePasswordLink.setAttribute('href', `%%VENDOR_PORTAL_URL%%user/personal_settings`);
+        } else {
+          this.changePasswordLink.setAttribute('href', `%%VENDOR_PORTAL_URL%%user/autologin/?token=${token}&username=${this.email}&next=/user/personal_settings`);
+        }
+
+        hide(this.formNode);
         show(this.changePasswordNode);
       }
     }
