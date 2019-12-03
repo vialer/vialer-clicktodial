@@ -1,11 +1,13 @@
-import "../components/c-click-to-dial-button.mjs";
-import "../components/c-click-to-dial-wrapper.mjs";
+import '../components/c-click-to-dial-button.mjs';
+import '../components/c-click-to-dial-wrapper.mjs';
 
-import { Logger } from "../lib/logging.mjs";
-import { Walker } from "./walker.js";
-import parsers from "./parser.js";
+import { Logger } from '../lib/logging.mjs';
+import { Walker } from './walker.js';
 
-const logger = new Logger("observer");
+import parsers from './parser.js';
+import browser from '../vendor/browser-polyfill.js';
+
+const logger = new Logger('observer');
 
 /**
  * The Observer module. Injected in all tabs and all its frames.
@@ -20,25 +22,22 @@ export class ObserverModule {
     this.handleMutationsTimeout = null;
     this.parkedNodes = [];
 
-    /**
-     * Handle the event when a link is clicked that contains
-     * <a href="tel:"></a>.
-     */
-    //TODO think if this should be possible
-    // $('body').on('click', '[href^="tel:"]', (e) => {
-    //     $(e.currentTarget).blur()
-    //     // Don't do anything with this click in the actual page.
-    //     e.preventDefault()
-    //     e.stopPropagation()
-    //     e.stopImmediatePropagation()
+    document.body.addEventListener('click', e => {
+      if (e.target.nodeName === 'A' && e.target.href.substring(0, 4) === 'tel:') {
+        // Don't do anything with this click in the actual page.
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
 
-    //     // Dial the b_number.
-    //     const bNumber = $(e.currentTarget).attr('href').substring(4)
-    //     this.app.emit('dialer:dial', {
-    //         analytics: 'Webpage',
-    //         b_number: bNumber,
-    //     })
-    // })
+        // Shift away focus from the window.
+        window.blur();
+
+        const bNumber = e.target.href.substring(4);
+        browser.runtime.sendMessage(null, { b_number: bNumber }).then(() => {
+          logger.info(`Trying to call ${bNumber}`);
+        });
+      }
+    });
   }
 
   doInsert(root) {
@@ -48,7 +47,7 @@ export class ObserverModule {
 
     // Walk the DOM looking for elements to parse, but block reasonably
     // sized pages to prevent locking the page.
-    let childrenLength = root.querySelectorAll("*").length; // no lookup costs
+    let childrenLength = root.querySelectorAll('*').length; // no lookup costs
     if (childrenLength < 2001) {
       logger.debug(`${this}scanning ${childrenLength} elements`);
       this.walker.walkTheDOM(root, currentNode => {
@@ -61,33 +60,24 @@ export class ObserverModule {
           // from node.data, and
           // - enable inserting the icon html
           // (doesn't work with a text node)
-          let replacementNode = document.createElement(
-            "c-click-to-dial-wrapper"
-          );
+          let replacementNode = document.createElement('c-click-to-dial-wrapper');
           let originalHTML = this.escapeHTML(currentNode.data);
 
           let matches = parser().parse(originalHTML);
           if (matches.length) {
             if (
               !parser().isBlockingNode(currentNode.previousElementSibling) &&
-              !parser().isBlockingNode(
-                currentNode.parentNode.previousElementSibling
-              )
+              !parser().isBlockingNode(currentNode.parentNode.previousElementSibling)
             ) {
               matches.reverse().forEach(match => {
-                let numberIconElement = document.createElement(
-                  "c-click-to-dial-button"
-                );
+                let numberIconElement = document.createElement('c-click-to-dial-button');
 
-                let before = document.createElement("span");
+                let before = document.createElement('span');
                 before.textContent = originalHTML.slice(0, match.start);
-                let after = document.createElement("span");
+                let after = document.createElement('span');
                 after.textContent = originalHTML.slice(match.end);
-                let originalNumber = document.createElement("span");
-                originalNumber.textContent = originalHTML.slice(
-                  match.start,
-                  match.end
-                );
+                let originalNumber = document.createElement('span');
+                originalNumber.textContent = originalHTML.slice(match.start, match.end);
 
                 numberIconElement.contactDetails = match.number;
                 replacementNode.appendChild(before);
@@ -119,10 +109,7 @@ export class ObserverModule {
     // Insert icons.
     const before = new Date().getTime();
     this.doInsert();
-    logger.debug(
-      `${this}doInsert (processPage) took`,
-      new Date().getTime() - before
-    );
+    logger.debug(`${this}doInsert (processPage) took`, new Date().getTime() - before);
     // Start listening to DOM mutations.
     this.observePage();
   }
@@ -134,10 +121,10 @@ export class ObserverModule {
    */
   escapeHTML(str) {
     const replacements = {
-      '"': "&quot;",
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;"
+      '"': '&quot;',
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;'
     };
     return str.replace(/[&"<>]/g, m => replacements[m]);
   }
@@ -163,14 +150,9 @@ export class ObserverModule {
               if (stillInDocument) {
                 let before = new Date().getTime();
                 this.doInsert(node);
-                logger.debug(
-                  `${this}doInsert (handleMutations) took`,
-                  new Date().getTime() - before
-                );
+                logger.debug(`${this}doInsert (handleMutations) took`, new Date().getTime() - before);
               } else {
-                logger.debug(
-                  `${this}doInsert (handleMutations) took 0 - removed node`
-                );
+                logger.debug(`${this}doInsert (handleMutations) took 0 - removed node`);
               }
             }
           }, 0); // Push back execution to the end on the current event stack.
@@ -209,10 +191,7 @@ export class ObserverModule {
         // Assuming nothing happens, scan the nodes in 500 ms - after
         // this the page should've been done dealing with the mutations.
         if (this.parkedNodes.length) {
-          this.handleMutationsTimeout = setTimeout(
-            this.handleMutations.bind(this),
-            500
-          );
+          this.handleMutationsTimeout = setTimeout(this.handleMutations.bind(this), 500);
         }
       });
     }
@@ -239,7 +218,7 @@ export class ObserverModule {
    * text node containing the phonenumber.
    */
   restorePhonenumbers() {
-    document.querySelectorAll("c-click-to-dial-wrapper").forEach(el => {
+    document.querySelectorAll('c-click-to-dial-wrapper').forEach(el => {
       el.parentNode.replaceChild(document.createTextNode(el.textContent), el);
     });
   }
