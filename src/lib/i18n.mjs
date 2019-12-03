@@ -1,48 +1,39 @@
-import { Logger } from "/lib/logging.mjs";
-import browser from "/vendor/browser-polyfill.js";
+import { Logger } from '/lib/logging.mjs';
+import browser from '/vendor/browser-polyfill.js';
 
-const logger = new Logger("i18n");
+const logger = new Logger('i18n');
 
-export const availableLanguages = ["nl-NL", "en-US"]; // ['en-US', 'nl-NL' ];
+export const availableLanguages = ['nl-NL', 'en-US']; // ['en-US', 'nl-NL' ];
 export let chosenLanguage = null;
 
 export async function setChosenLanguage() {
-  let chosen = await browser.storage.local.get("chosenLanguage");
-  chosenLanguage =
-    Object.keys(chosen).length !== 0
-      ? chosen.chosenLanguage
-      : availableLanguages[0]; // first as default
+  let chosen = await browser.storage.local.get('chosenLanguage');
+  chosenLanguage = Object.keys(chosen).length !== 0 ? chosen.chosenLanguage : availableLanguages[0]; // first as default
   logger.info(`Chosen language is set on: ${chosenLanguage}`);
 }
 
-export function setTranslatedTextContent(
-  node,
-  key = node.dataset.translationKey
-) {
+export function setTranslatedTextContent(node, key = node.dataset.translationKey) {
   return translate(key).then(text => {
     node.innerText = text;
   });
 }
 
-export function setTranslatedPlaceholder(
-  node,
-  key = node.dataset.placeholderTranslationKey
-) {
+export function setTranslatedPlaceholder(node, key = node.dataset.placeholderTranslationKey) {
   return translate(key).then(text => {
-    node.setAttribute("placeholder", text);
+    node.setAttribute('placeholder', text);
   });
 }
 
 export function translateNodes(node = document.body) {
   const collection = [];
-  for (const n of node.querySelectorAll("[data-translation-key]")) {
+  for (const n of node.querySelectorAll('[data-translation-key]')) {
     const { translationKey } = n.dataset;
     if (translationKey) {
       collection.push(setTranslatedTextContent(n, translationKey));
     }
   }
 
-  for (const n of node.querySelectorAll("[data-placeholder-translation-key]")) {
+  for (const n of node.querySelectorAll('[data-placeholder-translation-key]')) {
     const { placeholderTranslationKey } = n.dataset;
     if (placeholderTranslationKey) {
       collection.push(setTranslatedPlaceholder(n, placeholderTranslationKey));
@@ -60,17 +51,15 @@ export function setLanguage(lng) {
   }
 
   return new Promise(resolve => {
-    document.documentElement.setAttribute("lang", lng);
+    document.documentElement.setAttribute('lang', lng);
     chosenLanguage = lng;
     browser.storage.local.set({ chosenLanguage: lng });
-    Array.from(document.getElementsByTagName("c-translate")).forEach(t => {
+    Array.from(document.getElementsByTagName('c-translate')).forEach(t => {
       t.update();
     });
-    Array.from(document.getElementsByTagName("c-language-switcher")).forEach(
-      t => {
-        t.update();
-      }
-    );
+    Array.from(document.getElementsByTagName('c-language-switcher')).forEach(t => {
+      t.update();
+    });
     translateNodes();
     resolve(chosenLanguage);
   });

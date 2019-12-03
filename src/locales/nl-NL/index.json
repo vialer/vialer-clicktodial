@@ -20,6 +20,8 @@
   "enter_number_or_name": "Typ een nummer of naam",
   "enter_password": "Vul hier je wachtwoord in",
   "error_occured": "Er is helaas iets mis gegaan",
+  "failed_a": "We konden je toestel niet bereiken",
+  "failed_b": "kon niet worden bereikt",
   "forgot_password": "Wachtwoord vergeten?",
   "general": "Algemeen",
   "log_in_action": "Inloggen",

@@ -1,16 +1,12 @@
-import request from "./request.mjs";
-import { Logger } from "./logging.mjs";
-import { showNotification } from "./notify.mjs";
-import browser from "/vendor/browser-polyfill.js";
+import request from './request.mjs';
+import { Logger } from './logging.mjs';
+import { showNotification } from './notify.mjs';
+import browser from '/vendor/browser-polyfill.js';
+import { translate } from './i18n.mjs';
 
-const logger = new Logger("data");
+const logger = new Logger('data');
 
-async function getStorageData({
-  storageName,
-  forceRefresh,
-  apiDataMutateCallback,
-  apiRequestOption = {}
-}) {
+async function getStorageData({ storageName, forceRefresh, apiDataMutateCallback, apiRequestOption = {} }) {
   const storedData = await browser.storage.local.get(storageName);
 
   if (Object.keys(storedData).length === 0 || forceRefresh) {
@@ -24,12 +20,10 @@ async function getStorageData({
         return data;
       })
       .catch(err => {
-        if (err.message === "unauthorised") {
-          logger.error(
-            "Made an unauthorized request, possible password change. Removing token, updating view"
-          );
+        if (err.message === 'unauthorised') {
+          logger.error('Made an unauthorized request, possible password change. Removing token, updating view');
           localStorage.clear();
-          window.dispatchEvent(new CustomEvent("updatePlugin"));
+          window.dispatchEvent(new CustomEvent('updatePlugin'));
         }
       });
   }
@@ -41,29 +35,21 @@ export async function getContact(forceRefresh = false) {
   const apiDataMutateCallback = objects => {
     const cleanObjects = [];
 
-    objects.forEach(
-      ({
-        sipreginfo,
-        description,
-        internal_number,
-        account_id,
-        is_app_account
-      }) => {
-        const status = sipreginfo || is_app_account ? "available" : "offline";
+    objects.forEach(({ sipreginfo, description, internal_number, account_id, is_app_account }) => {
+      const status = sipreginfo || is_app_account ? 'available' : 'offline';
 
-        cleanObjects.push({
-          description,
-          status,
-          phoneNumber: internal_number,
-          accountId: account_id
-        });
-      }
-    );
+      cleanObjects.push({
+        description,
+        status,
+        phoneNumber: internal_number,
+        accountId: account_id
+      });
+    });
     return cleanObjects;
   };
 
   const colleagueList = getStorageData({
-    storageName: "contacts",
+    storageName: 'contacts',
     forceRefresh,
     apiDataMutateCallback
   });
@@ -71,11 +57,11 @@ export async function getContact(forceRefresh = false) {
 }
 
 export async function getPreviousDestination() {
-  return await browser.storage.local.get("previousDestination");
+  return await browser.storage.local.get('previousDestination');
 }
 
 export async function getUser(forceRefresh = false) {
-  const user = getStorageData({ storageName: "user", forceRefresh });
+  const user = getStorageData({ storageName: 'user', forceRefresh });
   return user;
 }
 
@@ -84,31 +70,39 @@ let callStatusInterval;
 export async function clickToDial(bNumber) {
   const body = { b_number: bNumber };
   try {
-    const {
-      a_number,
-      auto_answer,
-      b_number,
-      callid
-    } = await request("clickToDial", { body });
-    localStorage.setItem("callid", callid);
-    callStatusInterval = setInterval(getCallStatus, 3000);
+    const { a_number, auto_answer, b_number, callid } = await request('clickToDial', { body });
+    localStorage.setItem('callid', callid);
+    callStatusInterval = setInterval(() => getCallStatus(bNumber), 3000);
     return { a_number, auto_answer, b_number, callid };
   } catch (err) {
-    logger.error("Call not succesfull", err);
+    logger.error('Call not succesfull', err);
   }
 }
 
-async function getCallStatus() {
-  const { a_number, auto_answer, b_number, callid, status } = await request(
-    "callStatus"
-  );
-  stopIntervalAtStatus(status);
+const statusTranslations = {
+  failed_a: () => translate('failed_a'),
+  failed_b: () => translate('failed_b')
+};
+
+async function getCallStatus(bNumber) {
+  const { a_number, auto_answer, b_number, callid, status } = await request('callStatus');
+
+  stopIntervalAtStatus(status, bNumber);
   // return { a_number, auto_answer, b_number, callid, status };
 }
 
-function stopIntervalAtStatus(status) {
-  if (status !== "dialing_b") {
-    showNotification(status);
+async function stopIntervalAtStatus(status, bNumber) {
+  if (status !== 'dialing_b') {
+    let notification = status;
+
+    if (status in statusTranslations) {
+      notification = await statusTranslations[status]();
+
+      if (status === 'failed_b') {
+        notification = `${bNumber} ${notification}`;
+      }
+    }
+    showNotification(notification);
     clearInterval(callStatusInterval);
   }
 }
@@ -120,13 +114,13 @@ export async function getQueues(forceRefresh = false) {
     objects.forEach(({ id, description, internal_number, queue_size }) => {
       let status;
       if (queue_size > 10) {
-        status = "hectic";
+        status = 'hectic';
       } else if (queue_size > 5) {
-        status = "busy";
+        status = 'busy';
       } else if (queue_size > 2) {
-        status = "moderate";
+        status = 'moderate';
       } else {
-        status = "quiet";
+        status = 'quiet';
       }
 
       cleanObjects.push({
@@ -141,7 +135,7 @@ export async function getQueues(forceRefresh = false) {
   };
 
   const queues = getStorageData({
-    storageName: "queues",
+    storageName: 'queues',
     forceRefresh,
     apiDataMutateCallback
   });
@@ -154,13 +148,13 @@ export async function getDestinations(forceRefresh = false) {
 
     objects.forEach(({ fixeddestinations, phoneaccounts }) => {
       fixeddestinations.forEach(({ id, description: desc, phonenumber }) => {
-        const description = `+${phonenumber}${desc ? ` - ${desc}` : ""}`;
+        const description = `+${phonenumber}${desc ? ` - ${desc}` : ''}`;
 
         cleanObjects.push({
           fixedDestinations: {
             id,
             description,
-            type: "fixed"
+            type: 'fixed'
           }
         });
       });
@@ -171,7 +165,7 @@ export async function getDestinations(forceRefresh = false) {
           id,
           internalNumber: internal_number,
           description,
-          type: "account"
+          type: 'account'
         });
       });
     });
@@ -179,7 +173,7 @@ export async function getDestinations(forceRefresh = false) {
   };
 
   const destinations = await getStorageData({
-    storageName: "destinations",
+    storageName: 'destinations',
     forceRefresh,
     apiDataMutateCallback
   });
@@ -187,7 +181,7 @@ export async function getDestinations(forceRefresh = false) {
 }
 
 export async function getSelectedDestination() {
-  const data = await request("getDestination");
+  const data = await request('getDestination');
   const { id, fixeddestination, phoneaccount } = data.objects[0];
   return {
     id,
@@ -199,10 +193,8 @@ export async function getSelectedDestination() {
 export async function setDestination(destination) {
   const { id } = await getSelectedDestination();
   const body = {
-    fixeddestination:
-      destination && destination.type === "fixed" ? destination.id : null,
-    phoneaccount:
-      destination && destination.type === "account" ? destination.id : null
+    fixeddestination: destination && destination.type === 'fixed' ? destination.id : null,
+    phoneaccount: destination && destination.type === 'account' ? destination.id : null
   };
-  return await request("setDestination", { id, body });
+  return await request('setDestination', { id, body });
 }
