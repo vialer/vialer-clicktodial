@@ -1,9 +1,9 @@
-import { Logger } from "../lib/logging.mjs";
+import { Logger } from '../lib/logging.mjs';
 
-const logger = new Logger("walker");
+const logger = new Logger('walker');
 
 // Identify our elements with these class names.
-const phoneElementClassName = "vialer-phone-number";
+const phoneElementClassName = 'vialer-phone-number';
 
 /**
  * Using an object to check if tagName is disallowed is faster when using
@@ -15,56 +15,56 @@ let getBlockedTagNames = function() {
   // eslint-disable-next-line max-len
   // https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5/HTML5_element_list
   const tags = [
-    "TITLE",
-    "BASE",
-    "LINK",
-    "META",
-    "STYLE",
-    "SCRIPT",
-    "TEMPLATE",
-    "PRE",
-    "FIGURE",
-    "DATA",
-    "TIME",
-    "CODE",
-    "VAR",
-    "SAMP",
-    "KBD",
-    "SUB",
-    "SUP",
-    "RUBY",
-    "RT",
-    "RP",
-    "BDI",
-    "BR",
-    "WBR",
-    "IMG",
-    "EMBED",
-    "OBJECT",
-    "PARAM",
-    "VIDEO",
-    "AUDIO",
-    "SOURCE",
-    "TRACK",
-    "CANVAS",
-    "MAP",
-    "AREA",
-    "SVG",
-    "MATH",
-    "INPUT",
-    "BUTTON",
-    "SELECT",
-    "DATALIST",
-    "OPTGROUP",
-    "OPTION",
-    "TEXTAREA",
-    "KEYGEN",
-    "PROGRESS",
-    "METER",
-    "DETAILS",
-    "SUMMARY",
-    "MENUITEM",
-    "MENU"
+    'TITLE',
+    'BASE',
+    'LINK',
+    'META',
+    'STYLE',
+    'SCRIPT',
+    'TEMPLATE',
+    'PRE',
+    'FIGURE',
+    'DATA',
+    'TIME',
+    'CODE',
+    'VAR',
+    'SAMP',
+    'KBD',
+    'SUB',
+    'SUP',
+    'RUBY',
+    'RT',
+    'RP',
+    'BDI',
+    'BR',
+    'WBR',
+    'IMG',
+    'EMBED',
+    'OBJECT',
+    'PARAM',
+    'VIDEO',
+    'AUDIO',
+    'SOURCE',
+    'TRACK',
+    'CANVAS',
+    'MAP',
+    'AREA',
+    'SVG',
+    'MATH',
+    'INPUT',
+    'BUTTON',
+    'SELECT',
+    'DATALIST',
+    'OPTGROUP',
+    'OPTION',
+    'TEXTAREA',
+    'KEYGEN',
+    'PROGRESS',
+    'METER',
+    'DETAILS',
+    'SUMMARY',
+    'MENUITEM',
+    'MENU'
   ];
   let disallowed = {};
   tags.forEach(i => {
@@ -79,17 +79,17 @@ let getBlockedTagNames = function() {
  */
 let getBlockedRoles = function() {
   const roles = [
-    "button",
-    "checkbox",
-    "command",
-    "input",
-    "radio",
-    "range",
-    "slider",
-    "option",
-    "search",
-    "textbox",
-    "timer"
+    'button',
+    'checkbox',
+    'command',
+    'input',
+    'radio',
+    'range',
+    'slider',
+    'option',
+    'search',
+    'textbox',
+    'timer'
   ];
   let disallowed = {};
   roles.forEach(i => {
@@ -97,6 +97,17 @@ let getBlockedRoles = function() {
   });
   return disallowed;
 };
+
+function closest(node, selector) {
+  do {
+    if (node.matches(selector)) {
+      return node;
+    }
+    node = node.parentNode;
+  } while (node.nodeType === 1);
+
+  return undefined;
+}
 
 /**
  * Walk the DOM.
@@ -121,21 +132,22 @@ export class Walker {
     // Check for attributes on *element*.
     if (
       element.isContentEditable ||
-      element.hasAttribute("aria-labelledby") ||
-      (element.hasAttribute("role") &&
-        element.getAttribute("role").toLowerCase() in this.blockedRoles)
+      element.hasAttribute('aria-labelledby') ||
+      (element.hasAttribute('role') && element.getAttribute('role').toLowerCase() in this.blockedRoles)
     ) {
       return true;
     } else {
-      //TODO dit terugzetten
-      // check for attributes on *parents*
-      // let closest_role_element = $(element).closest('[role]')
-      // if (!!$(element).closest('[contenteditable="true"]').length ||
-      //     !!$(element).closest('[aria-labelledby]').length ||
-      //     (!!closest_role_element.length &&
-      //         $(closest_role_element[0]).attr('role').toLowerCase() in this.blockedRoles)) {
-      //     return true
-      // }
+      let closest_role_element = closest(element, '[role]');
+      let closest_contenteditable_element = closest(element, '[contenteditable="true"]');
+      let closest_aria_element = closest(element, '[aria-labelledby]');
+
+      if (
+        closest_contenteditable_element ||
+        closest_aria_element ||
+        (closest_role_element && closest_role_element.getAttribute('role').toLowerCase() in this.blockedRoles)
+      ) {
+        return true;
+      }
     }
     return false;
   }
@@ -147,10 +159,7 @@ export class Walker {
    */
   skipNode(node) {
     // Only parse element and text nodes.
-    if (
-      node.nodeType !== Node.ELEMENT_NODE &&
-      node.nodeType !== Node.TEXT_NODE
-    ) {
+    if (node.nodeType !== Node.ELEMENT_NODE && node.nodeType !== Node.TEXT_NODE) {
       return true;
     }
 
