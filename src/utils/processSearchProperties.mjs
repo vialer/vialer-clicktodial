@@ -1,6 +1,6 @@
-import replaceSpecialCharacters from "/utils/replaceSpecialCharacters.mjs";
+import replaceSpecialCharacters from '/utils/replaceSpecialCharacters.mjs';
 
-const searchTheseProperties = ["description", "phoneNumber"];
+const searchTheseProperties = ['description', 'phoneNumber'];
 
 export function processSearchProperties(data) {
   return searchTheseProperties.reduce((prev, property) => {

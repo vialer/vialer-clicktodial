@@ -4,15 +4,15 @@
  * @returns {templateNode} - a template with the content set.
  */
 export function createTemplate(templateString) {
-  const template = document.createElement("template");
+  const template = document.createElement('template');
   template.innerHTML = templateString;
   return template;
 }
 
 const templateCache = new Map();
 const templateTypeMapping = {
-  c: "components",
-  p: "pages"
+  c: 'components',
+  p: 'pages'
 };
 export function loadTemplate(component) {
   if (templateCache.has(component)) {
@@ -20,16 +20,16 @@ export function loadTemplate(component) {
   }
 }
 
-Array.from(document.querySelectorAll("template")).forEach(templateNode => {
+Array.from(document.querySelectorAll('template')).forEach(templateNode => {
   const { component } = templateNode.dataset;
   templateCache.set(component, templateNode);
 });
 
 export function toggleVisibility(node) {
-  if (node.hasAttribute("hidden")) {
-    node.removeAttribute("hidden");
+  if (node.hasAttribute('hidden')) {
+    node.removeAttribute('hidden');
   } else {
-    node.setAttribute("hidden", "");
+    node.setAttribute('hidden', '');
   }
 }
 
@@ -56,7 +56,7 @@ export function getFormValues(form) {
  * @param node - the node that needs to be hidden
  */
 export function hide(n) {
-  n.setAttribute("hidden", "");
+  n.setAttribute('hidden', '');
 }
 
 /**
@@ -64,7 +64,7 @@ export function hide(n) {
  * @param node - the node that needs to be shown.
  */
 export function show(n) {
-  n.removeAttribute("hidden");
+  n.removeAttribute('hidden');
 }
 
 /**
@@ -72,7 +72,7 @@ export function show(n) {
  * @param node - the node that needs to be checked.
  */
 export function isHidden(n) {
-  return n.hasAttribute("hidden");
+  return n.hasAttribute('hidden');
 }
 
 /**
@@ -80,7 +80,7 @@ export function isHidden(n) {
  * @param node - the node that needs to be disabled.
  */
 export function disable(n) {
-  n.setAttribute("disabled", "");
+  n.setAttribute('disabled', '');
 }
 
 /**
@@ -88,7 +88,7 @@ export function disable(n) {
  * @param node - the node that needs to be enabled.
  */
 export function enable(n) {
-  n.removeAttribute("disabled");
+  n.removeAttribute('disabled');
 }
 
 /**
@@ -96,7 +96,7 @@ export function enable(n) {
  * @param node - the node that needs to be enabled.
  */
 export function select(n) {
-  n.setAttribute("selected", "");
+  n.setAttribute('selected', '');
 }
 
 const iconCache = new Map();
@@ -111,7 +111,7 @@ export function loadIcon(id) {
     }
 
     return r.text().then(svg => {
-      const template = document.createElement("template");
+      const template = document.createElement('template');
       template.innerHTML = svg;
 
       return template;

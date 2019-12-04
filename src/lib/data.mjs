@@ -27,11 +27,9 @@ async function getStorageData({ storageName, forceRefresh, apiDataMutateCallback
             break;
 
           case 'unauthorised':
-            logger.error(
-              "Made an unauthorized request, possible password change. Removing token, updating view"
-            );
+            logger.error('Made an unauthorized request, possible password change. Removing token, updating view');
             localStorage.clear();
-            window.dispatchEvent(new CustomEvent("updatePlugin"));
+            window.dispatchEvent(new CustomEvent('updatePlugin'));
             break;
         }
       });
