@@ -22,21 +22,17 @@
   <a href="%%SETTINGS_URL%%"" target="_blank"><c-icon icon="settings"></c-icon></a>
 </template>
 
-<template data-component="c-toggle-availability">
-  <label>
-    <span data-translation-key="enable_dnd"></span>
-    <input type="checkbox" data-selector="toggle-dnd" />
-  </label>
-</template>
-
 <template data-component="c-availability">
   <div class="component-header">
     <c-icon icon="phone"></c-icon>
     <h3 data-translation-key="availability"></h3>
-    <c-toggle-availability></c-toggle-availability>
+    <label>
+      <span data-translation-key="enable_dnd"></span>
+      <input type="checkbox" data-selector="toggle-dnd" disabled />
+    </label>
   </div>
   <div>
-    <select data-selector="destination-select"></select>
+    <select data-selector="destination-select" disabled></select>
   </div>
 </template>
 

@@ -6,23 +6,18 @@
     "activeTab",
     "storage",
     "notifications",
+    "contextMenus",
     "https://api.segment.io/*",
     "https://partner.voipgrid.nl/api/*"
   ],
   "background": {
-    "scripts": [
-      "background.js"
-    ],
+    "scripts": ["background.js"],
     "persistent": false
   },
   "content_scripts": [
     {
-      "matches": [
-        "<all_urls>"
-      ],
-      "js": [
-        "content.js"
-      ]
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
     }
   ],
   "browser_action": {
@@ -40,5 +35,8 @@
     "48": "brand/logo-64.png",
     "128": "brand/logo-128.png"
   },
+  "web_accessible_resources": [
+    "icons/phone.png"
+  ],
   "manifest_version": 2
 }

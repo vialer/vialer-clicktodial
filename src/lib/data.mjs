@@ -1,16 +1,11 @@
-import request from "./request.mjs";
-import { Logger } from "./logging.mjs";
-import { showNotification } from "./notify.mjs";
-import browser from "/vendor/browser-polyfill.js";
+import request from './request.mjs';
+import { Logger } from './logging.mjs';
+import { showNotification } from './notify.mjs';
+import browser from '/vendor/browser-polyfill.js';
 
-const logger = new Logger("data");
+const logger = new Logger('data');
 
-async function getStorageData({
-  storageName,
-  forceRefresh,
-  apiDataMutateCallback,
-  apiRequestOption = {}
-}) {
+async function getStorageData({ storageName, forceRefresh, apiDataMutateCallback, apiRequestOption = {} }) {
   const storedData = await browser.storage.local.get(storageName);
 
   if (Object.keys(storedData).length === 0 || forceRefresh) {
@@ -48,29 +43,21 @@ export async function getContact(forceRefresh = false) {
   const apiDataMutateCallback = objects => {
     const cleanObjects = [];
 
-    objects.forEach(
-      ({
-        sipreginfo,
-        description,
-        internal_number,
-        account_id,
-        is_app_account
-      }) => {
-        const status = sipreginfo || is_app_account ? "available" : "offline";
+    objects.forEach(({ sipreginfo, description, internal_number, account_id, is_app_account }) => {
+      const status = sipreginfo || is_app_account ? 'available' : 'offline';
 
-        cleanObjects.push({
-          description,
-          status,
-          phoneNumber: internal_number,
-          accountId: account_id
-        });
-      }
-    );
+      cleanObjects.push({
+        description,
+        status,
+        phoneNumber: internal_number,
+        accountId: account_id
+      });
+    });
     return cleanObjects;
   };
 
   const colleagueList = getStorageData({
-    storageName: "contacts",
+    storageName: 'contacts',
     forceRefresh,
     apiDataMutateCallback
   });
@@ -78,11 +65,11 @@ export async function getContact(forceRefresh = false) {
 }
 
 export async function getPreviousDestination() {
-  return await browser.storage.local.get("previousDestination");
+  return await browser.storage.local.get('previousDestination');
 }
 
 export async function getUser(forceRefresh = false) {
-  const user = getStorageData({ storageName: "user", forceRefresh });
+  const user = getStorageData({ storageName: 'user', forceRefresh });
   return user;
 }
 
@@ -91,30 +78,23 @@ let callStatusInterval;
 export async function clickToDial(bNumber) {
   const body = { b_number: bNumber };
   try {
-    const {
-      a_number,
-      auto_answer,
-      b_number,
-      callid
-    } = await request("clickToDial", { body });
-    localStorage.setItem("callid", callid);
+    const { a_number, auto_answer, b_number, callid } = await request('clickToDial', { body });
+    localStorage.setItem('callid', callid);
     callStatusInterval = setInterval(getCallStatus, 3000);
     return { a_number, auto_answer, b_number, callid };
   } catch (err) {
-    logger.error("Call not succesfull", err);
+    logger.error('Call not succesfull', err);
   }
 }
 
 async function getCallStatus() {
-  const { a_number, auto_answer, b_number, callid, status } = await request(
-    "callStatus"
-  );
+  const { a_number, auto_answer, b_number, callid, status } = await request('callStatus');
   stopIntervalAtStatus(status);
   // return { a_number, auto_answer, b_number, callid, status };
 }
 
 function stopIntervalAtStatus(status) {
-  if (status !== "dialing_b") {
+  if (status !== 'dialing_b') {
     showNotification(status);
     clearInterval(callStatusInterval);
   }
@@ -127,13 +107,13 @@ export async function getQueues(forceRefresh = false) {
     objects.forEach(({ id, description, internal_number, queue_size }) => {
       let status;
       if (queue_size > 10) {
-        status = "hectic";
+        status = 'hectic';
       } else if (queue_size > 5) {
-        status = "busy";
+        status = 'busy';
       } else if (queue_size > 2) {
-        status = "moderate";
+        status = 'moderate';
       } else {
-        status = "quiet";
+        status = 'quiet';
       }
 
       cleanObjects.push({
@@ -148,7 +128,7 @@ export async function getQueues(forceRefresh = false) {
   };
 
   const queues = getStorageData({
-    storageName: "queues",
+    storageName: 'queues',
     forceRefresh,
     apiDataMutateCallback
   });
@@ -161,13 +141,13 @@ export async function getDestinations(forceRefresh = false) {
 
     objects.forEach(({ fixeddestinations, phoneaccounts }) => {
       fixeddestinations.forEach(({ id, description: desc, phonenumber }) => {
-        const description = `+${phonenumber}${desc ? ` - ${desc}` : ""}`;
+        const description = `+${phonenumber}${desc ? ` - ${desc}` : ''}`;
 
         cleanObjects.push({
           fixedDestinations: {
             id,
             description,
-            type: "fixed"
+            type: 'fixed'
           }
         });
       });
@@ -178,7 +158,7 @@ export async function getDestinations(forceRefresh = false) {
           id,
           internalNumber: internal_number,
           description,
-          type: "account"
+          type: 'account'
         });
       });
     });
@@ -186,7 +166,7 @@ export async function getDestinations(forceRefresh = false) {
   };
 
   const destinations = await getStorageData({
-    storageName: "destinations",
+    storageName: 'destinations',
     forceRefresh,
     apiDataMutateCallback
   });
@@ -194,7 +174,7 @@ export async function getDestinations(forceRefresh = false) {
 }
 
 export async function getSelectedDestination() {
-  const data = await request("getDestination");
+  const data = await request('getDestination');
   const { id, fixeddestination, phoneaccount } = data.objects[0];
   return {
     id,
@@ -206,10 +186,28 @@ export async function getSelectedDestination() {
 export async function setDestination(destination) {
   const { id } = await getSelectedDestination();
   const body = {
-    fixeddestination:
-      destination && destination.type === "fixed" ? destination.id : null,
-    phoneaccount:
-      destination && destination.type === "account" ? destination.id : null
+    fixeddestination: destination && destination.type === 'fixed' ? destination.id : null,
+    phoneaccount: destination && destination.type === 'account' ? destination.id : null
   };
-  return await request("setDestination", { id, body });
+
+  return await request('setDestination', { id, body }).then(response => {
+    if (destination) {
+      browser.storage.local.set({ previousDestination: destination });
+    }
+  });
+}
+
+export async function setUnavailable(isUnavailable = true) {
+  if (isUnavailable) {
+    await setDestination();
+  } else {
+    const { previousDestination } = await browser.storage.local.get('previousDestination');
+    await setDestination(previousDestination);
+  }
+
+  window.dispatchEvent(
+    new CustomEvent('availabilityChange', {
+      detail: { disabled: isUnavailable }
+    })
+  );
 }
