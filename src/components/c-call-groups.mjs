@@ -1,11 +1,11 @@
-import "/components/c-contact.mjs";
+import '/components/c-contact.mjs';
 
-import { hide, show, loadTemplate } from "/utils/dom.mjs";
-import { getQueues } from "/lib/data.mjs";
+import { hide, show, loadTemplate } from '/utils/dom.mjs';
+import { getQueues } from '/lib/data.mjs';
 
-loadTemplate("c-call-groups").then(({ content }) => {
+loadTemplate('c-call-groups').then(({ content }) => {
   window.customElements.define(
-    "c-call-groups",
+    'c-call-groups',
 
     class extends HTMLElement {
       constructor() {
@@ -16,7 +16,7 @@ loadTemplate("c-call-groups").then(({ content }) => {
       connectedCallback() {
         this.appendChild(content.cloneNode(true));
 
-        this.list = this.querySelector("[data-selector=call-groups]");
+        this.list = this.querySelector('[data-selector=call-groups]');
 
         this.toggleNode = this.querySelector('c-toggle');
         this.toggleNode.addEventListener('toggle-open', this);
@@ -46,7 +46,7 @@ loadTemplate("c-call-groups").then(({ content }) => {
         getQueues().then(queues => {
           this.dataRetrieved = true;
           queues.forEach(queue => {
-            let contact = document.createElement("c-contact");
+            let contact = document.createElement('c-contact');
             this.list.appendChild(contact);
 
             contact.contactDetails = queue;
