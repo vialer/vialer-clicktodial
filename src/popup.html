@@ -75,19 +75,19 @@
       <h1 data-translation-key="log_in_action"></h1>
       <c-language-switcher></c-language-switcher>
     </header>
+    <div class="login-change-password" data-selector="change-password" hidden>
+      <h3 data-translation-key="change_password_title"></h3>
+      <p>
+        <span data-translation-key="change_password_body"></span>
+        <a data-selector="change-password-link" target="_blank">link</a>
+      </p>
+    </div>
     <form class="login-form">
       <div class="login-error" data-selector="authentication-error" hidden>
         <c-icon icon="warning"></c-icon>
         <span data-translation-key="authentication_error"></span>
       </div>
-      <div class="login-change-password" data-selector="change-password" hidden>
-        <h5 data-translation-key="change_password_body"></h5>
-        <p><span class="login-change-password-title" data-translation-key="change_password_title"></span></p>
-        <p>
-          <span data-translation-key="change_password_body"></span>
-          <a data-selector="change-password-link" target="_blank" href="%%CHANGE_PASSWORD_URL%%">link</a>
-        </p>
-      </div>
+
       <label>
         <span data-translation-key="email_address"></span>
         <input type="email" name="email" data-selector="email-input" data-placeholder-translation-key="enter_email"
