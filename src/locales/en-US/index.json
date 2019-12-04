@@ -21,6 +21,8 @@
   "enter_number_or_name": "Enter a number or name",
   "enter_password": "Enter your password",
   "error_occured": "Unfortunately, something went wrong.",
+  "failed_a": "We could not reach your phone",
+  "failed_b": "could not be reached",
   "forgot_password": "Forgot password?",
   "general": "General",
   "log_in_action": "Log in",
