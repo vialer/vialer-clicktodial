@@ -551,7 +551,7 @@ export default function() {
     state: "INTERNATIONAL"
   };
   rules[4] = {
-    pattern: "^31",
+    pattern: "^\\d{2}",
     action: actions.keep,
     length: 2,
     state: "AREA"
@@ -677,20 +677,16 @@ export default function() {
           num_behind_0++;
         }
       }
-      let num_behind_31 = -1;
-      for (let j = 0; j < digits.length - 1 && num_behind_31 < 8; j++) {
-        if (
-          digits[j] === "3" &&
-          digits[j + 1] === "1" &&
-          num_behind_31 === -1
-        ) {
-          num_behind_31++;
+      let num_behind_country_code = -1;
+      for (let j = 0; j < digits.length - 1 && num_behind_country_code < 8; j++) {
+        if (num_behind_country_code === -1) {
+          num_behind_country_code++;
         }
-        if (num_behind_31 !== -1) {
-          num_behind_31++;
+        if (num_behind_country_code !== -1) {
+          num_behind_country_code++;
         }
       }
-      if (num_behind_0 < 8 && num_behind_31 < 8) {
+      if (num_behind_0 < 8 && num_behind_country_code < 8) {
         return matches;
       }
     }
@@ -797,13 +793,13 @@ export default function() {
   // validate result,
   // result is guaranteed to have no whitespace, which makes life easy
   let validate = function() {
-    let matches = new RegExp("^(?:(?:(?:\\+|00)31)|0)(.*)").exec(result);
+    let matches = new RegExp("^(?:(?:(?:\\+|00)\\d{2})|0)(.*)").exec(result);
     if (!matches) {
       // the number
-      // - doesn't start with `((+|00)31|0)`, or
+      // - doesn't start with `((+|00)\d{2}|0)`, or
       // - has no trailing characters, or
       // - has no trailing digits
-      if (debug) console.log('invalid: "' + result + '" not ((+|00)31|0)\\d+');
+      if (debug) console.log('invalid: "' + result + '" not ((+|00)\\d{2}|0)\\d+');
       return false;
     }
 
