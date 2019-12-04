@@ -2,6 +2,7 @@ import request from './request.mjs';
 import { Logger } from './logging.mjs';
 import { showNotification } from './notify.mjs';
 import browser from '/vendor/browser-polyfill.js';
+import { translate } from './i18n.mjs';
 
 const logger = new Logger('data');
 
@@ -71,22 +72,37 @@ export async function clickToDial(bNumber) {
   try {
     const { a_number, auto_answer, b_number, callid } = await request('clickToDial', { body });
     localStorage.setItem('callid', callid);
-    callStatusInterval = setInterval(getCallStatus, 3000);
+    callStatusInterval = setInterval(() => getCallStatus(bNumber), 3000);
     return { a_number, auto_answer, b_number, callid };
   } catch (err) {
     logger.error('Call not succesfull', err);
   }
 }
 
-async function getCallStatus() {
+const statusTranslations = {
+  failed_a: () => translate('failed_a'),
+  failed_b: () => translate('failed_b')
+};
+
+async function getCallStatus(bNumber) {
   const { a_number, auto_answer, b_number, callid, status } = await request('callStatus');
-  stopIntervalAtStatus(status);
+
+  stopIntervalAtStatus(status, bNumber);
   // return { a_number, auto_answer, b_number, callid, status };
 }
 
-function stopIntervalAtStatus(status) {
+async function stopIntervalAtStatus(status, bNumber) {
   if (status !== 'dialing_b') {
-    showNotification(status);
+    let notification = status;
+
+    if (status in statusTranslations) {
+      notification = await statusTranslations[status]();
+
+      if (status === 'failed_b') {
+        notification = `${bNumber} ${notification}`;
+      }
+    }
+    showNotification(notification);
     clearInterval(callStatusInterval);
   }
 }
