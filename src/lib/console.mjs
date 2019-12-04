@@ -25,5 +25,5 @@ export function logToConsole(level, module, message, ...args) {
     `padding: 2px 0.5em`
   ];
 
-  fn(`%c${module}%c ${message}`, styles.join(";"), "", ...args);
+  fn(`%c${module}%c ${message}`, styles.join(';'), '', ...args);
 }

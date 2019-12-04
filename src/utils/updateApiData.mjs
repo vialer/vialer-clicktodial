@@ -1,12 +1,12 @@
-import { getUser, getQueues, getContact } from "/lib/data.mjs";
-import browser from "/vendor/browser-polyfill.js";
+import { getUser, getQueues, getContact } from '/lib/data.mjs';
+import browser from '/vendor/browser-polyfill.js';
 
 const userTimeout = 2 * 60 * 1000; // = 2 minutes
 const queuesTimeout = 2 * 60 * 1000;
 const contactsTimeout = 2 * 60 * 1000;
 
 export async function updateApiData() {
-  const storedTimeStamps = await browser.storage.local.get("timeStamps");
+  const storedTimeStamps = await browser.storage.local.get('timeStamps');
   let timeStampNow = new Date().getTime();
   if (Object.keys(storedTimeStamps).length === 0) {
     browser.storage.local.set({

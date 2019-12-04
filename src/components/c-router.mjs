@@ -1,16 +1,16 @@
-import { isAuthenticated as check } from "/lib/user.mjs";
-import { updateApiData } from "/utils/updateApiData.mjs";
-import { Logger } from "/lib/logging.mjs";
-import { startTrackingUser } from "/utils/startTrackingUser.mjs";
-import { translateNodes, setChosenLanguage } from "/lib/i18n.mjs";
+import { isAuthenticated as check } from '/lib/user.mjs';
+import { updateApiData } from '/utils/updateApiData.mjs';
+import { Logger } from '/lib/logging.mjs';
+import { startTrackingUser } from '/utils/startTrackingUser.mjs';
+import { translateNodes, setChosenLanguage } from '/lib/i18n.mjs';
 
-import "/pages/p-login.mjs";
-import "/pages/p-main.mjs";
+import '/pages/p-login.mjs';
+import '/pages/p-main.mjs';
 
-const logger = new Logger("router");
+const logger = new Logger('router');
 
 window.customElements.define(
-  "c-router",
+  'c-router',
 
   class extends HTMLElement {
     constructor() {
@@ -27,7 +27,7 @@ window.customElements.define(
               this.login.remove();
             }
             updateApiData();
-            this.main = document.createElement("p-main");
+            this.main = document.createElement('p-main');
             this.appendChild(this.main);
           } else {
             if (this.main !== undefined) {
@@ -41,14 +41,14 @@ window.customElements.define(
         })
         .catch(err => {
           this.setLogin();
-          logger.warn("Change of password needed");
+          logger.warn('Change of password needed');
           this.login.showChangePasswordMessage;
         });
     }
 
     setLogin() {
       if (this.login === undefined) {
-        this.login = document.createElement("p-login");
+        this.login = document.createElement('p-login');
         this.appendChild(this.login);
       }
     }
@@ -56,7 +56,7 @@ window.customElements.define(
     connectedCallback() {
       // TODO dit verwijderen als tracking user vanuit background succesvol is.
       startTrackingUser();
-      window.addEventListener("updatePlugin", () => {
+      window.addEventListener('updatePlugin', () => {
         this.showView();
       });
       this.showView();
