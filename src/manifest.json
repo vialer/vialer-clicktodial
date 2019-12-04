@@ -40,5 +40,8 @@
     "48": "brand/logo-64.png",
     "128": "brand/logo-128.png"
   },
+  "web_accessible_resources": [
+    "icons/phone.png"
+  ],
   "manifest_version": 2
 }
