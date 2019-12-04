@@ -1,20 +1,43 @@
+import browser from '/vendor/browser-polyfill.js';
 import { clickToDial } from './lib/data.mjs';
 import { showNotification } from './lib/notify.mjs';
 import { Logger } from './lib/logging.mjs';
-import browser from '/vendor/browser-polyfill.js';
+import { translate } from './lib/i18n.mjs';
 import * as segment from './lib/segment.mjs';
+import cleanPhoneNumber from './utils/cleanPhoneNumber.mjs';
 
 const logger = new Logger('background');
 
-browser.runtime.onMessage.addListener(async function(request, sender, sendResponse) {
+function doClickToDial(number) {
+  clickToDial(number)
+    .then(({ b_number }) => {
+      showNotification(`calling ${b_number}`);
+      segment.track.clickedToDial();
+    })
+    .catch(e => {
+      logger.error(e);
+    });
+}
+
+browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.b_number) {
-    clickToDial(request.b_number)
-      .then(({ b_number }) => {
-        showNotification(`calling ${b_number}`);
-        segment.track.clickedToDial();
-      })
-      .catch(e => {
-        logger.error(e);
-      });
+    doClickToDial(request.b_number);
   }
+});
+
+browser.contextMenus.onClicked.addListener((info, tab) => {
+  if (info.menuItemId === 'select-number') {
+    const phoneNumber = cleanPhoneNumber(info.selectionText);
+    if (phoneNumber) {
+      doClickToDial(phoneNumber);
+    }
+  }
+});
+
+translate('call_selected_number').then(title => {
+  browser.contextMenus.create({
+    id: 'select-number',
+    title,
+    contexts: ['selection']
+  });
 });

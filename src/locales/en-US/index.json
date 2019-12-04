@@ -6,6 +6,7 @@
   "call_failed_unavailable": "Other person is unavailable, cannot establish call.",
   "call_failed": "Cannot establish call",
   "calling": "Calling",
+  "call_selected_number": "Call selected number",
   "change_password_body": "Your current password is temporary and needs to be changed for security reasons. Please click on the following link to go to the portal: ",
   "change_password_title": "Change temporary password",
   "click_to_dial": "Click to Dial",
