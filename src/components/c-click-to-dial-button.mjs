@@ -36,13 +36,14 @@ window.customElements.define(
   class extends HTMLElement {
     connectedCallback() {
       this.appendChild(template.content.cloneNode(true));
-      this.callButton = this.querySelector('[data-selector=click-to-dial-button]');
-      this.callButton.addEventListener('click', this);
-      this.callButton.className = phoneIconClassName;
+      console.log(this);
+      // this.callButton = this.querySelector('[data-selector=click-to-dial-button]');
+      this.addEventListener('click', this);
+      // this.callButton.className = phoneIconClassName;
     }
 
     disconnectedCallback() {
-      this.callButton.removeEventListener('click', this);
+      this.removeEventListener('click', this);
     }
 
     async handleEvent(e) {

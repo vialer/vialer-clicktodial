@@ -71,7 +71,6 @@ export class ObserverModule {
             ) {
               matches.reverse().forEach(match => {
                 let numberIconElement = document.createElement('c-click-to-dial-button');
-
                 let before = document.createElement('span');
                 before.textContent = originalHTML.slice(0, match.start);
                 let after = document.createElement('span');

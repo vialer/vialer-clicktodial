@@ -13,7 +13,6 @@ window.customElements.define(
 
   class extends HTMLElement {
     connectedCallback() {
-      // this.appendChild(content.cloneNode(true));
       this.appendChild(template.content.cloneNode(true));
       this.className = phoneElementClassName;
     }
