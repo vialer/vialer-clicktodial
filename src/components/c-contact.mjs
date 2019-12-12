@@ -1,9 +1,10 @@
-import { clickToDial } from '/lib/data.mjs';
 import { show, hide, loadTemplate } from '/utils/dom.mjs';
-import { showNotification } from '/lib/notify.mjs';
 
 import { processSearchProperties } from '/utils/processSearchProperties.mjs';
-import * as segment from '/lib/segment.mjs';
+import * as segment from '../lib/segment.mjs';
+import { Logger } from '../lib/logging.mjs';
+
+const logger = new Logger('contact');
 
 loadTemplate('c-contact').then(({ content }) => {
   customElements.define(
