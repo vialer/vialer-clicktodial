@@ -3,7 +3,6 @@ import { clickToDial } from './lib/data.mjs';
 import { showNotification } from './lib/notify.mjs';
 import { Logger } from './lib/logging.mjs';
 import { translate } from './lib/i18n.mjs';
-import * as segment from './lib/segment.mjs';
 import cleanPhoneNumber from './utils/cleanPhoneNumber.mjs';
 
 const logger = new Logger('background');
@@ -12,7 +11,6 @@ function doClickToDial(number) {
   clickToDial(number)
     .then(({ b_number }) => {
       showNotification(`calling ${b_number}`);
-      segment.track.clickedToDial();
     })
     .catch(e => {
       logger.error(e);

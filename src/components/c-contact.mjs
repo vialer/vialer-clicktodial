@@ -46,10 +46,11 @@ loadTemplate('c-contact').then(({ content }) => {
 
       async handleEvent({ type }) {
         if (this.phoneNumber) {
-          let { b_number } = await clickToDial(this.phoneNumber);
-          showNotification(`calling ${b_number}`);
-          segment.track.callContact();
+          browser.runtime.sendMessage(null, { b_number: this.phoneNumber }).then(() => {
+            logger.info(`Trying to call ${this.phoneNumber}`);
+          });
         }
+        segment.track.callContact();
       }
 
       doesMatchSearchString(_str = '') {
