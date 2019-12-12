@@ -9,7 +9,6 @@ loadTemplate('c-account-info').then(({ content }) => {
     class extends HTMLElement {
       connectedCallback() {
         this.appendChild(content.cloneNode(true));
-        console.log('Component mounted');
         this.logout = this.querySelector('[data-selector=log-out]');
         this.logout.addEventListener('click', this);
         this.userName = this.querySelector('[data-selector=user-name]');
