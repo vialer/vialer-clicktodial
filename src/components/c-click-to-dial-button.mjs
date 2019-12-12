@@ -49,7 +49,6 @@ window.customElements.define(
       e.preventDefault();
       e.stopPropagation();
       e.stopImmediatePropagation();
-      console.log('dit doet jet');
 
       if (this.phoneNumber) {
         browser.runtime.sendMessage(null, { b_number: this.phoneNumber }).then(() => {
@@ -61,7 +60,6 @@ window.customElements.define(
 
     set contactDetails(number) {
       this.phoneNumber = number;
-      console.log(this.phoneNumber);
     }
 
     get contactDetails() {
