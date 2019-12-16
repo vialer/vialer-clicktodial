@@ -93,9 +93,7 @@ const statusTranslations = {
 
 async function getCallStatus(bNumber) {
   const { a_number, auto_answer, b_number, callid, status } = await request('callStatus');
-
   stopIntervalAtStatus(status, bNumber);
-  // return { a_number, auto_answer, b_number, callid, status };
 }
 
 async function stopIntervalAtStatus(status, bNumber) {
