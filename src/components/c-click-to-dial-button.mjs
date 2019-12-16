@@ -17,7 +17,7 @@ const buttonStyle = `
       bottom: -3px;
       box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.2);
       display: inline-block;
-      height: 18px;
+      height: 18px;wearespindle.com
       line-height: 18px;
       margin: 0 4px;
       padding: 0;
@@ -27,7 +27,7 @@ const buttonStyle = `
 
 const template = document.createElement('template');
 template.innerHTML = `
-<button data-selector="click-to-dial-button" style="${buttonStyle}"></button>
+<button style="${buttonStyle}"></button>
 `;
 
 window.customElements.define(
@@ -36,9 +36,19 @@ window.customElements.define(
   class extends HTMLElement {
     connectedCallback() {
       this.appendChild(template.content.cloneNode(true));
-      console.log(this);
       // this.callButton = this.querySelector('[data-selector=click-to-dial-button]');
-      this.addEventListener('click', this);
+      this.addEventListener(
+        'click',
+        () => {
+          if (this.phoneNumber) {
+            browser.runtime.sendMessage(null, { b_number: this.phoneNumber }).then(() => {
+              logger.info(`Trying to call ${this.phoneNumber}`);
+              segment.track.clickedToDial();
+            });
+          }
+        },
+        true
+      );
       // this.callButton.className = phoneIconClassName;
     }
 
@@ -46,18 +56,18 @@ window.customElements.define(
       this.removeEventListener('click', this);
     }
 
-    async handleEvent(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      e.stopImmediatePropagation();
+    // async handleEvent(e) {
+    //   e.preventDefault();
+    //   e.stopPropagation();
+    //   e.stopImmediatePropagation();
 
-      if (this.phoneNumber) {
-        browser.runtime.sendMessage(null, { b_number: this.phoneNumber }).then(() => {
-          logger.info(`Trying to call ${this.phoneNumber}`);
-          segment.track.clickedToDial();
-        });
-      }
-    }
+    //   if (this.phoneNumber) {
+    //     browser.runtime.sendMessage(null, { b_number: this.phoneNumber }).then(() => {
+    //       logger.info(`Trying to call ${this.phoneNumber}`);
+    //       segment.track.clickedToDial();
+    //     });
+    //   }
+    // }
 
     set contactDetails(number) {
       this.phoneNumber = number;
