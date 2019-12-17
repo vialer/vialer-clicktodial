@@ -1,9 +1,10 @@
-import { clickToDial } from '/lib/data.mjs';
 import { show, hide, loadTemplate } from '/utils/dom.mjs';
-import { showNotification } from '/lib/notify.mjs';
 
 import { processSearchProperties } from '/utils/processSearchProperties.mjs';
-import * as segment from '/lib/segment.mjs';
+import * as segment from '../lib/segment.mjs';
+import { Logger } from '../lib/logging.mjs';
+
+const logger = new Logger('contact');
 
 loadTemplate('c-contact').then(({ content }) => {
   customElements.define(
@@ -46,8 +47,9 @@ loadTemplate('c-contact').then(({ content }) => {
 
       async handleEvent({ type }) {
         if (this.phoneNumber) {
-          let { b_number } = await clickToDial(this.phoneNumber);
-          showNotification(`calling ${b_number}`);
+          browser.runtime.sendMessage(null, { b_number: this.phoneNumber }).then(() => {
+            logger.info(`Trying to call ${this.phoneNumber}`);
+          });
           segment.track.callContact();
         }
       }

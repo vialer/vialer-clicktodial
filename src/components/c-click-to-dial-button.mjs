@@ -1,5 +1,6 @@
 import { Logger } from '../lib/logging.mjs';
 import browser from '/vendor/browser-polyfill.js';
+import * as segment from '../lib/segment.mjs';
 
 const logger = new Logger('click-to-dial-button');
 const phoneIconClassName = 'vialer-icon';
@@ -52,6 +53,7 @@ window.customElements.define(
       if (this.phoneNumber) {
         browser.runtime.sendMessage(null, { b_number: this.phoneNumber }).then(() => {
           logger.info(`Trying to call ${this.phoneNumber}`);
+          segment.track.clickedToDial();
         });
       }
     }
