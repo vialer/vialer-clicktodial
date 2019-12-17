@@ -97,7 +97,7 @@ async function getCallStatus(bNumber) {
 }
 
 async function stopIntervalAtStatus(status, bNumber) {
-  if (status !== 'dialing_b') {
+  if (status !== 'dialing_b' && status !== 'dialing_a') {
     let notification = status;
 
     if (status in statusTranslations) {
