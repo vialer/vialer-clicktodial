@@ -50,8 +50,8 @@ loadTemplate('c-contact').then(({ content }) => {
           browser.runtime.sendMessage(null, { b_number: this.phoneNumber }).then(() => {
             logger.info(`Trying to call ${this.phoneNumber}`);
           });
+          segment.track.callContact();
         }
-        segment.track.callContact();
       }
 
       doesMatchSearchString(_str = '') {
