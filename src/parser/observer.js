@@ -1,5 +1,4 @@
-import '../components/c-click-to-dial-button.mjs';
-import '../components/c-click-to-dial-wrapper.mjs';
+import { createClickToDialButton } from '../utils/createClickButton.mjs';
 
 import { Logger } from '../lib/logging.mjs';
 import { Walker } from './walker.js';
@@ -60,7 +59,7 @@ export class ObserverModule {
           // from node.data, and
           // - enable inserting the icon html
           // (doesn't work with a text node)
-          let replacementNode = document.createElement('c-click-to-dial-wrapper');
+          let replacementNode = document.createElement('span');
           let originalHTML = this.escapeHTML(currentNode.data);
 
           let matches = parser().parse(originalHTML);
@@ -70,7 +69,7 @@ export class ObserverModule {
               !parser().isBlockingNode(currentNode.parentNode.previousElementSibling)
             ) {
               matches.reverse().forEach(match => {
-                let numberIconElement = document.createElement('c-click-to-dial-button');
+                let numberIconElement = createClickToDialButton(match.number);
 
                 let before = document.createElement('span');
                 before.textContent = originalHTML.slice(0, match.start);
@@ -79,13 +78,11 @@ export class ObserverModule {
                 let originalNumber = document.createElement('span');
                 originalNumber.textContent = originalHTML.slice(match.start, match.end);
 
-                numberIconElement.contactDetails = match.number;
                 replacementNode.appendChild(before);
                 replacementNode.appendChild(originalNumber);
                 replacementNode.appendChild(numberIconElement);
                 replacementNode.appendChild(after);
               });
-
               currentNode.parentNode.insertBefore(replacementNode, currentNode);
               currentNode.parentNode.removeChild(currentNode);
             }
