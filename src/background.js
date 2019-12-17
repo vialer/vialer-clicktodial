@@ -10,7 +10,10 @@ const logger = new Logger('background');
 function doClickToDial(number) {
   clickToDial(number)
     .then(({ b_number }) => {
-      showNotification(`calling ${b_number}`);
+      translate('calling').then(callingMessage => {
+        showNotification(`${callingMessage}: ${b_number}`);
+      });
+      segment.track.clickedToDial();
     })
     .catch(e => {
       logger.error(e);
