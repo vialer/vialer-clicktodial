@@ -54,7 +54,6 @@ window.customElements.define(
     }
 
     connectedCallback() {
-      // TODO dit verwijderen als tracking user vanuit background succesvol is.
       startTrackingUser();
       window.addEventListener('updatePlugin', () => {
         this.showView();

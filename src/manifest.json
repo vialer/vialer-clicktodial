@@ -1,6 +1,6 @@
 {
   "name": "click-to-dial",
-  "version": "0.1",
+  "version": "0.0.0.1",
   "description": "Click and dial numbers on webpages",
   "permissions": [
     "activeTab",
@@ -35,8 +35,6 @@
     "48": "brand/logo-64.png",
     "128": "brand/logo-128.png"
   },
-  "web_accessible_resources": [
-    "icons/phone.png"
-  ],
+  "web_accessible_resources": ["icons/phone.png"],
   "manifest_version": 2
 }
