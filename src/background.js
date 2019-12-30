@@ -4,6 +4,7 @@ import { showNotification } from './lib/notify.mjs';
 import { Logger } from './lib/logging.mjs';
 import { translate } from './lib/i18n.mjs';
 import cleanPhoneNumber from './utils/cleanPhoneNumber.mjs';
+import * as segment from '../lib/segment.mjs';
 
 const logger = new Logger('background');
 
