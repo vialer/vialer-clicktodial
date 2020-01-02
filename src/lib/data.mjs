@@ -154,13 +154,10 @@ export async function getDestinations(forceRefresh = false) {
     objects.forEach(({ fixeddestinations, phoneaccounts }) => {
       fixeddestinations.forEach(({ id, description: desc, phonenumber }) => {
         const description = `+${phonenumber}${desc ? ` - ${desc}` : ''}`;
-
         cleanObjects.push({
-          fixedDestinations: {
-            id,
-            description,
-            type: 'fixed'
-          }
+          id,
+          description,
+          type: 'fixed'
         });
       });
 
