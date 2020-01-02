@@ -1,5 +1,5 @@
 import { show, hide, loadTemplate } from '/utils/dom.mjs';
-
+import browser from '/vendor/browser-polyfill.js';
 import { processSearchProperties } from '/utils/processSearchProperties.mjs';
 import * as segment from '../lib/segment.mjs';
 import { Logger } from '../lib/logging.mjs';
