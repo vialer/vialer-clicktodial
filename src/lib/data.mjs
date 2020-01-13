@@ -4,6 +4,10 @@ import { showNotification } from './notify.mjs';
 import browser from '/vendor/browser-polyfill.js';
 import { translate } from './i18n.mjs';
 
+/**
+ * data.mjs is responsible for retrieving data either from storage or from the API by making a request.
+ * It is also responsible for setting up the call using the API
+ */
 const logger = new Logger('data');
 
 async function getStorageData({ storageName, forceRefresh, apiDataMutateCallback, apiRequestOption = {} }) {

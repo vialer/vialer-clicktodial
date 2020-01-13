@@ -1,6 +1,10 @@
 import { Logger } from '/lib/logging.mjs';
 import browser from '/vendor/browser-polyfill.js';
 
+/**
+ * i18n.mjs is responsible for translating all the nodes in the plugin.
+ */
+
 const logger = new Logger('i18n');
 
 export const availableLanguages = ['nl-NL', 'en-US']; // ['en-US', 'nl-NL' ];

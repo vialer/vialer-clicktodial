@@ -8,29 +8,20 @@ loadTemplate('c-colleagues').then(({ content }) => {
     'c-colleagues',
 
     class Colleagues extends HTMLElement {
+      getContactData() {
+        getContact().then(contacts => {
+          this.dataRetrieved = true;
+          contacts.forEach(contact => {
+            let colleague = document.createElement('c-contact');
+            this.list.appendChild(colleague);
+            colleague.contactDetails = contact;
+          });
+        });
+      }
+
       constructor() {
         super();
         this.dataRetrieved = false;
-      }
-
-      connectedCallback() {
-        this.appendChild(content.cloneNode(true));
-
-        this.list = this.querySelector('[data-selector=colleagues]');
-
-        this.toggleNode = this.querySelector('c-toggle');
-        this.toggleNode.addEventListener('toggle-open', this);
-        this.toggleNode.addEventListener('toggle-close', this);
-
-        this.searchInput = this.querySelector('[data-selector=searchInput]');
-        this.searchInput.addEventListener('input', this);
-
-        this.getContactData();
-      }
-
-      disconnectedCallback() {
-        this.toggleNode.removeEventListener('toggle-open', this);
-        this.toggleNode.removeEventListener('toggle-close', this);
       }
 
       handleEvent({ type }) {
@@ -52,17 +43,6 @@ loadTemplate('c-colleagues').then(({ content }) => {
         }
       }
 
-      getContactData() {
-        getContact().then(contacts => {
-          this.dataRetrieved = true;
-          contacts.forEach(contact => {
-            let colleague = document.createElement('c-contact');
-            this.list.appendChild(colleague);
-            colleague.contactDetails = contact;
-          });
-        });
-      }
-
       applyContactsFilters() {
         const { children } = this.list;
         const { value } = this.searchInput;
@@ -73,6 +53,26 @@ loadTemplate('c-colleagues').then(({ content }) => {
           }
           node.doesMatchSearchString(value) ? show(node) : hide(node);
         }
+      }
+
+      connectedCallback() {
+        this.appendChild(content.cloneNode(true));
+
+        this.list = this.querySelector('[data-selector=colleagues]');
+
+        this.toggleNode = this.querySelector('c-toggle');
+        this.toggleNode.addEventListener('toggle-open', this);
+        this.toggleNode.addEventListener('toggle-close', this);
+
+        this.searchInput = this.querySelector('[data-selector=searchInput]');
+        this.searchInput.addEventListener('input', this);
+
+        this.getContactData();
+      }
+
+      disconnectedCallback() {
+        this.toggleNode.removeEventListener('toggle-open', this);
+        this.toggleNode.removeEventListener('toggle-close', this);
       }
     }
   );

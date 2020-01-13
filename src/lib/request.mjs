@@ -1,3 +1,8 @@
+/**
+ * request.mjs makes the proper API request with the information given by data.mjs.
+ * It is also responsible for handling the responses.
+ */
+
 const BASE = 'https://partner.voipgrid.nl/api/';
 
 const CONFIGS = {
