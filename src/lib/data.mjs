@@ -82,6 +82,7 @@ export async function clickToDial(bNumber) {
   const body = { b_number: bNumber };
   try {
     const { a_number, auto_answer, b_number, callid } = await request('clickToDial', { body });
+    // localStorage is used here, request.mjs uses it as well and does not import browser.
     localStorage.setItem('callid', callid);
     callStatusInterval = setInterval(() => getCallStatus(bNumber), 3000);
     return { a_number, auto_answer, b_number, callid };
@@ -96,7 +97,7 @@ const statusTranslations = {
 };
 
 async function getCallStatus(bNumber) {
-  const { a_number, auto_answer, b_number, callid, status } = await request('callStatus');
+  const { status, b_number } = await request('callStatus');
   stopIntervalAtStatus(status, bNumber);
 }
 
@@ -113,6 +114,7 @@ async function stopIntervalAtStatus(status, bNumber) {
     }
     showNotification(notification);
     clearInterval(callStatusInterval);
+    localStorage.removeItem('callid');
   }
 }
 

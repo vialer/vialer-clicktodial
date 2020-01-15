@@ -25,6 +25,7 @@
   "failed_b": "could not be reached",
   "forgot_password": "Forgot password?",
   "general": "General",
+  "in_call": "Already trying to set up a call",
   "log_in_action": "Log in",
   "log_in_again": "Log back in",
   "log_out": "Log out",
