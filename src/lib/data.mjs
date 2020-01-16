@@ -194,14 +194,12 @@ export async function getSelectedDestination() {
 
 export async function setDestination(destination) {
   const { id } = await getSelectedDestination();
-  console.log(destination);
   const body = {
     fixeddestination: destination && destination.type === 'fixed' ? destination.id : null,
     phoneaccount: destination && destination.type === 'account' ? destination.id : null
   };
 
   return await request('setDestination', { id, body }).then(response => {
-    console.log({ id, body });
     if (destination) {
       browser.storage.local.set({ previousDestination: destination });
     }
