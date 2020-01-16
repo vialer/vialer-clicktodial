@@ -76,10 +76,14 @@ loadTemplate('c-availability').then(({ content }) => {
         });
       }
 
+      isAvailableCheck(selected) {
+        return selected.phoneaccount !== null || selected.fixeddestination !== null ? true : false;
+      }
+
       updateAvailabilityInterface() {
         getSelectedDestination().then(selected => {
           this.selectedDestination = selected;
-          this.isAvailable = this.selectedDestination.phoneaccount === null ? false : true;
+          this.isAvailable = this.isAvailableCheck(this.selectedDestination);
 
           this.updateSelectedDestination();
           enable(this.toggleDnDNode);
