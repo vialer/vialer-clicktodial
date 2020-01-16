@@ -20,6 +20,7 @@ loadTemplate('c-availability').then(({ content }) => {
       }
 
       async connectedCallback() {
+        this.classList.add('loading');
         this.appendChild(content.cloneNode(true));
 
         this.toggleDnDNode = this.querySelector('[data-selector=toggle-dnd]');
@@ -65,6 +66,7 @@ loadTemplate('c-availability').then(({ content }) => {
           }
           this.destinationSelectNode.appendChild(option);
         });
+        this.classList.remove('loading');
       }
 
       updateAvailabilityInterface() {
