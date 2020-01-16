@@ -48,5 +48,6 @@
   "two-factor-token": "Token",
   "unknown": "Onbekend",
   "user_destination_help_text": "Kies het VoIP-account waarop je oproepen wilt ontvangen wanneer iemand je belt.",
-  "user_destination": "Eindbestemming van gebruiker"
+  "user_destination": "Eindbestemming van gebruiker",
+  "in_call": "Already trying to set up a call"
 }

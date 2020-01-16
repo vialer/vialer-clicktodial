@@ -20,17 +20,13 @@ loadTemplate('c-contact').then(({ content }) => {
         this.searchProperties = processSearchProperties(data);
       }
 
-      connectedCallback() {
-        this.appendChild(content.cloneNode(true));
-
-        this.nameNode = this.querySelector('[data-selector=name]');
-        this.phoneNumberNode = this.querySelector('[data-selector=phoneNumber]');
-        this.callButton = this.querySelector('[data-selector=call-me]');
-        this.callButton.addEventListener('click', this);
-
-        window.addEventListener('availabilityChange', e => {
-          this.changeVisibilityCallButton(e.detail.disabled);
-        });
+      async handleEvent({ type }) {
+        if (this.phoneNumber) {
+          browser.runtime.sendMessage(null, { b_number: this.phoneNumber }).then(() => {
+            logger.info(`Trying to call ${this.phoneNumber}`);
+          });
+          segment.track.callContact();
+        }
       }
 
       changeVisibilityCallButton(isDisabled) {
@@ -38,19 +34,6 @@ loadTemplate('c-contact').then(({ content }) => {
           hide(this.callButton);
         } else {
           show(this.callButton);
-        }
-      }
-
-      disconnectedCallback() {
-        this.callButton.removeEventListener('click', this);
-      }
-
-      async handleEvent({ type }) {
-        if (this.phoneNumber) {
-          browser.runtime.sendMessage(null, { b_number: this.phoneNumber }).then(() => {
-            logger.info(`Trying to call ${this.phoneNumber}`);
-          });
-          segment.track.callContact();
         }
       }
 
@@ -65,6 +48,23 @@ loadTemplate('c-contact').then(({ content }) => {
           }
         }
         return false;
+      }
+
+      connectedCallback() {
+        this.appendChild(content.cloneNode(true));
+
+        this.nameNode = this.querySelector('[data-selector=name]');
+        this.phoneNumberNode = this.querySelector('[data-selector=phoneNumber]');
+        this.callButton = this.querySelector('[data-selector=call-me]');
+        this.callButton.addEventListener('click', this);
+
+        window.addEventListener('availabilityChange', e => {
+          this.changeVisibilityCallButton(e.detail.disabled);
+        });
+      }
+
+      disconnectedCallback() {
+        this.callButton.removeEventListener('click', this);
       }
     }
   );
