@@ -1,5 +1,5 @@
 import * as user from '/lib/user.mjs';
-import { getFormValues, show, hide, loadTemplate } from '/utils/dom.mjs';
+import { getFormValues, show, hide, isHidden, loadTemplate } from '/utils/dom.mjs';
 import { Logger } from '/lib/logging.mjs';
 
 const logger = new Logger('login');
@@ -9,24 +9,6 @@ loadTemplate('p-login').then(({ content }) => {
     'p-login',
 
     class extends HTMLElement {
-      connectedCallback() {
-        this.appendChild(content.cloneNode(true));
-        this.formNode = this.querySelector('form');
-        this.formNode.addEventListener('submit', this);
-
-        this.twoFactorAuthenticationInput = this.querySelector('[data-selector=two-factor-input]');
-        this.twoFactorAuthenticationContainerNode = this.querySelector('[data-selector=two-factor-container]');
-
-        this.changePasswordNode = this.querySelector('[data-selector=change-password]');
-        this.changePasswordLink = this.querySelector('[data-selector=change-password-link');
-        this.authenticationErrorNode = this.querySelector('[data-selector=authentication-error]');
-        console.log('Component mounted');
-      }
-
-      disconnectedCallback() {
-        this.formNode.removeEventListener('submit', this);
-      }
-
       handleEvent(e) {
         e.preventDefault();
         switch (e.type) {
@@ -64,6 +46,11 @@ loadTemplate('p-login').then(({ content }) => {
                   }
                 });
             }
+          case 'onkeypress':
+            console.log('hjadfkjgkasjrgfjaewhgf,jsdhfljashdfjdhsfkjhbdsfjhk');
+            if (!isHidden(this.changePasswordNode)) {
+              hide(this.changePasswordNode);
+            }
         }
       }
 
@@ -85,6 +72,27 @@ loadTemplate('p-login').then(({ content }) => {
 
         hide(this.formNode);
         show(this.changePasswordNode);
+      }
+
+      connectedCallback() {
+        this.appendChild(content.cloneNode(true));
+        this.formNode = this.querySelector('form');
+        this.formNode.addEventListener('submit', this);
+
+        this.twoFactorAuthenticationInput = this.querySelector('[data-selector=two-factor-input]');
+        this.twoFactorAuthenticationContainerNode = this.querySelector('[data-selector=two-factor-container]');
+
+        this.passwordInput = this.querySelector('[data-selector=password-input]');
+        this.passwordInput.addEventListener('onkeypress', this);
+
+        this.changePasswordNode = this.querySelector('[data-selector=change-password]');
+        this.changePasswordLink = this.querySelector('[data-selector=change-password-link');
+        this.authenticationErrorNode = this.querySelector('[data-selector=authentication-error]');
+      }
+
+      disconnectedCallback() {
+        this.formNode.removeEventListener('submit', this);
+        this.passwordInput.removeEventListener('onkeypress', this);
       }
     }
   );
