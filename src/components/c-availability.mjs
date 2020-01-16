@@ -24,41 +24,46 @@ loadTemplate('c-availability').then(({ content }) => {
 
         this.toggleDnDNode = this.querySelector('[data-selector=toggle-dnd]');
         this.toggleDnDNode.addEventListener('change', this);
+
         window.addEventListener('availabilityChange', () => {
           this.updateAvailabilityInterface();
         });
 
-        this.destinations = [];
+        this.destinations = [...(await getDestinations(true))];
 
-        const destinations = await getDestinations(true);
-        this.destinations.push(...destinations);
+        //await setDestination(destination);
 
         this.destinationSelectNode = this.querySelector('[data-selector=destination-select]');
         this.destinationSelectNode.addEventListener('change', this);
 
         this.updateAvailabilityInterface();
+
+        //const { previousDestination } = await browser.storage.local.get('previousDestination');
+        //console.log(`prev: ${previousDestination}`);
+        //const appels = this.destinations.find(destination => this.shouldAPIDestinationBeSelected(destination));
+        //console.log(`dingvanapi: ${appels}`);
+        //if (
+        //  !previousDestination &&
+        //  this.destinations.length > 0 &&
+        //  !this.destinations.find(this.shouldAPIDestinationBeSelected.bind(this))
+        //) {
+        //  console.log('setitng ding');
+        //  await browser.storage.local.set({ previousDestination: this.destinations[0] });
+        //  //const destination = this.destinations.find(this.shouldAPIDestinationBeSelected.bind(this));
+        //  //console.log(destination);
+        //}
       }
 
       async updateSelectedDestination() {
         empty(this.destinationSelectNode);
 
-        const { previousDestination } = await browser.storage.local.get('previousDestination');
-
-        this.destinations.forEach(destination => {
+        this.destinations.forEach(async destination => {
           const option = document.createElement('option');
           option.value = destination.id;
           option.textContent = destination.description;
           if (
-            this.selectedDestination &&
-            (this.selectedDestination.phoneaccount == destination.id ||
-              this.selectedDestination.userdestination == destination.id)
-          ) {
-            select(option);
-            this.selectedDestination = destination;
-          } else if (
-            this.selectedDestination.phoneaccount === null &&
-            previousDestination !== undefined &&
-            destination.id === previousDestination.id
+            this.shouldAPIDestinationBeSelected(destination) ||
+            (await this.shouldPreviousDestinationBeSelected(destination))
           ) {
             select(option);
             this.selectedDestination = destination;
@@ -67,24 +72,40 @@ loadTemplate('c-availability').then(({ content }) => {
         });
       }
 
+      shouldAPIDestinationBeSelected(destination) {
+        console.log(destination);
+        console.log(this.selectedDestination);
+        return (
+          this.selectedDestination &&
+          (this.selectedDestination.phoneaccount == destination.id ||
+            this.selectedDestination.userdestination == destination.id)
+        );
+      }
+
+      async shouldPreviousDestinationBeSelected(destination) {
+        const { previousDestination } = await browser.storage.local.get('previousDestination');
+        return (
+          this.selectedDestination.phoneaccount === null &&
+          previousDestination !== undefined &&
+          destination.id === previousDestination.id
+        );
+      }
+
       updateAvailabilityInterface() {
         getSelectedDestination().then(selected => {
           this.selectedDestination = selected;
           this.isAvailable = this.selectedDestination.phoneaccount === null ? false : true;
 
           this.updateSelectedDestination();
+
           enable(this.toggleDnDNode);
+          console.log(this.isAvailable);
           if (this.isAvailable) {
             enable(this.destinationSelectNode);
           } else {
             this.toggleDnDNode.checked = true;
           }
         });
-      }
-
-      async getSavedDestination() {
-        let previousDestination = await browser.storage.local.get('previousAvailability');
-        return previousDestination['previousAvailability'];
       }
 
       disconnectedCallback() {
@@ -94,10 +115,13 @@ loadTemplate('c-availability').then(({ content }) => {
       async handleEvent({ type, currentTarget, currentTarget: { checked }, target: { value } }) {
         switch (currentTarget) {
           case this.toggleDnDNode:
+            console.log('targettt');
             if (checked !== this.isAvailable) {
               return;
             }
+            console.log(`a. - ${checked}`);
             await setUnavailable(checked);
+            console.log(`b. - ${checked}`);
             if (checked) {
               disable(this.destinationSelectNode);
             } else {
