@@ -119,28 +119,10 @@ loadTemplate('c-availability').then(({ content }) => {
         });
 
         this.destinations = [...(await getDestinations(true))];
-
-        //await setDestination(destination);
-
         this.destinationSelectNode = this.querySelector('[data-selector=destination-select]');
         this.destinationSelectNode.addEventListener('change', this);
 
         this.updateAvailabilityInterface();
-
-        //const { previousDestination } = await browser.storage.local.get('previousDestination');
-        //console.log(`prev: ${previousDestination}`);
-        //const appels = this.destinations.find(destination => this.shouldAPIDestinationBeSelected(destination));
-        //console.log(`dingvanapi: ${appels}`);
-        //if (
-        //  !previousDestination &&
-        //  this.destinations.length > 0 &&
-        //  !this.destinations.find(this.shouldAPIDestinationBeSelected.bind(this))
-        //) {
-        //  console.log('setitng ding');
-        //  await browser.storage.local.set({ previousDestination: this.destinations[0] });
-        //  //const destination = this.destinations.find(this.shouldAPIDestinationBeSelected.bind(this));
-        //  //console.log(destination);
-        //}
       }
 
       disconnectedCallback() {
