@@ -8,9 +8,33 @@ loadTemplate('c-call-groups').then(({ content }) => {
     'c-call-groups',
 
     class extends HTMLElement {
+      getContactData() {
+        getQueues().then(queues => {
+          this.dataRetrieved = true;
+          queues.forEach(queue => {
+            let contact = document.createElement('c-contact');
+            this.list.appendChild(contact);
+
+            contact.contactDetails = queue;
+          });
+        });
+      }
+
       constructor() {
         super();
         this.dataRetrieved = false;
+      }
+
+      handleEvent({ type }) {
+        switch (type) {
+          case 'toggle-open':
+            show(this.list);
+            break;
+
+          case 'toggle-close':
+            hide(this.list);
+            break;
+        }
       }
 
       connectedCallback() {
@@ -28,30 +52,6 @@ loadTemplate('c-call-groups').then(({ content }) => {
       disconnectedCallback() {
         this.toggleNode.removeEventListener('toggle-open', this);
         this.toggleNode.removeEventListener('toggle-close', this);
-      }
-
-      handleEvent({ type }) {
-        switch (type) {
-          case 'toggle-open':
-            show(this.list);
-            break;
-
-          case 'toggle-close':
-            hide(this.list);
-            break;
-        }
-      }
-
-      getContactData() {
-        getQueues().then(queues => {
-          this.dataRetrieved = true;
-          queues.forEach(queue => {
-            let contact = document.createElement('c-contact');
-            this.list.appendChild(contact);
-
-            contact.contactDetails = queue;
-          });
-        });
       }
     }
   );

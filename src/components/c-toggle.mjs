@@ -9,24 +9,6 @@ loadTemplate('c-toggle').then(({ content }) => {
         return ['open'];
       }
 
-      connectedCallback() {
-        this.appendChild(content.cloneNode(true));
-
-        this.button = this.querySelector('button');
-        this.icon = this.querySelector('c-icon');
-
-        this.button.addEventListener('click', this);
-
-        if (this.needToDispatchLater) {
-          delete this.needToDispatchLater;
-          this.dispatch();
-        }
-      }
-
-      disconnectedCallback() {
-        this.button.removeEventListener('click', this);
-      }
-
       handleEvent(e) {
         switch (e.type) {
           case 'click':
@@ -60,6 +42,23 @@ loadTemplate('c-toggle').then(({ content }) => {
             this.dispatch();
             break;
         }
+      }
+      connectedCallback() {
+        this.appendChild(content.cloneNode(true));
+
+        this.button = this.querySelector('button');
+        this.icon = this.querySelector('c-icon');
+
+        this.button.addEventListener('click', this);
+
+        if (this.needToDispatchLater) {
+          delete this.needToDispatchLater;
+          this.dispatch();
+        }
+      }
+
+      disconnectedCallback() {
+        this.button.removeEventListener('click', this);
       }
     }
   );

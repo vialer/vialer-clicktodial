@@ -12,6 +12,11 @@ loadTemplate('c-availability').then(({ content }) => {
     'c-availability',
 
     class extends HTMLElement {
+      async getSavedDestination() {
+        let previousDestination = await browser.storage.local.get('previousAvailability');
+        return previousDestination['previousAvailability'];
+      }
+
       constructor(args) {
         super(args);
 
@@ -19,24 +24,28 @@ loadTemplate('c-availability').then(({ content }) => {
         this.selectedDestination = undefined;
       }
 
-      async connectedCallback() {
-        this.appendChild(content.cloneNode(true));
+      async handleEvent({ type, currentTarget, currentTarget: { checked }, target: { value } }) {
+        switch (currentTarget) {
+          case this.toggleDnDNode:
+            if (checked !== this.isAvailable) {
+              return;
+            }
+            await setUnavailable(checked);
+            if (checked) {
+              disable(this.destinationSelectNode);
+            } else {
+              enable(this.destinationSelectNode);
+            }
+            break;
 
-        this.toggleDnDNode = this.querySelector('[data-selector=toggle-dnd]');
-        this.toggleDnDNode.addEventListener('change', this);
-        window.addEventListener('availabilityChange', () => {
-          this.updateAvailabilityInterface();
-        });
-
-        this.destinations = [];
-
-        const destinations = await getDestinations(true);
-        this.destinations.push(...destinations);
-
-        this.destinationSelectNode = this.querySelector('[data-selector=destination-select]');
-        this.destinationSelectNode.addEventListener('change', this);
-
-        this.updateAvailabilityInterface();
+          case this.destinationSelectNode:
+            if ('change' === type) {
+              segment.track.updateAvailability();
+              const destination = this.destinations.find(destination => destination.id == value);
+              await setDestination(destination);
+            }
+            break;
+        }
       }
 
       async updateSelectedDestination() {
@@ -82,37 +91,29 @@ loadTemplate('c-availability').then(({ content }) => {
         });
       }
 
-      async getSavedDestination() {
-        let previousDestination = await browser.storage.local.get('previousAvailability');
-        return previousDestination['previousAvailability'];
+      async connectedCallback() {
+        this.appendChild(content.cloneNode(true));
+
+        this.toggleDnDNode = this.querySelector('[data-selector=toggle-dnd]');
+        this.toggleDnDNode.addEventListener('change', this);
+
+        window.addEventListener('availabilityChange', () => {
+          this.updateAvailabilityInterface();
+        });
+
+        this.destinations = [];
+
+        const destinations = await getDestinations(true);
+        this.destinations.push(...destinations);
+
+        this.destinationSelectNode = this.querySelector('[data-selector=destination-select]');
+        this.destinationSelectNode.addEventListener('change', this);
+
+        this.updateAvailabilityInterface();
       }
 
       disconnectedCallback() {
         this.destinationSelectNode.removeEventListener('change', this);
-      }
-
-      async handleEvent({ type, currentTarget, currentTarget: { checked }, target: { value } }) {
-        switch (currentTarget) {
-          case this.toggleDnDNode:
-            if (checked !== this.isAvailable) {
-              return;
-            }
-            await setUnavailable(checked);
-            if (checked) {
-              disable(this.destinationSelectNode);
-            } else {
-              enable(this.destinationSelectNode);
-            }
-            break;
-
-          case this.destinationSelectNode:
-            if ('change' === type) {
-              segment.track.updateAvailability();
-              const destination = this.destinations.find(destination => destination.id == value);
-              await setDestination(destination);
-            }
-            break;
-        }
       }
     }
   );

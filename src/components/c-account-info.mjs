@@ -7,18 +7,10 @@ loadTemplate('c-account-info').then(({ content }) => {
     'c-account-info',
 
     class extends HTMLElement {
-      connectedCallback() {
-        this.appendChild(content.cloneNode(true));
-        this.logout = this.querySelector('[data-selector=log-out]');
-        this.logout.addEventListener('click', this);
-        this.userName = this.querySelector('[data-selector=user-name]');
-        this.setUserInfo();
-        let shortcuts = document.createElement('c-shortcuts');
-        this.appendChild(shortcuts);
-      }
-
-      disconnectedCallback() {
-        this.logout.removeEventListener('click', this);
+      setUserInfo() {
+        getUser().then(userInfo => {
+          this.userName.textContent = userInfo.email;
+        });
       }
 
       handleEvent(e) {
@@ -32,10 +24,18 @@ loadTemplate('c-account-info').then(({ content }) => {
         }
       }
 
-      setUserInfo() {
-        getUser().then(userInfo => {
-          this.userName.textContent = userInfo.email;
-        });
+      connectedCallback() {
+        this.appendChild(content.cloneNode(true));
+        this.logout = this.querySelector('[data-selector=log-out]');
+        this.logout.addEventListener('click', this);
+        this.userName = this.querySelector('[data-selector=user-name]');
+        this.setUserInfo();
+        let shortcuts = document.createElement('c-shortcuts');
+        this.appendChild(shortcuts);
+      }
+
+      disconnectedCallback() {
+        this.logout.removeEventListener('click', this);
       }
     }
   );
