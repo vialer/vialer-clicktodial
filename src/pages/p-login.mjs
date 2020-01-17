@@ -13,7 +13,10 @@ loadTemplate('p-login').then(({ content }) => {
         e.preventDefault();
         switch (e.type) {
           case 'click':
-            break;
+            e.preventDefault();
+            if (!isHidden(this.authenticationErrorNode)) {
+              hide(this.authenticationErrorNode);
+            }
           case 'submit':
             const { target } = e;
             const { email, password, token } = getFormValues(target);
@@ -45,11 +48,6 @@ loadTemplate('p-login').then(({ content }) => {
                     show(this.authenticationErrorNode);
                   }
                 });
-            }
-          case 'onkeypress':
-            console.log('hjadfkjgkasjrgfjaewhgf,jsdhfljashdfjdhsfkjhbdsfjhk');
-            if (!isHidden(this.changePasswordNode)) {
-              hide(this.changePasswordNode);
             }
         }
       }
@@ -83,7 +81,7 @@ loadTemplate('p-login').then(({ content }) => {
         this.twoFactorAuthenticationContainerNode = this.querySelector('[data-selector=two-factor-container]');
 
         this.passwordInput = this.querySelector('[data-selector=password-input]');
-        this.passwordInput.addEventListener('onkeypress', this);
+        this.passwordInput.addEventListener('click', this);
 
         this.changePasswordNode = this.querySelector('[data-selector=change-password]');
         this.changePasswordLink = this.querySelector('[data-selector=change-password-link');
@@ -92,7 +90,7 @@ loadTemplate('p-login').then(({ content }) => {
 
       disconnectedCallback() {
         this.formNode.removeEventListener('submit', this);
-        this.passwordInput.removeEventListener('onkeypress', this);
+        this.passwordInput.removeEventListener('click', this);
       }
     }
   );
