@@ -34,7 +34,6 @@ export function createClickToDialButton(number) {
       if (number) {
         browser.runtime.sendMessage(null, { b_number: number }).then(() => {
           logger.info(`Trying to call ${number}`);
-          segment.track.clickedToDial();
         });
       }
     },

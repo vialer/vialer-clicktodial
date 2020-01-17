@@ -8,17 +8,20 @@ import * as segment from './lib/segment.mjs';
 
 const logger = new Logger('background');
 
-function doClickToDial(number) {
-  clickToDial(number)
-    .then(({ b_number }) => {
-      translate('calling').then(callingMessage => {
-        showNotification(`${callingMessage}: ${b_number}`);
+async function doClickToDial(number) {
+  let inCall = (await localStorage.getItem('callid')) !== null;
+  if (!inCall) {
+    clickToDial(number)
+      .then(({ b_number }) => {
+        translate('calling').then(callingMessage => {
+          showNotification(`${callingMessage}: ${b_number}`);
+        });
+        segment.track.clickedToDial();
+      })
+      .catch(e => {
+        logger.error(e);
       });
-      segment.track.clickedToDial();
-    })
-    .catch(e => {
-      logger.error(e);
-    });
+  }
 }
 
 browser.runtime.onMessage.addListener((request, sender, sendResponse) => {

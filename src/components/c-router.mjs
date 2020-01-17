@@ -13,6 +13,13 @@ window.customElements.define(
   'c-router',
 
   class extends HTMLElement {
+    setLogin() {
+      if (this.login === undefined) {
+        this.login = document.createElement('p-login');
+        this.appendChild(this.login);
+      }
+    }
+
     constructor() {
       super();
       this.main = undefined;
@@ -44,13 +51,6 @@ window.customElements.define(
           logger.warn('Change of password needed');
           this.login.showChangePasswordMessage;
         });
-    }
-
-    setLogin() {
-      if (this.login === undefined) {
-        this.login = document.createElement('p-login');
-        this.appendChild(this.login);
-      }
     }
 
     connectedCallback() {
