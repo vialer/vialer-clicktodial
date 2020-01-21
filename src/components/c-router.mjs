@@ -27,6 +27,7 @@ window.customElements.define(
     }
 
     async showView() {
+      this.classList.add('loading');
       check()
         .then(isAuthenticated => {
           if (isAuthenticated) {
@@ -45,6 +46,7 @@ window.customElements.define(
           setChosenLanguage().then(() => {
             translateNodes();
           });
+          this.classList.remove('loading');
         })
         .catch(err => {
           this.setLogin();
