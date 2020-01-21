@@ -44,3 +44,27 @@ select {
 }
 option {
 }
+
+@keyframes loadingSpin {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(355deg);
+    }
+  }
+  .loading {
+    &::before {
+      display: block;
+      width: 2rem;
+      height: 2rem;
+      background: url('/icons/spinner.svg');
+      animation: 0.8s infinite linear loadingSpin;
+      content: '';
+      margin: 1rem auto;
+    }
+
+    > * {
+      visibility: hidden;
+    }
+  }
