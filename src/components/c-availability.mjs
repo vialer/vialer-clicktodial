@@ -36,8 +36,8 @@ loadTemplate('c-availability').then(({ content }) => {
           case this.destinationSelectNode:
             if ('change' === type) {
               segment.track.updateAvailability();
-              const destination = this.destinations.find(destination => destination.id == value);
-              await setDestination(destination);
+              const destination = this.destinations.find(destination => destination.id === value);
+              setDestination(destination);
             }
             break;
         }
@@ -62,10 +62,14 @@ loadTemplate('c-availability').then(({ content }) => {
       }
 
       shouldAPIDestinationBeSelected(destination) {
+        console.log('vanuit shouldAPI');
+        console.log(typeof destination.id);
+        console.log(typeof this.selectedDestination.phoneaccount);
+
         return (
           this.selectedDestination &&
-          (this.selectedDestination.phoneaccount == destination.id ||
-            this.selectedDestination.userdestination == destination.id)
+          (this.selectedDestination.phoneaccount === Number(destination.id) ||
+            this.selectedDestination.userdestination === Number(destination.id))
         );
       }
 
@@ -82,7 +86,7 @@ loadTemplate('c-availability').then(({ content }) => {
         const { previousDestination } = await browser.storage.local.get('previousDestination');
         if (previousDestination === undefined) {
           if (selected.fixeddestination !== null || selected.phoneaccount !== null) {
-            const destination = this.destinations.find(destination => destination.id == selected.phoneaccount);
+            const destination = this.destinations.find(destination => destination.id === selected.phoneaccount);
             browser.storage.local.set({ previousDestination: destination });
           } else {
             browser.storage.local.set({ previousDestination: this.destinations[0] });
@@ -91,11 +95,15 @@ loadTemplate('c-availability').then(({ content }) => {
       }
 
       isAvailableCheck(selected) {
-        return selected.phoneaccount !== null || selected.fixeddestination !== null ? true : false;
+        return selected.phoneaccount !== null || selected.fixeddestination !== null;
       }
 
       updateAvailabilityInterface() {
         getSelectedDestination().then(async selected => {
+          console.log('wat is de geselecteerde:    ');
+          console.log(typeof selected.id);
+          console.log(selected);
+
           this.selectedDestination = selected;
           this.isAvailable = this.isAvailableCheck(this.selectedDestination);
 
