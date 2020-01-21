@@ -12,6 +12,11 @@ loadTemplate('c-availability').then(({ content }) => {
     'c-availability',
 
     class extends HTMLElement {
+      async getSavedDestination() {
+        let previousDestination = await browser.storage.local.get('previousAvailability');
+        return previousDestination['previousAvailability'];
+      }
+
       constructor(args) {
         super(args);
 
@@ -32,7 +37,6 @@ loadTemplate('c-availability').then(({ content }) => {
               enable(this.destinationSelectNode);
             }
             break;
-
           case this.destinationSelectNode:
             if ('change' === type) {
               segment.track.updateAvailability();
@@ -59,6 +63,7 @@ loadTemplate('c-availability').then(({ content }) => {
           }
           this.destinationSelectNode.appendChild(option);
         });
+        this.classList.remove('loading');
       }
 
       shouldAPIDestinationBeSelected(destination) {
@@ -113,6 +118,7 @@ loadTemplate('c-availability').then(({ content }) => {
       }
 
       async connectedCallback() {
+        this.classList.add('loading');
         this.appendChild(content.cloneNode(true));
 
         this.toggleDnDNode = this.querySelector('[data-selector=toggle-dnd]');
