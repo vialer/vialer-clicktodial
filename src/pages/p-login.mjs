@@ -20,7 +20,6 @@ loadTemplate('p-login').then(({ content }) => {
         this.changePasswordNode = this.querySelector('[data-selector=change-password]');
         this.changePasswordLink = this.querySelector('[data-selector=change-password-link');
         this.authenticationErrorNode = this.querySelector('[data-selector=authentication-error]');
-        console.log('Component mounted');
       }
 
       disconnectedCallback() {

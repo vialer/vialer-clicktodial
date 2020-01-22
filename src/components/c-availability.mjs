@@ -67,10 +67,6 @@ loadTemplate('c-availability').then(({ content }) => {
       }
 
       shouldAPIDestinationBeSelected(destination) {
-        console.log('vanuit shouldAPI');
-        console.log(typeof destination.id);
-        console.log(typeof this.selectedDestination.phoneaccount);
-
         return (
           this.selectedDestination &&
           (this.selectedDestination.phoneaccount === Number(destination.id) ||
@@ -105,10 +101,6 @@ loadTemplate('c-availability').then(({ content }) => {
 
       updateAvailabilityInterface() {
         getSelectedDestination().then(async selected => {
-          console.log('wat is de geselecteerde:    ');
-          console.log(typeof selected.id);
-          console.log(selected);
-
           this.selectedDestination = selected;
           this.isAvailable = this.isAvailableCheck(this.selectedDestination);
 
