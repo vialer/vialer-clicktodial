@@ -37,7 +37,6 @@ loadTemplate('c-availability').then(({ content }) => {
               enable(this.destinationSelectNode);
             }
             break;
-
           case this.destinationSelectNode:
             if ('change' === type) {
               segment.track.updateAvailability();
@@ -74,6 +73,7 @@ loadTemplate('c-availability').then(({ content }) => {
           }
           this.destinationSelectNode.appendChild(option);
         });
+        this.classList.remove('loading');
       }
 
       isAvailableCheck(selected) {
@@ -96,6 +96,7 @@ loadTemplate('c-availability').then(({ content }) => {
       }
 
       async connectedCallback() {
+        this.classList.add('loading');
         this.appendChild(content.cloneNode(true));
 
         this.toggleDnDNode = this.querySelector('[data-selector=toggle-dnd]');
