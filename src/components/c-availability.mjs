@@ -40,8 +40,8 @@ loadTemplate('c-availability').then(({ content }) => {
           case this.destinationSelectNode:
             if ('change' === type) {
               segment.track.updateAvailability();
-              const destination = this.destinations.find(destination => destination.id == value);
-              await setDestination(destination);
+              const destination = this.destinations.find(destination => destination.id === value);
+              setDestination(destination);
             }
             break;
         }
@@ -50,23 +50,13 @@ loadTemplate('c-availability').then(({ content }) => {
       async updateSelectedDestination() {
         empty(this.destinationSelectNode);
 
-        const { previousDestination } = await browser.storage.local.get('previousDestination');
-
-        this.destinations.forEach(destination => {
+        this.destinations.forEach(async destination => {
           const option = document.createElement('option');
           option.value = destination.id;
           option.textContent = destination.description;
           if (
-            this.selectedDestination &&
-            (this.selectedDestination.phoneaccount == destination.id ||
-              this.selectedDestination.userdestination == destination.id)
-          ) {
-            select(option);
-            this.selectedDestination = destination;
-          } else if (
-            this.selectedDestination.phoneaccount === null &&
-            previousDestination !== undefined &&
-            destination.id === previousDestination.id
+            this.shouldAPIDestinationBeSelected(destination) ||
+            (await this.shouldPreviousDestinationBeSelected(destination))
           ) {
             select(option);
             this.selectedDestination = destination;
@@ -76,12 +66,46 @@ loadTemplate('c-availability').then(({ content }) => {
         this.classList.remove('loading');
       }
 
+      shouldAPIDestinationBeSelected(destination) {
+        return (
+          this.selectedDestination &&
+          (this.selectedDestination.phoneaccount === Number(destination.id) ||
+            this.selectedDestination.userdestination === Number(destination.id))
+        );
+      }
+
+      async shouldPreviousDestinationBeSelected(destination) {
+        const { previousDestination } = await browser.storage.local.get('previousDestination');
+        return (
+          this.selectedDestination.phoneaccount === null &&
+          previousDestination !== undefined &&
+          destination.id === previousDestination.id
+        );
+      }
+
+      async firstTimePreviousDestination(selected) {
+        const { previousDestination } = await browser.storage.local.get('previousDestination');
+        if (selected.fixeddestination !== null || selected.phoneaccount !== null) {
+          const destination = this.destinations.find(destination => Number(destination.id) === selected.phoneaccount);
+          browser.storage.local.set({ previousDestination: destination });
+        } else if (previousDestination === undefined) {
+          browser.storage.local.set({ previousDestination: this.destinations[0] });
+        }
+      }
+
+      isAvailableCheck(selected) {
+        return selected.phoneaccount !== null || selected.fixeddestination !== null;
+      }
+
       updateAvailabilityInterface() {
-        getSelectedDestination().then(selected => {
+        getSelectedDestination().then(async selected => {
           this.selectedDestination = selected;
-          this.isAvailable = this.selectedDestination.phoneaccount === null ? false : true;
+          this.isAvailable = this.isAvailableCheck(this.selectedDestination);
+
+          await this.firstTimePreviousDestination(selected);
 
           this.updateSelectedDestination();
+
           enable(this.toggleDnDNode);
           if (this.isAvailable) {
             enable(this.destinationSelectNode);
@@ -102,19 +126,18 @@ loadTemplate('c-availability').then(({ content }) => {
           this.updateAvailabilityInterface();
         });
 
-        this.destinations = [];
-
-        const destinations = await getDestinations(true);
-        this.destinations.push(...destinations);
-
+        this.destinations = [...(await getDestinations(true))];
         this.destinationSelectNode = this.querySelector('[data-selector=destination-select]');
         this.destinationSelectNode.addEventListener('change', this);
+
+        console.log(this.destinations);
 
         this.updateAvailabilityInterface();
       }
 
       disconnectedCallback() {
         this.destinationSelectNode.removeEventListener('change', this);
+        this.toggleDnDNode.removeEventListener('change', this);
       }
     }
   );
