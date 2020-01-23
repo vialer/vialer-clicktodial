@@ -14,9 +14,10 @@ loadTemplate('p-login').then(({ content }) => {
         switch (e.type) {
           case 'click':
             e.preventDefault();
-            if (!isHidden(this.authenticationErrorNode)) {
-              hide(this.authenticationErrorNode);
-            }
+            this.hideAuthenticationError();
+          case 'input':
+            e.preventDefault();
+            this.hideAuthenticationError();
           case 'submit':
             const { target } = e;
             const { email, password, token } = getFormValues(target);
@@ -52,6 +53,12 @@ loadTemplate('p-login').then(({ content }) => {
         }
       }
 
+      hideAuthenticationError() {
+        if (!isHidden(this.authenticationErrorNode)) {
+          hide(this.authenticationErrorNode);
+        }
+      }
+
       showtwoFactorAuthenticationContainer() {
         show(this.twoFactorAuthenticationContainerNode);
         this.twoFactorAuthenticationInput.setAttribute('required', '');
@@ -82,6 +89,7 @@ loadTemplate('p-login').then(({ content }) => {
 
         this.passwordInput = this.querySelector('[data-selector=password-input]');
         this.passwordInput.addEventListener('click', this);
+        this.passwordInput.addEventListener('input', this);
 
         this.changePasswordNode = this.querySelector('[data-selector=change-password]');
         this.changePasswordLink = this.querySelector('[data-selector=change-password-link');
