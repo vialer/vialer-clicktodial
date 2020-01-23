@@ -12,6 +12,27 @@ p-login {
     padding: 1rem;
   }
 
+  .login-error {
+    /* display: flex; */
+    align-items: center;
+    color: var(--danger-text-color, #8f0a06);
+    background-color: var(--danger-background-color, #ffadad);
+    padding: 2rem;
+    border-radius: 0.3rem;
+    margin-bottom: 2rem;
+
+    .login-error-content {
+      display: flex;
+      c-icon svg {
+        display: block;
+        width: 1.2rem;
+        height: 1.2rem;
+        fill: var(--danger-text-color, #8f0a06);
+        margin-right: 2rem;
+      }
+    }
+  }
+
   form {
     width: 100%;
     padding: 1rem;
@@ -26,19 +47,20 @@ p-login {
 
       > span {
         display: block;
-        margin-bottom: .25rem;
+        margin-bottom: 0.25rem;
       }
     }
     *:last-child {
       margin-bottom: 0;
     }
 
-    input, button {
+    input,
+    button {
       display: block;
       width: 100%;
       border: 1px solid var(--border-color);
-      border-radius: .25rem;
-      padding: .5rem;
+      border-radius: 0.25rem;
+      padding: 0.5rem;
     }
     input {
       background-color: var(--light-grey);

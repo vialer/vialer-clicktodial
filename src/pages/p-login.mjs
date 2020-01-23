@@ -1,5 +1,5 @@
 import * as user from '/lib/user.mjs';
-import { getFormValues, show, hide, loadTemplate } from '/utils/dom.mjs';
+import { getFormValues, show, hide, isHidden, loadTemplate } from '/utils/dom.mjs';
 import { Logger } from '/lib/logging.mjs';
 
 const logger = new Logger('login');
@@ -9,28 +9,15 @@ loadTemplate('p-login').then(({ content }) => {
     'p-login',
 
     class extends HTMLElement {
-      connectedCallback() {
-        this.appendChild(content.cloneNode(true));
-        this.formNode = this.querySelector('form');
-        this.formNode.addEventListener('submit', this);
-
-        this.twoFactorAuthenticationInput = this.querySelector('[data-selector=two-factor-input]');
-        this.twoFactorAuthenticationContainerNode = this.querySelector('[data-selector=two-factor-container]');
-
-        this.changePasswordNode = this.querySelector('[data-selector=change-password]');
-        this.changePasswordLink = this.querySelector('[data-selector=change-password-link');
-        this.authenticationErrorNode = this.querySelector('[data-selector=authentication-error]');
-      }
-
-      disconnectedCallback() {
-        this.formNode.removeEventListener('submit', this);
-      }
-
       handleEvent(e) {
         e.preventDefault();
         switch (e.type) {
           case 'click':
-            break;
+            e.preventDefault();
+            this.hideAuthenticationError();
+          case 'input':
+            e.preventDefault();
+            this.hideAuthenticationError();
           case 'submit':
             const { target } = e;
             const { email, password, token } = getFormValues(target);
@@ -66,6 +53,12 @@ loadTemplate('p-login').then(({ content }) => {
         }
       }
 
+      hideAuthenticationError() {
+        if (!isHidden(this.authenticationErrorNode)) {
+          hide(this.authenticationErrorNode);
+        }
+      }
+
       showtwoFactorAuthenticationContainer() {
         show(this.twoFactorAuthenticationContainerNode);
         this.twoFactorAuthenticationInput.setAttribute('required', '');
@@ -84,6 +77,29 @@ loadTemplate('p-login').then(({ content }) => {
 
         hide(this.formNode);
         show(this.changePasswordNode);
+      }
+
+      connectedCallback() {
+        this.appendChild(content.cloneNode(true));
+        this.formNode = this.querySelector('form');
+        this.formNode.addEventListener('submit', this);
+
+        this.twoFactorAuthenticationInput = this.querySelector('[data-selector=two-factor-input]');
+        this.twoFactorAuthenticationContainerNode = this.querySelector('[data-selector=two-factor-container]');
+
+        this.passwordInput = this.querySelector('[data-selector=password-input]');
+        this.passwordInput.addEventListener('click', this);
+        this.passwordInput.addEventListener('input', this);
+
+        this.changePasswordNode = this.querySelector('[data-selector=change-password]');
+        this.changePasswordLink = this.querySelector('[data-selector=change-password-link');
+        this.authenticationErrorNode = this.querySelector('[data-selector=authentication-error]');
+      }
+
+      disconnectedCallback() {
+        this.formNode.removeEventListener('submit', this);
+        this.passwordInput.removeEventListener('click', this);
+        this.passwordInput.removeEventListener('input', this);
       }
     }
   );
