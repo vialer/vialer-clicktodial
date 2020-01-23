@@ -85,13 +85,11 @@ loadTemplate('c-availability').then(({ content }) => {
 
       async firstTimePreviousDestination(selected) {
         const { previousDestination } = await browser.storage.local.get('previousDestination');
-        if (previousDestination === undefined) {
-          if (selected.fixeddestination !== null || selected.phoneaccount !== null) {
-            const destination = this.destinations.find(destination => destination.id === selected.phoneaccount);
-            browser.storage.local.set({ previousDestination: destination });
-          } else {
-            browser.storage.local.set({ previousDestination: this.destinations[0] });
-          }
+        if (selected.fixeddestination !== null || selected.phoneaccount !== null) {
+          const destination = this.destinations.find(destination => Number(destination.id) === selected.phoneaccount);
+          browser.storage.local.set({ previousDestination: destination });
+        } else if (previousDestination === undefined) {
+          browser.storage.local.set({ previousDestination: this.destinations[0] });
         }
       }
 
@@ -131,6 +129,8 @@ loadTemplate('c-availability').then(({ content }) => {
         this.destinations = [...(await getDestinations(true))];
         this.destinationSelectNode = this.querySelector('[data-selector=destination-select]');
         this.destinationSelectNode.addEventListener('change', this);
+
+        console.log(this.destinations);
 
         this.updateAvailabilityInterface();
       }
