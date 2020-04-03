@@ -1,160 +1,144 @@
-<!DOCTYPE html>
+<!doctype html>
 <html class="popup">
-  <head>
-    <title>Click-to-Dial</title>
-    <meta charset="utf-8" />
-    <link rel="stylesheet" href="styles.css" type="text/css" />
-  </head>
 
-  <body>
-    <script type="module" src="popup.js"></script>
-    <c-router class="loading"></c-router>
-  </body>
+<head>
+  <title>Click-to-Dial</title>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="styles.css" type="text/css" />
+</head>
 
-  <template data-component="c-account-info">
-    <span data-selector="user-name"></span>
-    <button data-selector="log-out" type="submit">
-      <c-icon icon="logout"></c-icon>
-    </button>
-    <a href="%%WEBPHONE_URL%%" target="_blank"><c-icon icon="website"> </c-icon></a>
-    <a href="%%HELP_URL%%" target="_blank"><c-icon icon="info"></c-icon></a>
-    <a href="%%SETTINGS_URL%%" target="_blank"><c-icon icon="settings"></c-icon></a>
-  </template>
+<body>
+  <script type="module" src="popup.js"></script>
+  <c-router class="loading"></c-router>
+</body>
 
-  <template data-component="c-availability">
-    <div class="component-header">
-      <c-icon icon="phone"></c-icon>
-      <h3 data-translation-key="availability"></h3>
-      <label>
-        <span data-translation-key="enable_dnd"></span>
-        <input type="checkbox" data-selector="toggle-dnd" disabled />
-      </label>
-    </div>
-    <div>
-      <select data-selector="destination-select" disabled></select>
-    </div>
-  </template>
+<template data-component="c-account-info">
+  <span data-selector="user-name"></span>
+  <button data-selector="log-out" type="submit">
+    <c-icon icon="logout"></c-icon>
+  </button>
+  <a href="%%WEBPHONE_URL%%" target="_blank"><c-icon icon="website"> </c-icon></a>
+  <a href="%%HELP_URL%%" target="_blank"><c-icon icon="info"></c-icon></a>
+  <a href="%%SETTINGS_URL%%"" target="_blank"><c-icon icon="settings"></c-icon></a>
+</template>
 
-  <template data-component="c-call-groups">
-    <div class="component-header">
-      <c-icon icon="queues"></c-icon>
-      <h3 data-translation-key="quick_links_queues"></h3>
-      <a title="open_call_groups" href="%%QUEUES_URL%%" target="_blank"><c-icon icon="ext-tab"></c-icon></a>
-      <c-toggle></c-toggle>
-    </div>
-    <div data-selector="call-groups" class="list-container" hidden></div>
-  </template>
-
-  <template data-component="c-colleagues">
-    <div class="component-header">
-      <c-icon icon="contacts"></c-icon>
-      <h3 data-translation-key="contacts"></h3>
-      <a title="open_colleagues" href="%%COLLEAGUES_URL%%" target="_blank"><c-icon icon="ext-tab"></c-icon></a>
-      <input
-        type="search"
-        class="search-input"
-        data-selector="searchInput"
-        data-placeholder-translation-key="search_colleagues"
-      />
-      <c-toggle></c-toggle>
-    </div>
-    <div data-selector="colleagues" class="list-container" hidden></div>
-  </template>
-
-  <template data-component="c-toggle">
-    <button><c-icon icon="caret-down"></c-icon></button>
-  </template>
-
-  <template data-component="c-contact">
-    <div>
-      <div data-selector="name" class="contact-name"></div>
-      <div data-selector="phoneNumber" class="contact-phone-number"></div>
-    </div>
-    <button data-selector="call-me"><c-icon icon="phone"></c-icon></button>
-  </template>
-
-  <template data-component="p-login">
-    <section>
-      <header>
-        <h1 data-translation-key="log_in_action"></h1>
-        <c-language-switcher></c-language-switcher>
-      </header>
-      <div class="login-change-password" data-selector="change-password" hidden>
-        <h3 data-translation-key="change_password_title"></h3>
-        <p>
-          <span data-translation-key="change_password_body"></span>
-          <a data-selector="change-password-link" target="_blank">link</a>
-        </p>
-      </div>
-      <form class="login-form">
-        <div class="login-error" data-selector="authentication-error" hidden>
-          <div class="login-error-content">
-            <c-icon icon="warning"></c-icon>
-            <span data-translation-key="authentication_error"></span>
-          </div>
-        </div>
-
-        <label>
-          <span data-translation-key="email_address"></span>
-          <input
-            type="email"
-            name="email"
-            data-selector="email-input"
-            data-placeholder-translation-key="enter_email"
-            autocomplete="username"
-            required
-          />
-        </label>
-        <label>
-          <span data-translation-key="password"></span>
-          <input
-            type="password"
-            name="password"
-            data-selector="password-input"
-            data-placeholder-translation-key="enter_password"
-            autocomplete="current-password"
-            required
-          />
-        </label>
-        <label hidden data-selector="two-factor-container">
-          <h5 data-translation-key="two-factor-token"></h5>
-          <input type="text" name="token" data-selector="two-factor-input" />
-        </label>
-        <div>
-          <button type="submit" data-translation-key="continue">✅</button>
-        </div>
-      </form>
-    </section>
-  </template>
-
-  <template data-component="c-language-switcher">
-    <label class="with-help-text">
-      <span data-translation-key="app_language"></span>
-      <select data-selector="language-select"></select>
+<template data-component="c-availability">
+  <div class="component-header">
+    <c-icon icon="phone"></c-icon>
+    <h3 data-translation-key="availability"></h3>
+    <label>
+      <span data-translation-key="enable_dnd"></span>
+      <input type="checkbox" data-selector="toggle-dnd" disabled />
     </label>
-    <!-- <p class="help-text" data-translation-key="app_language_help_text"></p> -->
-  </template>
+  </div>
+  <div>
+    <select data-selector="destination-select" disabled></select>
+  </div>
+</template>
 
-  <template data-component="c-click-to-dial-wrapper">
-    <section></section>
-  </template>
+<template data-component="c-call-groups">
+  <div class="component-header">
+    <c-icon icon="queues"></c-icon>
+    <h3 data-translation-key="quick_links_queues"></h3>
+    <a title="open_call_groups" href="%%QUEUES_URL%%" target="_blank"><c-icon icon="ext-tab"></c-icon></a>
+    <c-toggle></c-toggle>
+  </div>
+  <div data-selector="call-groups" class="list-container" hidden></div>
+</template>
 
-  <template data-component="c-click-to-dial-button">
-    <section>
-      <button data-selector="click-to-dial-button">
-        <c-icon icon="phone"></c-icon>
-      </button>
-    </section>
-  </template>
+<template data-component="c-colleagues">
+  <div class="component-header">
+    <c-icon icon="contacts"></c-icon>
+    <h3 data-translation-key="contacts"></h3>
+    <a title="open_colleagues" href="%%COLLEAGUES_URL%%" target="_blank"><c-icon icon="ext-tab"></c-icon></a>
+    <input type="search" class="search-input" data-selector="searchInput" data-placeholder-translation-key="search_colleagues" />
+    <c-toggle></c-toggle>
+  </div>
+  <div data-selector="colleagues" class="list-container" hidden></div>
+</template>
 
-  <template data-component="p-main">
+<template data-component="c-toggle">
+  <button><c-icon icon="caret-down"></c-icon></button>
+</template>
+
+<template data-component="c-contact">
+  <div>
+    <div data-selector="name" class="contact-name"></div>
+    <div data-selector="phoneNumber" class="contact-phone-number"></div>
+  </div>
+  <button data-selector="call-me"><c-icon icon="phone"></c-icon></button>
+</template>
+
+<template data-component="p-login">
+  <section>
     <header>
-      <c-account-info></c-account-info>
+      <h1 data-translation-key="log_in_action"></h1>
+      <c-language-switcher></c-language-switcher>
     </header>
-    <section>
-      <c-availability></c-availability>
-      <c-colleagues></c-colleagues>
-      <c-call-groups></c-call-groups>
-    </section>
-  </template>
+    <div class="login-change-password" data-selector="change-password" hidden>
+      <h3 data-translation-key="change_password_title"></h3>
+      <p>
+        <span data-translation-key="change_password_body"></span>
+        <a data-selector="change-password-link" target="_blank">link</a>
+      </p>
+    </div>
+    <form class="login-form">
+      <div class="login-error" data-selector="authentication-error" hidden>
+        <div class="login-error-content">
+          <c-icon icon="warning"></c-icon>
+          <span data-translation-key="authentication_error"></span>
+        </div>
+      </div>
+
+      <label>
+        <span data-translation-key="email_address"></span>
+        <input type="email" name="email" data-selector="email-input" data-placeholder-translation-key="enter_email"
+          autocomplete="username" required />
+      </label>
+      <label>
+        <span data-translation-key="password"></span>
+        <input type="password" name="password" data-selector="password-input"
+          data-placeholder-translation-key="enter_password" autocomplete="current-password" required />
+      </label>
+      <label hidden data-selector="two-factor-container">
+        <h5 data-translation-key="two-factor-token"></h5>
+        <input type="text" name="token" data-selector="two-factor-input" />
+      </label>
+      <div>
+        <button type="submit" data-translation-key="continue">✅</button>
+      </div>
+    </form>
+  </section>
+</template>
+
+<template data-component="c-language-switcher">
+  <label class="with-help-text">
+    <span data-translation-key="app_language"></span>
+    <select data-selector="language-select"></select>
+  </label>
+  <!-- <p class="help-text" data-translation-key="app_language_help_text"></p> -->
+</template>
+
+<template data-component="c-click-to-dial-wrapper">
+  <section></section>
+</template>
+
+<template data-component="c-click-to-dial-button">
+  <section>
+    <button data-selector="click-to-dial-button">
+      <c-icon icon="phone"></c-icon>
+    </button>
+  </section>
+</template>
+
+<template data-component="p-main">
+  <header>
+    <c-account-info></c-account-info>
+  </header>
+  <section>
+    <c-availability></c-availability>
+    <c-colleagues></c-colleagues>
+    <c-call-groups></c-call-groups>
+  </section>
+</template>
 </html>
