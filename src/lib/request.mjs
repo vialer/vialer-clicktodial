@@ -9,62 +9,62 @@ const CONFIGS = {
   contacts: {
     method: 'GET',
     useToken: true,
-    path: 'phoneaccount/basic/phoneaccount/?active=true&order_by=description'
+    path: 'phoneaccount/basic/phoneaccount/?active=true&order_by=description',
   },
   user: {
     method: 'GET',
     useToken: true,
-    path: 'plugin/user/'
+    path: 'plugin/user/',
   },
   autologin: {
     method: 'GET',
     useToken: true,
-    path: 'autologin/token/'
+    path: 'autologin/token/',
   },
   queues: {
     method: 'GET',
     useToken: true,
-    path: 'queuecallgroup/'
+    path: 'queuecallgroup/',
   },
   clickToDial: {
     method: 'POST',
     useToken: true,
     path: 'clicktodial/',
     headers: {
-      'Content-type': 'application/json'
-    }
+      'Content-type': 'application/json',
+    },
   },
   callStatus: {
     method: 'GET',
     useToken: true,
     path: '/clicktodial/',
-    setCallId: true
+    setCallId: true,
   },
   setDestination: {
     method: 'PUT',
     useToken: true,
     path: 'selecteduserdestination/',
     headers: {
-      'Content-type': 'application/json'
-    }
+      'Content-type': 'application/json',
+    },
   },
   getDestination: {
     method: 'GET',
     useToken: true,
-    path: 'selecteduserdestination/'
+    path: 'selecteduserdestination/',
   },
   destinations: {
     method: 'GET',
     useToken: true,
-    path: 'userdestination/'
+    path: 'userdestination/',
   },
   login: {
     method: 'POST',
     path: 'permission/apitoken/',
     headers: {
-      'Content-type': 'application/json'
-    }
-  }
+      'Content-type': 'application/json',
+    },
+  },
 };
 
 function makeRequestObject(name, options) {
@@ -97,7 +97,7 @@ function makeRequestObject(name, options) {
 
   if (requestOptions.params) {
     const queryString = Object.keys(requestOptions.params)
-      .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(requestOptions.params[k]))
+      .map((k) => encodeURIComponent(k) + '=' + encodeURIComponent(requestOptions.params[k]))
       .join('&');
 
     requestOptions.path += `?${queryString}`;
@@ -128,7 +128,7 @@ async function responseHandler(response) {
         status,
         url: response.url,
         statusText: response.statusText,
-        body: json
+        body: json,
       });
     } catch (err) {
       throw new Error('bad request');
