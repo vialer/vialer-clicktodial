@@ -7,7 +7,7 @@ import {
   SCRIPT_MAIN_SOURCE_TO_DESTINATION,
   SCRIPT_SOURCES_TO_DESTINATIONS,
   SOURCE_DIR,
-  DESTINATION_DIR
+  DESTINATION_DIR,
 } from './constants.mjs';
 
 const isProductionBuild = process.env.BUILD === 'production';
@@ -20,9 +20,9 @@ function getConfig(input, file) {
       format: 'esm',
       sourcemap: true,
       watch: {
-        clearScreen: false
+        clearScreen: false,
       },
-      paths: SCRIPT_SOURCES_TO_DESTINATIONS
+      paths: SCRIPT_SOURCES_TO_DESTINATIONS,
     },
     external: Object.keys(SCRIPT_SOURCES_TO_DESTINATIONS),
     inlineDynamicImports: true,
@@ -31,25 +31,24 @@ function getConfig(input, file) {
       commonjs(),
       replace({
         delimiters: ['%%', '%%'],
-        values:
-          process.env
+        values: process.env,
       }),
       rootImport({
         root: `${__dirname}/src`,
-        useEntry: 'prepend'
+        useEntry: 'prepend',
       }),
       isProductionBuild &&
-      terser({
-        ecma: 8,
-        warnings: 'verbose',
-        module: true
-      })
+        terser({
+          ecma: 8,
+          warnings: 'verbose',
+          module: true,
+        }),
     ],
     watch: {
       // this will be ignored if Rollup doesn't receive a -w CLI flag
       chokidar: true,
-      clearScreen: false
-    }
+      clearScreen: false,
+    },
   };
 }
 
@@ -71,4 +70,3 @@ export default new Promise(function (resolve) {
       .concat(Object.entries(SCRIPT_SOURCES_TO_DESTINATIONS).map(mapGetConfig))
   );
 });
-
