@@ -1,4 +1,4 @@
-import '/components/c-contact.mjs';
+import '/components/c-queue.mjs';
 
 import { hide, show, loadTemplate } from '/utils/dom.mjs';
 import { getQueues } from '/lib/data.mjs';
@@ -8,14 +8,14 @@ loadTemplate('c-call-groups').then(({ content }) => {
     'c-call-groups',
 
     class extends HTMLElement {
-      getContactData() {
-        getQueues().then(queues => {
+      getQueuesData() {
+        getQueues().then((queues) => {
           this.dataRetrieved = true;
-          queues.forEach(queue => {
-            let contact = document.createElement('c-contact');
-            this.list.appendChild(contact);
+          queues.forEach((queue) => {
+            let queueNode = document.createElement('c-queue');
+            this.list.appendChild(queueNode);
 
-            contact.contactDetails = queue;
+            queueNode.queueDetails = queue;
           });
         });
       }
@@ -46,7 +46,7 @@ loadTemplate('c-call-groups').then(({ content }) => {
         this.toggleNode.addEventListener('toggle-open', this);
         this.toggleNode.addEventListener('toggle-close', this);
 
-        this.getContactData();
+        this.getQueuesData();
       }
 
       disconnectedCallback() {
