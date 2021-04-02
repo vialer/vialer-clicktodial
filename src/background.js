@@ -12,12 +12,12 @@ const logger = new Logger('background');
 async function doClickToDial(number) {
   clickToDial(number)
     .then(({ b_number }) => {
-      translate('calling').then(callingMessage => {
+      translate('calling').then((callingMessage) => {
         showNotification(`${callingMessage}: ${b_number}`);
       });
       segment.track.clickedToDial();
     })
-    .catch(e => {
+    .catch((e) => {
       logger.error(e);
     });
 }
@@ -39,10 +39,11 @@ browser.contextMenus.onClicked.addListener((info, tab) => {
   }
 });
 
-translate('call_selected_number').then(title => {
+translate('call_selected_number').then((title) => {
+  browser.contextMenus.removeAll();
   browser.contextMenus.create({
     id: 'select-number',
     title,
-    contexts: ['selection']
+    contexts: ['selection'],
   });
 });
