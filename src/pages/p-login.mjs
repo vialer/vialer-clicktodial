@@ -13,8 +13,6 @@ loadTemplate('p-login').then(({ content }) => {
         e.preventDefault();
         switch (e.type) {
           case 'click':
-            e.preventDefault();
-            this.hideAuthenticationError();
           case 'input':
             e.preventDefault();
             this.hideAuthenticationError();
@@ -36,7 +34,7 @@ loadTemplate('p-login').then(({ content }) => {
                 .then(async () => {
                   window.dispatchEvent(new CustomEvent('updatePlugin'));
                 })
-                .catch(err => {
+                .catch((err) => {
                   const { status, body, message } = err;
                   if (status === 400 && body && body.apitoken && body.apitoken.two_factor_token) {
                     logger.warn('Two factor token needed');
@@ -89,6 +87,11 @@ loadTemplate('p-login').then(({ content }) => {
 
         this.passwordInput = this.querySelector('[data-selector=password-input]');
         this.passwordInput.addEventListener('click', this);
+
+        this.emailInput = this.querySelector('[data-selector=email-input]');
+        this.emailInput.addEventListener('click', this);
+        this.emailInput.addEventListener('input', this);
+
         this.passwordInput.addEventListener('input', this);
 
         this.changePasswordNode = this.querySelector('[data-selector=change-password]');
@@ -100,6 +103,8 @@ loadTemplate('p-login').then(({ content }) => {
         this.formNode.removeEventListener('submit', this);
         this.passwordInput.removeEventListener('click', this);
         this.passwordInput.removeEventListener('input', this);
+        this.emailInput.removeEventListener('click', this);
+        this.emailInput.removeEventListener('input', this);
       }
     }
   );
