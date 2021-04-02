@@ -1,11 +1,11 @@
-.component-header{
+.component-header {
   display: flex;
   align-items: center;
   padding-bottom: 1rem;
 
   > c-icon,
   > a {
-    margin-right: .75rem;
+    margin-right: 0.75rem;
     width: var(--text-l);
     height: var(--text-l);
 
@@ -16,7 +16,7 @@
 
   > h3 {
     width: 6rem;
-    margin-right: .75rem;
+    margin-right: 0.75rem;
   }
 
   > input {
@@ -25,10 +25,10 @@
     min-width: 0;
     border: none;
     background: white;
-    border-radius: .25rem;
-    padding: .25rem;
+    border-radius: 0.25rem;
+    padding: 0.25rem;
     font-size: var(--text-l);
-    margin-right: .75rem;
+    margin-right: 0.75rem;
   }
 
   > c-toggle {
@@ -38,10 +38,11 @@
 
 .list-container {
   border-top: 1px solid var(--border-color);
-  padding: .5rem;
+  padding: 0.5rem;
   margin-left: -1rem;
   margin-right: -1rem;
   background-color: var(--background-light);
-  height: 15rem;
+  min-height: 5rem;
+  max-height: 15rem;
   overflow: auto;
 }
