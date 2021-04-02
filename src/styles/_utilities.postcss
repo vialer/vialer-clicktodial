@@ -46,3 +46,39 @@
   max-height: 15rem;
   overflow: auto;
 }
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+/* Tooltip text */
+.tooltip .tooltip-text {
+  visibility: hidden;
+  width: 120px;
+  background-color: var(--background-dark);
+  color: var(--text-light);
+  text-align: center;
+  padding: 5px 0;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  opacity: 0;
+  transition: opacity 1s;
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltip-text-left {
+  top: 100%;
+  right: 105%;
+}
+
+.tooltip-text-right {
+  top: -5px;
+  left: 105%;
+}
+
+.tooltip:hover .tooltip-text {
+  opacity: 1;
+  visibility: visible;
+}

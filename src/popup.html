@@ -14,12 +14,13 @@
 
 <template data-component="c-account-info">
   <span data-selector="user-name"></span>
-  <button data-selector="log-out" type="submit">
+  <button data-selector="log-out" type="submit" class="tooltip">
+    <span class="tooltip-text tooltip-text-left" data-translation-key="log_out"></span>
     <c-icon icon="logout"></c-icon>
   </button>
-  <a href="%%WEBPHONE_URL%%" target="_blank"><c-icon icon="website"> </c-icon></a>
-  <a href="%%HELP_URL%%" target="_blank"><c-icon icon="info"></c-icon></a>
-  <a href="%%SETTINGS_URL%%"" target="_blank"><c-icon icon="settings"></c-icon></a>
+  <a href="%%WEBPHONE_URL%%" target="_blank" class="tooltip"><span class="tooltip-text tooltip-text-left" data-translation-key="open_webphone"></span><c-icon icon="website"> </c-icon></a>
+  <a href="%%HELP_URL%%" target="_blank" class="tooltip"><span class="tooltip-text tooltip-text-left" data-translation-key="open_wiki"></span><c-icon icon="info"></c-icon></a>
+  <a href="%%SETTINGS_URL%%"" target="_blank" class="tooltip"><span class="tooltip-text tooltip-text-left" data-translation-key="open_settings"></span><c-icon icon="settings"></c-icon></a>
 </template>
 
 <template data-component="c-availability">
@@ -40,7 +41,7 @@
   <div class="component-header">
     <c-icon icon="queues"></c-icon>
     <h3 data-translation-key="quick_links_queues"></h3>
-    <a title="open_call_groups" href="%%QUEUES_URL%%" target="_blank"><c-icon icon="ext-tab"></c-icon></a>
+    <a href="%%QUEUES_URL%%" target="_blank" class="tooltip"><span class="tooltip-text tooltip-text-right" data-translation-key="open_call_groups"></span><c-icon icon="ext-tab"></c-icon></a>
     <c-toggle></c-toggle>
   </div>
   <div data-selector="call-groups" class="list-container" hidden></div>
@@ -50,7 +51,7 @@
   <div class="component-header">
     <c-icon icon="contacts"></c-icon>
     <h3 data-translation-key="contacts"></h3>
-    <a title="open_colleagues" href="%%COLLEAGUES_URL%%" target="_blank"><c-icon icon="ext-tab"></c-icon></a>
+    <a href="%%COLLEAGUES_URL%%" target="_blank" class="tooltip"><span class="tooltip-text tooltip-text-right" data-translation-key="open_colleagues"></span><c-icon icon="ext-tab"></c-icon></a>
     <input type="search" class="search-input" data-selector="searchInput" data-placeholder-translation-key="search_colleagues" />
     <c-toggle></c-toggle>
   </div>
