@@ -8,6 +8,7 @@ loadTemplate('c-language-switcher').then(({ content }) => {
       handleEvent({ target: { value } }) {
         if (value !== chosenLanguage) {
           setLanguage(value);
+          this.update();
         }
       }
 
@@ -26,18 +27,16 @@ loadTemplate('c-language-switcher').then(({ content }) => {
 
         this.selectNode = this.querySelector('[data-selector=language-select]');
 
-        availableLanguages.forEach(async l => {
+        availableLanguages.forEach(async (l) => {
           const option = document.createElement('option');
           option.dataset.translationKey = l;
           option.value = l;
           option.textContent = l;
 
-          if (l === chosenLanguage) {
-            option.setAttribute('selected', '');
-          }
-
           this.selectNode.appendChild(option);
         });
+
+        this.update();
 
         translateNodes(this);
 

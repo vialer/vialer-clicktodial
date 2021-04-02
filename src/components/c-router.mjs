@@ -15,8 +15,10 @@ window.customElements.define(
   class extends HTMLElement {
     setLogin() {
       if (this.login === undefined) {
-        this.login = document.createElement('p-login');
-        this.appendChild(this.login);
+        setChosenLanguage().then(() => {
+          this.login = document.createElement('p-login');
+          this.appendChild(this.login);
+        });
       }
     }
 
@@ -29,7 +31,7 @@ window.customElements.define(
     async showView() {
       this.classList.add('loading');
       check()
-        .then(isAuthenticated => {
+        .then((isAuthenticated) => {
           if (isAuthenticated) {
             if (this.login !== undefined) {
               this.login.remove();
@@ -48,7 +50,7 @@ window.customElements.define(
           });
           this.classList.remove('loading');
         })
-        .catch(err => {
+        .catch((err) => {
           this.setLogin();
           logger.warn('Change of password needed');
           this.login.showChangePasswordMessage;
