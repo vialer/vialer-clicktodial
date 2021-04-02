@@ -26,7 +26,7 @@ loadTemplate('c-availability').then(({ content }) => {
 
       async handleEvent({ type, currentTarget, currentTarget: { checked }, target: { value } }) {
         switch (currentTarget) {
-          case this.toggleDnDNode:
+          case this.setUnavailable:
             if (checked !== this.isAvailable) {
               return;
             }
@@ -40,7 +40,7 @@ loadTemplate('c-availability').then(({ content }) => {
           case this.destinationSelectNode:
             if ('change' === type) {
               segment.track.updateAvailability();
-              const destination = this.destinations.find(destination => destination.id === value);
+              const destination = this.destinations.find((destination) => destination.id === value);
               setDestination(destination);
             }
             break;
@@ -50,7 +50,7 @@ loadTemplate('c-availability').then(({ content }) => {
       async updateSelectedDestination() {
         empty(this.destinationSelectNode);
 
-        this.destinations.forEach(async destination => {
+        this.destinations.forEach(async (destination) => {
           const option = document.createElement('option');
           option.value = destination.id;
           option.textContent = destination.description;
@@ -86,7 +86,7 @@ loadTemplate('c-availability').then(({ content }) => {
       async firstTimePreviousDestination(selected) {
         const { previousDestination } = await browser.storage.local.get('previousDestination');
         if (selected.fixeddestination !== null || selected.phoneaccount !== null) {
-          const destination = this.destinations.find(destination => Number(destination.id) === selected.phoneaccount);
+          const destination = this.destinations.find((destination) => Number(destination.id) === selected.phoneaccount);
           browser.storage.local.set({ previousDestination: destination });
         } else if (previousDestination === undefined) {
           browser.storage.local.set({ previousDestination: this.destinations[0] });
@@ -98,7 +98,7 @@ loadTemplate('c-availability').then(({ content }) => {
       }
 
       updateAvailabilityInterface() {
-        getSelectedDestination().then(async selected => {
+        getSelectedDestination().then(async (selected) => {
           this.selectedDestination = selected;
           this.isAvailable = this.isAvailableCheck(this.selectedDestination);
 
@@ -106,11 +106,11 @@ loadTemplate('c-availability').then(({ content }) => {
 
           this.updateSelectedDestination();
 
-          enable(this.toggleDnDNode);
+          enable(this.setUnavailable);
           if (this.isAvailable) {
             enable(this.destinationSelectNode);
           } else {
-            this.toggleDnDNode.checked = true;
+            this.setUnavailable.checked = true;
           }
         });
       }
@@ -119,8 +119,8 @@ loadTemplate('c-availability').then(({ content }) => {
         this.classList.add('loading');
         this.appendChild(content.cloneNode(true));
 
-        this.toggleDnDNode = this.querySelector('[data-selector=toggle-dnd]');
-        this.toggleDnDNode.addEventListener('change', this);
+        this.setUnavailable = this.querySelector('[data-selector=setUnavailable]');
+        this.setUnavailable.addEventListener('change', this);
 
         window.addEventListener('availabilityChange', () => {
           this.updateAvailabilityInterface();
@@ -137,7 +137,7 @@ loadTemplate('c-availability').then(({ content }) => {
 
       disconnectedCallback() {
         this.destinationSelectNode.removeEventListener('change', this);
-        this.toggleDnDNode.removeEventListener('change', this);
+        this.setUnavailable.removeEventListener('change', this);
       }
     }
   );
