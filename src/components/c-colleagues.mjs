@@ -9,9 +9,9 @@ loadTemplate('c-colleagues').then(({ content }) => {
 
     class Colleagues extends HTMLElement {
       getContactData() {
-        getContact().then(contacts => {
+        getContact().then((contacts) => {
           this.dataRetrieved = true;
-          contacts.forEach(contact => {
+          contacts.forEach((contact) => {
             let colleague = document.createElement('c-contact');
             this.list.appendChild(colleague);
             colleague.contactDetails = contact;
@@ -24,7 +24,7 @@ loadTemplate('c-colleagues').then(({ content }) => {
         this.dataRetrieved = false;
       }
 
-      handleEvent({ type }) {
+      handleEvent({ type, key }) {
         switch (type) {
           case 'toggle-open':
             show(this.list);
@@ -39,6 +39,14 @@ loadTemplate('c-colleagues').then(({ content }) => {
               this.toggleNode.setAttribute('open', '');
             }
             this.applyContactsFilters();
+            break;
+          case 'keypress':
+            if (key === 'Enter') {
+              const visibleColleagues = document.querySelectorAll('c-contact:not([hidden])');
+              if (visibleColleagues.length === 1) {
+                visibleColleagues[0].call();
+              }
+            }
             break;
         }
       }
@@ -66,6 +74,7 @@ loadTemplate('c-colleagues').then(({ content }) => {
 
         this.searchInput = this.querySelector('[data-selector=searchInput]');
         this.searchInput.addEventListener('input', this);
+        this.searchInput.addEventListener('keypress', this);
 
         this.getContactData();
       }
@@ -73,6 +82,7 @@ loadTemplate('c-colleagues').then(({ content }) => {
       disconnectedCallback() {
         this.toggleNode.removeEventListener('toggle-open', this);
         this.toggleNode.removeEventListener('toggle-close', this);
+        this.searchInput.removeEventListener('keypress', this);
       }
     }
   );

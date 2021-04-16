@@ -21,6 +21,10 @@ loadTemplate('c-contact').then(({ content }) => {
       }
 
       async handleEvent({ type }) {
+        this.call();
+      }
+
+      call() {
         if (this.phoneNumber) {
           browser.runtime.sendMessage(null, { b_number: this.phoneNumber }).then(() => {
             logger.info(`Trying to call ${this.phoneNumber}`);
