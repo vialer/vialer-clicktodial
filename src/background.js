@@ -18,6 +18,9 @@ async function doClickToDial(number) {
       segment.track.clickedToDial();
     })
     .catch((e) => {
+      translate('something_went_wrong_call').then((text) => {
+        showNotification(`${text}`);
+      });
       logger.error(e);
     });
 }
