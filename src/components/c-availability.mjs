@@ -2,6 +2,7 @@ import browser from '/vendor/browser-polyfill.js';
 
 import { empty, disable, enable, select, loadTemplate } from '/utils/dom.mjs';
 import { getDestinations, getSelectedDestination, setDestination, setUnavailable } from '/lib/data.mjs';
+import { translate } from '/lib/i18n.mjs';
 import { Logger } from '/lib/logging.mjs';
 import * as segment from '/lib/segment.mjs';
 
@@ -26,22 +27,26 @@ loadTemplate('c-availability').then(({ content }) => {
 
       async handleEvent({ type, currentTarget, currentTarget: { checked }, target: { value } }) {
         switch (currentTarget) {
-          case this.setUnavailable:
-            if (checked !== this.isAvailable) {
-              return;
-            }
-            await setUnavailable(checked);
-            if (checked) {
-              disable(this.destinationSelectNode);
-            } else {
-              enable(this.destinationSelectNode);
-            }
-            break;
+          // case this.setUnavailable:
+          //   if (checked !== this.isAvailable) {
+          //     return;
+          //   }
+          //   await setUnavailable(checked);
+          //   if (checked) {
+          //     disable(this.destinationSelectNode);
+          //   } else {
+          //     enable(this.destinationSelectNode);
+          //   }
+          //   break;
           case this.destinationSelectNode:
             if ('change' === type) {
               segment.track.updateAvailability();
-              const destination = this.destinations.find((destination) => destination.id === value);
-              setDestination(destination);
+              if (value === 'noDestination') {
+                setDestination();
+              } else {
+                const destination = this.destinations.find((destination) => destination.id === value);
+                setDestination(destination);
+              }
             }
             break;
         }
@@ -63,6 +68,14 @@ loadTemplate('c-availability').then(({ content }) => {
           }
           this.destinationSelectNode.appendChild(option);
         });
+
+        const noDestinationOption = document.createElement('option');
+        noDestinationOption.value = 'noDestination';
+        noDestinationOption.textContent = await translate('no_destination');
+        this.destinationSelectNode.appendChild(noDestinationOption);
+        if (!this.isAvailable) {
+          select(noDestinationOption);
+        }
         this.classList.remove('loading');
       }
 
@@ -106,12 +119,12 @@ loadTemplate('c-availability').then(({ content }) => {
 
           this.updateSelectedDestination();
 
-          enable(this.setUnavailable);
-          if (this.isAvailable) {
-            enable(this.destinationSelectNode);
-          } else {
-            this.setUnavailable.checked = true;
-          }
+          // enable(this.setUnavailable);
+          // if (this.isAvailable) {
+          // enable(this.destinationSelectNode);
+          // } else {
+          // this.setUnavailable.checked = true;
+          // }
         });
       }
 
@@ -119,8 +132,8 @@ loadTemplate('c-availability').then(({ content }) => {
         this.classList.add('loading');
         this.appendChild(content.cloneNode(true));
 
-        this.setUnavailable = this.querySelector('[data-selector=setUnavailable]');
-        this.setUnavailable.addEventListener('change', this);
+        // this.setUnavailable = this.querySelector('[data-selector=setUnavailable]');
+        // this.setUnavailable.addEventListener('change', this);
 
         window.addEventListener('availabilityChange', () => {
           this.updateAvailabilityInterface();
